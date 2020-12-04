@@ -16,8 +16,14 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_DEBUG ${CMAKE_BINARY_DIR}/../bin)
 find_library(ARMADILLO_LIB armadillo HINTS /usr/local/lib/)
 find_library(GGM_INVERSION_LIB ggm_inversion HINTS /usr/local/lib/)
 
-add_executable(main src/main.cpp)
-target_link_libraries(main PUBLIC ${ARMADILLO_LIB} ${GGM_INVERSION_LIB})
+add_executable(test_3d_sgd src/test_3d_sgd.cpp)
+target_link_libraries(test_3d_sgd PUBLIC ${ARMADILLO_LIB} ${GGM_INVERSION_LIB})
+
+add_executable(test_5d_sgd src/test_5d_sgd.cpp)
+target_link_libraries(test_5d_sgd PUBLIC ${ARMADILLO_LIB} ${GGM_INVERSION_LIB})
+
+add_executable(test_5d_adam src/test_5d_adam.cpp)
+target_link_libraries(test_5d_adam PUBLIC ${ARMADILLO_LIB} ${GGM_INVERSION_LIB})
 
 # If want to include install target
 # install(TARGETS bmla_layer_1 RUNTIME DESTINATION bin)

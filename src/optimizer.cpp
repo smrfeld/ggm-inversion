@@ -115,7 +115,7 @@ arma::mat Optimizer::get_derivs(const arma::mat &cov_mat_curr, const arma::mat &
     return derivs;
 }
 
-arma::mat Optimizer::solve(const arma::mat &cov_mat_true, const arma::mat &prec_mat_init, double lr, int no_opt_steps) const {
+arma::mat Optimizer::solve_sgd(const arma::mat &cov_mat_true, const arma::mat &prec_mat_init, double lr, int no_opt_steps) const {
             
     arma::mat prec_mat_curr = prec_mat_init;
         
@@ -128,6 +128,39 @@ arma::mat Optimizer::solve(const arma::mat &cov_mat_true, const arma::mat &prec_
     
     return prec_mat_curr;
 }
+
+arma::mat Optimizer::solve_adam(const arma::mat &cov_mat_true, const arma::mat &prec_mat_init, double lr, int no_opt_steps, double adam_beta_1, double adam_beta_2, double adam_eps) const {
+            
+    arma::mat prec_mat_curr = prec_mat_init;
+    
+    arma::mat adam_mt, adam_vt;
+    
+    for (size_t i=0; i<no_opt_steps; i++) {
+        arma::mat cov_mat_curr = arma::inv(prec_mat_curr);
+                    
+        arma::mat derivs = get_derivs(cov_mat_curr, cov_mat_true);
+        
+        if (i == 0) {
+            adam_mt = derivs;
+        } else {
+            adam_mt = adam_beta_1 * adam_mt + (1 - adam_beta_1) * derivs;
+        }
+
+        if (i == 0) {
+            adam_vt = pow(derivs,2);
+        } else {
+            adam_vt = adam_beta_2 * adam_vt + (1 - adam_beta_2) * pow(derivs,2);
+        }
+                                
+        arma::mat adam_mt_corr = adam_mt / (1 - pow(adam_beta_1, i+1));
+        arma::mat adam_vt_corr = adam_vt / (1 - pow(adam_beta_2, i+1));
+        
+        prec_mat_curr -= lr * adam_mt_corr / (sqrt(adam_vt_corr) + adam_eps);
+    }
+    
+    return prec_mat_curr;
+}
+
 
 };
 

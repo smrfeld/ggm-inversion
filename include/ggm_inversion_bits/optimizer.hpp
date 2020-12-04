@@ -61,7 +61,8 @@ public:
     
     arma::mat get_derivs(const arma::mat &cov_mat_curr, const arma::mat &cov_mat_true) const;
     
-    arma::mat solve(const arma::mat &cov_mat_true, const arma::mat &prec_mat_init, double lr, int no_opt_steps) const;
+    arma::mat solve_sgd(const arma::mat &cov_mat_true, const arma::mat &prec_mat_init, double lr, int no_opt_steps) const;
+    arma::mat solve_adam(const arma::mat &cov_mat_true, const arma::mat &prec_mat_init, double lr, int no_opt_steps, double adam_beta_1=0.9, double adam_beta_2=0.999, double adam_eps=1e-8) const;
 };
 
 }
