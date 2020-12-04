@@ -1,0 +1,6 @@
+#ifndef GGM_INVERSION_BITS_H
+#define GGM_INVERSION_BITS_H
+
+#include "ggm_inversion_bits/optimizer.hpp"
+
+#endif
