@@ -98,18 +98,26 @@ double Optimizer::get_obj_func_val(const arma::mat &cov_mat_curr, const arma::ma
 arma::mat Optimizer::get_derivs(const arma::mat &cov_mat_curr, const arma::mat &cov_mat_true) const {
     
     arma::mat derivs = arma::zeros(_n_rows, _n_cols);
-    for (auto idx_pair: _idx_pairs_free) {
-        int i = idx_pair.first;
-        int j = idx_pair.second;
+    for (auto idx_pair_deriv: _idx_pairs_free) {
+        int i = idx_pair_deriv.first;
+        int j = idx_pair_deriv.second;
         
-        double t1 = cov_mat_curr(i,j) - cov_mat_true(i,j);
-        double t2 = cov_mat_curr(i,i) * cov_mat_curr(j,j);
-        if (i != j) {
-            t2 += pow(cov_mat_curr(i,j), 2);
+        double deriv = 0.0;
+        for (auto idx_pair_sum: _idx_pairs_free) {
+            int k = idx_pair_sum.first;
+            int l = idx_pair_sum.second;
+            
+            double t1 = cov_mat_curr(k,l) - cov_mat_true(k,l);
+            double t2 = - cov_mat_curr(k,i) * cov_mat_curr(l,j);
+            if (i != j) {
+                t2 -= cov_mat_curr(k,j) * cov_mat_curr(l,i);
+            }
+            
+            deriv += 2 * t1 * t2;
         }
         
-        derivs(i,j) = -2.0 * t1 * t2;
-        derivs(j,i) = derivs(i,j);
+        derivs(i,j) = deriv;
+        derivs(j,i) = deriv;
     }
     
     return derivs;

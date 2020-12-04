@@ -7,6 +7,8 @@
 #include <exception>
 #include <armadillo>
 
+#include "common.hpp"
+
 using namespace std;
 using namespace ggm;
 
@@ -32,11 +34,8 @@ int main() {
     double lr = 1e-9;
     arma::mat prec_mat_init = 0.01 * arma::eye(n_rows, n_cols);
     arma::mat prec_mat_solved = opt.solve_sgd(cov_mat_true, prec_mat_init, lr, 500);
-    
-    std::cout << "Solution:" << std::endl;
-    std::cout << prec_mat_solved << std::endl;
-    std::cout << "Cov mat:" << std::endl;
-    std::cout << arma::inv(prec_mat_solved) << std::endl;
 
+    report_results(prec_mat_solved, cov_mat_true, idx_pairs_free, opt);
+    
     return 0;
 }
