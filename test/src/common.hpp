@@ -14,7 +14,7 @@ void report_results(
                     const arma::mat &prec_mat_solved,
                     const arma::mat &cov_mat_true,
                     const std::vector<std::pair<int,int>> &idx_pairs_free,
-                    const Optimizer &opt
+                    const OptimizerBase &opt
                     ) {
     arma::mat cov_mat_solved = arma::inv(prec_mat_solved);
     

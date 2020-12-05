@@ -29,11 +29,11 @@ int main() {
     
     int n_rows = 3;
     int n_cols = 3;
-    Optimizer opt(n_rows, n_cols, idx_pairs_free);
+    OptimizerSGD opt(n_rows, n_cols, idx_pairs_free);
     
     double lr = 1e-9;
     arma::mat prec_mat_init = 0.01 * arma::eye(n_rows, n_cols);
-    arma::mat prec_mat_solved = opt.solve_sgd(cov_mat_true, prec_mat_init, lr, 500);
+    arma::mat prec_mat_solved = opt.solve(cov_mat_true, prec_mat_init, lr, 500);
 
     report_results(prec_mat_solved, cov_mat_true, idx_pairs_free, opt);
     
