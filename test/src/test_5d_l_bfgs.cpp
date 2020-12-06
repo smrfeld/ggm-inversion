@@ -35,12 +35,12 @@ int main() {
     
     int n_rows = 5;
     int n_cols = 5;
-    Optimizer opt(n_rows, n_cols, idx_pairs_free);
+    OptimizerLBFGS opt(n_rows, n_cols, idx_pairs_free);
     
     arma::mat prec_mat_init = 0.01 * arma::eye(n_rows, n_cols);
     int m = 10;
     double tol = 1e-8;
-    arma::mat prec_mat_solved = opt.solve_l_bfgs(cov_mat_true, prec_mat_init, 1000, m, tol);
+    arma::mat prec_mat_solved = opt.solve(cov_mat_true, prec_mat_init, 1000, m, tol);
 
     report_results(prec_mat_solved, cov_mat_true, idx_pairs_free, opt);
 

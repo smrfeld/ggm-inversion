@@ -42,11 +42,20 @@ private:
     double _get_step_size_armijo_backtrack(const arma::mat &prec_mat_curr, const arma::mat &cov_mat_true, const arma::vec &updates, const arma::vec &grads, double c=1e-4) const;
     double _get_step_size_wolfe_search(const arma::mat &prec_mat_curr, const arma::mat &cov_mat_true, const arma::vec &updates, const arma::vec &grads, double c1=1e-4, double c2=0.9) const;
 
+    struct RetSolveSGD {
+        int opt_step_final;
+        arma::vec s_vec, y_vec;
+        arma::vec derivs_last, vals_last;
+        arma::mat prec_mat_curr;
+    };
+    
+    RetSolveSGD _solve_sgd_initial(const arma::mat &cov_mat_true, const arma::mat &prec_mat_init, int no_opt_steps, double lr_sgd_init) const;
+    
 public:
     
     using OptimizerBase::OptimizerBase;
         
-    arma::mat solve(const arma::mat &cov_mat_true, const arma::mat &prec_mat_init, int no_opt_steps, int m, double tol) const;
+    arma::mat solve(const arma::mat &cov_mat_true, const arma::mat &prec_mat_init, int no_opt_steps, int m, double tol, double lr_sgd_init) const;
 };
 
 }
