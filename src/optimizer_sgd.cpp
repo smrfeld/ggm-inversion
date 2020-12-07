@@ -31,13 +31,15 @@ SOFTWARE.
 
 namespace ggm {
 
-arma::mat OptimizerSGD::solve(const arma::mat &cov_mat_true, const arma::mat &prec_mat_init, double lr, int no_opt_steps) const {
+arma::mat OptimizerSGD::solve(const arma::mat &cov_mat_true, const arma::mat &prec_mat_init, double lr, int no_opt_steps, bool log_progress, int log_interval) const {
             
     arma::mat prec_mat_curr = prec_mat_init;
         
     for (size_t i=0; i<no_opt_steps; i++) {
         arma::mat cov_mat_curr = arma::inv(prec_mat_curr);
                     
+        _log_progress_if_needed(log_progress, log_interval, i, no_opt_steps, cov_mat_curr);
+        
         arma::mat derivs = get_deriv_mat(cov_mat_curr, cov_mat_true);
         prec_mat_curr -= lr * derivs;
     }

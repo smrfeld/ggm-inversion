@@ -47,6 +47,8 @@ protected:
     arma::mat _vec_to_mat(const arma::vec &vec) const;
     arma::vec _mat_to_vec(const arma::mat &mat) const;
 
+    void _log_progress_if_needed(bool log_progress, int log_interval, int opt_step, int no_opt_steps, const arma::mat &cov_mat_curr) const;
+    
 private:
     
     /// Internal clean up

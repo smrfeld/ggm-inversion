@@ -55,7 +55,7 @@ public:
     
     using OptimizerBase::OptimizerBase;
         
-    arma::mat solve(const arma::mat &cov_mat_true, const arma::mat &prec_mat_init, int no_opt_steps, int m, double tol, double lr_sgd_init) const;
+    arma::mat solve(const arma::mat &cov_mat_true, const arma::mat &prec_mat_init, int no_opt_steps, int m, double tol, double lr_sgd_init, bool log_progress=false, int log_interval=1) const;
 };
 
 }

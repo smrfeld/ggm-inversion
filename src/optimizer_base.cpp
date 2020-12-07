@@ -79,6 +79,16 @@ void OptimizerBase::_move(OptimizerBase& other) {
     _dim = other._dim;
 };
 
+void OptimizerBase::_log_progress_if_needed(bool log_progress, int log_interval, int opt_step, int no_opt_steps, const arma::mat &cov_mat_curr) const {
+    if (log_progress) {
+        if (opt_step % log_interval == 0) {
+            std::cout << "   Inversion: " << opt_step << " / " << no_opt_steps << std::endl;
+            std::cout << "   Cov mat curr: " << std::endl;
+            std::cout << cov_mat_curr << std::endl;
+        }
+    }
+}
+
 double OptimizerBase::_get_first_deriv_inverse_mat(const arma::mat &cov_mat_curr, int d1, int d2, int n1, int n2) const {
     double ret = 0.0;
     ret -= cov_mat_curr(n1,d1) * cov_mat_curr(n2,d2);
