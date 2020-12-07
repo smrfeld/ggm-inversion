@@ -39,7 +39,7 @@ class OptimizerBase {
 protected:
     
     std::vector<std::pair<int,int>> _idx_pairs_free;
-    int _n_rows, _n_cols;
+    int _dim;
     
     double _get_first_deriv_inverse_mat(const arma::mat &cov_mat_curr, int d1, int d2, int n1, int n2) const;
     double _get_second_deriv_inverse_mat(const arma::mat &cov_mat_curr, int d1, int d2, int d3, int d4, int n1, int n2) const;
@@ -58,7 +58,7 @@ private:
 
 public:
     
-    OptimizerBase(int n_rows, int n_cols, const std::vector<std::pair<int,int>> &idx_pairs_free);
+    OptimizerBase(int dim, const std::vector<std::pair<int,int>> &idx_pairs_free);
     OptimizerBase(const OptimizerBase& other);
     OptimizerBase& operator=(const OptimizerBase& other);
     OptimizerBase(OptimizerBase&& other);

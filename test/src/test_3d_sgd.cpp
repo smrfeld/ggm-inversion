@@ -27,9 +27,7 @@ int main() {
         {0, 30, 50}
     };
     
-    int n_rows = 3;
-    int n_cols = 3;
-    OptimizerSGD opt(n_rows, n_cols, idx_pairs_free);
+    OptimizerSGD opt(3, idx_pairs_free);
     
     double lr = 1e-9;
     arma::mat prec_mat_init = 0.01 * arma::eye(n_rows, n_cols);

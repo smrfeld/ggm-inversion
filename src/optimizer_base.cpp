@@ -31,15 +31,14 @@ SOFTWARE.
 
 namespace ggm {
 
-OptimizerBase::OptimizerBase(int n_rows, int n_cols, const std::vector<std::pair<int,int>> &idx_pairs_free) {
+OptimizerBase::OptimizerBase(int dim, const std::vector<std::pair<int,int>> &idx_pairs_free) {
     _idx_pairs_free = idx_pairs_free;
-    _n_rows = n_rows;
-    _n_cols = n_cols;
+    _dim = dim;
     
     // Check
     for (auto pr: _idx_pairs_free) {
-        assert(pr.first < _n_rows);
-        assert(pr.second < _n_cols);
+        assert(pr.first < _dim);
+        assert(pr.second < _dim);
     }
 }
 
@@ -73,13 +72,11 @@ void OptimizerBase::_clean_up() {
 
 void OptimizerBase::_copy(const OptimizerBase& other) {
     _idx_pairs_free = other._idx_pairs_free;
-    _n_cols = other._n_cols;
-    _n_rows = other._n_rows;
+    _dim = other._dim;
 };
 void OptimizerBase::_move(OptimizerBase& other) {
     _idx_pairs_free = other._idx_pairs_free;
-    _n_cols = other._n_cols;
-    _n_rows = other._n_rows;
+    _dim = other._dim;
 };
 
 double OptimizerBase::_get_first_deriv_inverse_mat(const arma::mat &cov_mat_curr, int d1, int d2, int n1, int n2) const {
@@ -113,7 +110,7 @@ double OptimizerBase::_get_second_deriv_inverse_mat(const arma::mat &cov_mat_cur
 
 arma::mat OptimizerBase::_vec_to_mat(const arma::vec &vec) const {
     
-    arma::mat mat = arma::zeros(_n_rows,_n_cols);
+    arma::mat mat = arma::zeros(_dim,_dim);
     for (size_t i=0; i<_idx_pairs_free.size(); i++) {
         auto pr = _idx_pairs_free.at(i);
         mat(pr.first, pr.second) = vec(i);
@@ -148,7 +145,7 @@ double OptimizerBase::get_obj_func_val(const arma::mat &cov_mat_curr, const arma
 
 arma::mat OptimizerBase::get_deriv_mat(const arma::mat &cov_mat_curr, const arma::mat &cov_mat_true) const {
     
-    arma::mat derivs = arma::zeros(_n_rows, _n_cols);
+    arma::mat derivs = arma::zeros(_dim, _dim);
     for (auto idx_pair_deriv: _idx_pairs_free) {
         int i = idx_pair_deriv.first;
         int j = idx_pair_deriv.second;

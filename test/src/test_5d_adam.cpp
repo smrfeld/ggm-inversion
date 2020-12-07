@@ -33,9 +33,7 @@ int main() {
         {0, 0, 4, 10, 60}
     };
     
-    int n_rows = 5;
-    int n_cols = 5;
-    OptimizerAdam opt(n_rows, n_cols, idx_pairs_free);
+    OptimizerAdam opt(5, idx_pairs_free);
     
     double lr = 1e-3;
     arma::mat prec_mat_init = 0.01 * arma::eye(n_rows, n_cols);
