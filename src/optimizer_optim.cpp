@@ -51,8 +51,16 @@ double optim_obj_func(const arma::vec &prec_mat_vec, arma::vec *deriv_vec, void*
     return obj_func_val;
 }
 
-arma::mat OptimizerOptim::solve(const arma::mat &cov_mat_true, const arma::mat &prec_mat_init, int no_opt_steps, LogOptions log_options, WritingOptions writing_options) const {
+arma::mat OptimizerOptim::solve(const arma::mat &cov_mat_true, const arma::mat &prec_mat_init, Options options) const {
+    return solve(cov_mat_true, prec_mat_init, 0, options);
+}
+    
+arma::mat OptimizerOptim::solve(const arma::mat &cov_mat_true, const arma::mat &prec_mat_init, int no_opt_steps, Options options) const {
 
+    if (no_opt_steps != 0) {
+        throw std::invalid_argument("No opt steps not supported for Optim optimizer!");
+    }
+    
     // Init
     arma::vec prec_mat_vec = mat_to_vec(prec_mat_init);
     

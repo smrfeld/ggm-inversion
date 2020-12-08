@@ -47,7 +47,6 @@ struct InputObjFuncVal {
 double optim_obj_func(const arma::vec &prec_mat_vec, arma::vec *deriv_vec, void* input_obj_func_val);
 
 class OptimizerOptim : public OptimizerBase {
-private:
             
 public:
         
@@ -55,8 +54,10 @@ public:
     double tol = 1e-10;
         
     using OptimizerBase::OptimizerBase;
-        
-    arma::mat solve(const arma::mat &cov_mat_true, const arma::mat &prec_mat_init, int no_opt_steps, LogOptions log_options=LogOptions(), WritingOptions writing_options=WritingOptions()) const override;
+
+    arma::mat solve(const arma::mat &cov_mat_true, const arma::mat &prec_mat_init, Options options=Options()) const;
+
+    arma::mat solve(const arma::mat &cov_mat_true, const arma::mat &prec_mat_init, int no_opt_steps, Options options=Options()) const override;
 };
 
 }

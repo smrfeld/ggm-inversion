@@ -44,7 +44,7 @@ public:
     
     using OptimizerBase::OptimizerBase;
         
-    arma::mat solve(const arma::mat &cov_mat_true, const arma::mat &prec_mat_init, int no_opt_steps, LogOptions log_options=LogOptions(), WritingOptions writing_options=WritingOptions()) const override;
+    arma::mat solve(const arma::mat &cov_mat_true, const arma::mat &prec_mat_init, int no_opt_steps, Options options=Options()) const override;
 };
 
 }

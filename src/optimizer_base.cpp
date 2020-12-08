@@ -80,7 +80,7 @@ void OptimizerBase::_move(OptimizerBase& other) {
     _dim = other._dim;
 };
 
-void OptimizerBase::_log_progress_if_needed(LogOptions options, int opt_step, int no_opt_steps, const arma::mat &cov_mat_curr, const arma::mat &cov_mat_targets) const {
+void OptimizerBase::_log_progress_if_needed(Options options, int opt_step, int no_opt_steps, const arma::mat &cov_mat_curr, const arma::mat &cov_mat_targets) const {
     if (options.log_progress) {
         if (opt_step % options.log_interval == 0) {
             std::cout << "   Inversion: " << opt_step << " / " << no_opt_steps << std::endl;
@@ -92,7 +92,7 @@ void OptimizerBase::_log_progress_if_needed(LogOptions options, int opt_step, in
     }
 }
 
-void OptimizerBase::_write_progress_if_needed(WritingOptions options, int opt_step, const arma::mat &prec_mat_curr, const arma::mat &cov_mat_curr, const arma::mat &cov_mat_true) const {
+void OptimizerBase::_write_progress_if_needed(Options options, int opt_step, const arma::mat &prec_mat_curr, const arma::mat &cov_mat_curr, const arma::mat &cov_mat_true) const {
     if (options.write_progress) {
         assert (options.write_dir != "");
         

@@ -31,7 +31,7 @@ SOFTWARE.
 
 namespace ggm {
         
-arma::mat OptimizerAdam::solve(const arma::mat &cov_mat_true, const arma::mat &prec_mat_init, int no_opt_steps, LogOptions log_options, WritingOptions writing_options) const {
+arma::mat OptimizerAdam::solve(const arma::mat &cov_mat_true, const arma::mat &prec_mat_init, int no_opt_steps, Options options) const {
     
     arma::mat prec_mat_curr = prec_mat_init;
 
@@ -42,10 +42,10 @@ arma::mat OptimizerAdam::solve(const arma::mat &cov_mat_true, const arma::mat &p
         arma::mat cov_mat_curr = arma::inv(prec_mat_curr);
         
         // Log
-        _log_progress_if_needed(log_options, i, no_opt_steps, cov_mat_curr, cov_mat_true);
+        _log_progress_if_needed(options, i, no_opt_steps, cov_mat_curr, cov_mat_true);
         
         // Write
-        _write_progress_if_needed(writing_options, i, prec_mat_curr, cov_mat_curr, cov_mat_true);
+        _write_progress_if_needed(options, i, prec_mat_curr, cov_mat_curr, cov_mat_true);
         
         arma::mat derivs = get_deriv_mat(cov_mat_curr, cov_mat_true);
 
