@@ -86,7 +86,7 @@ public:
 
     arma::mat get_hessian(const arma::mat &cov_mat_curr, const arma::mat &cov_mat_true) const;
     
-    virtual arma::mat solve(const arma::mat &cov_mat_true, const arma::mat &prec_mat_init, Options options=Options()) const = 0;
+    virtual arma::mat solve(const arma::mat &cov_mat_true, const arma::mat &prec_mat_init) const = 0;
 };
 
 }

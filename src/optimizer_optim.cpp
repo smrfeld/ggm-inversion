@@ -51,7 +51,7 @@ double optim_obj_func(const arma::vec &prec_mat_vec, arma::vec *deriv_vec, void*
     return obj_func_val;
 }
 
-arma::mat OptimizerOptim::solve(const arma::mat &cov_mat_true, const arma::mat &prec_mat_init, Options options) const {
+arma::mat OptimizerOptim::solve(const arma::mat &cov_mat_true, const arma::mat &prec_mat_init) const {
     
     // Init
     arma::vec prec_mat_vec = mat_to_vec(prec_mat_init);

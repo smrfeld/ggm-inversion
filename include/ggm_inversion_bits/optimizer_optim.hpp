@@ -55,7 +55,7 @@ public:
         
     using OptimizerBase::OptimizerBase;
 
-    arma::mat solve(const arma::mat &cov_mat_true, const arma::mat &prec_mat_init, Options options=Options()) const override;
+    arma::mat solve(const arma::mat &cov_mat_true, const arma::mat &prec_mat_init) const override;
 };
 
 }

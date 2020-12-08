@@ -120,7 +120,7 @@ OptimizerLBFGS::RetSolveSGD OptimizerLBFGS::_solve_sgd_initial(const arma::mat &
     throw std::runtime_error("Could not find positive curvature direction after max no of optimization steps of SGD");
 }
 
-arma::mat OptimizerLBFGS::solve(const arma::mat &cov_mat_true, const arma::mat &prec_mat_init, Options options) const {
+arma::mat OptimizerLBFGS::solve(const arma::mat &cov_mat_true, const arma::mat &prec_mat_init) const {
 
     // Solve sgd first
     auto ret_sgd = _solve_sgd_initial(cov_mat_true, prec_mat_init, no_opt_steps, lr_sgd_init);
