@@ -25,8 +25,8 @@ target_link_libraries(test_5d_sgd PUBLIC ${ARMADILLO_LIB} ${GGM_INVERSION_LIB})
 add_executable(test_5d_adam src/test_5d_adam.cpp src/common.hpp)
 target_link_libraries(test_5d_adam PUBLIC ${ARMADILLO_LIB} ${GGM_INVERSION_LIB})
 
-add_executable(test_5d_nlopt src/test_5d_nlopt.cpp src/common.hpp)
-target_link_libraries(test_5d_nlopt PUBLIC ${ARMADILLO_LIB} ${GGM_INVERSION_LIB})
+add_executable(test_5d_optim src/test_5d_optim.cpp src/common.hpp)
+target_link_libraries(test_5d_optim PUBLIC ${ARMADILLO_LIB} ${GGM_INVERSION_LIB})
 
 add_executable(test_5d_l_bfgs src/test_5d_l_bfgs.cpp src/common.hpp)
 target_link_libraries(test_5d_l_bfgs PUBLIC ${ARMADILLO_LIB} ${GGM_INVERSION_LIB})

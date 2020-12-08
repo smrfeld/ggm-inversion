@@ -62,6 +62,7 @@ arma::mat OptimizerOptim::solve(const arma::mat &cov_mat_true, const arma::mat &
     input->cov_mat_true = cov_mat_true;
     
     bool success = optim::lbfgs(prec_mat_vec, optim_obj_func, input);
+    assert (success);
     
     // Clean up!
     delete input;
