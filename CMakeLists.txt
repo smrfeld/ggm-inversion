@@ -22,10 +22,12 @@ set(SOURCE_FILES
     ${PROJECT_INCLUDE_DIR}/optimizer_base.hpp
     ${PROJECT_INCLUDE_DIR}/optimizer_l_bfgs.hpp
     ${PROJECT_INCLUDE_DIR}/optimizer_sgd.hpp
+    ${PROJECT_INCLUDE_DIR}/helpers.hpp
     ${PROJECT_SOURCE_DIR}/optimizer_adam.cpp
     ${PROJECT_SOURCE_DIR}/optimizer_base.cpp
     ${PROJECT_SOURCE_DIR}/optimizer_l_bfgs.cpp
     ${PROJECT_SOURCE_DIR}/optimizer_sgd.cpp
+    ${PROJECT_SOURCE_DIR}/helpers.cpp
 )
 
 # Set up such that XCode organizes the files correctly

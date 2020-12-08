@@ -37,9 +37,14 @@ namespace ggm {
 class OptimizerAdam : public OptimizerBase {
 public:
     
+    double adam_beta_1 = 0.9;
+    double adam_beta_2 = 0.999;
+    double adam_eps = 1e-8;
+    double lr = 1.0;
+    
     using OptimizerBase::OptimizerBase;
         
-    arma::mat solve(const arma::mat &cov_mat_true, const arma::mat &prec_mat_init, double lr, int no_opt_steps, bool log_progress=false, int log_interval=1, double adam_beta_1=0.9, double adam_beta_2=0.999, double adam_eps=1e-8) const;
+    arma::mat solve(const arma::mat &cov_mat_true, const arma::mat &prec_mat_init, int no_opt_steps, LogOptions log_options=LogOptions(), WritingOptions writing_options=WritingOptions()) const override;
 };
 
 }

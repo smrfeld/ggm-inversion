@@ -53,9 +53,14 @@ private:
     
 public:
     
+    int m = 5;
+    double tol = 1e-10;
+    double lr_sgd_init = 1e-10;
+    
+    
     using OptimizerBase::OptimizerBase;
-        
-    arma::mat solve(const arma::mat &cov_mat_true, const arma::mat &prec_mat_init, int no_opt_steps, int m, double tol, double lr_sgd_init, bool log_progress=false, int log_interval=1) const;
+    
+    arma::mat solve(const arma::mat &cov_mat_true, const arma::mat &prec_mat_init, int no_opt_steps, LogOptions log_options=LogOptions(), WritingOptions writing_options=WritingOptions()) const override;
 };
 
 }

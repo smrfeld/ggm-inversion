@@ -35,10 +35,10 @@ int main() {
     
     OptimizerAdam opt(5, idx_pairs_free);
     
-    double lr = 1e-3;
-    arma::mat prec_mat_init = 0.01 * arma::eye(n_rows, n_cols);
-    arma::mat prec_mat_solved = opt.solve(cov_mat_true, prec_mat_init, lr, 500000);
-
+    arma::mat prec_mat_init = 0.01 * arma::eye(5,5);
+    opt.lr = 1e-3;
+    arma::mat prec_mat_solved = opt.solve(cov_mat_true, prec_mat_init, 5e5);
+    
     report_results(prec_mat_solved, cov_mat_true, idx_pairs_free, opt);
 
     return 0;

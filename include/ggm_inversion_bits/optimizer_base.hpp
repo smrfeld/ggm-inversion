@@ -35,7 +35,19 @@ SOFTWARE.
 
 namespace ggm {
 
+struct LogOptions {
+    bool log_progress=false;
+    int log_interval=1;
+};
+
+struct WritingOptions {
+    bool write_progress=false;
+    int write_interval=1;
+    std::string write_dir="";
+};
+
 class OptimizerBase {
+        
 protected:
     
     std::vector<std::pair<int,int>> _idx_pairs_free;
@@ -47,7 +59,9 @@ protected:
     arma::mat _vec_to_mat(const arma::vec &vec) const;
     arma::vec _mat_to_vec(const arma::mat &mat) const;
 
-    void _log_progress_if_needed(bool log_progress, int log_interval, int opt_step, int no_opt_steps, const arma::mat &cov_mat_curr) const;
+    void _log_progress_if_needed(LogOptions options, int opt_step, int no_opt_steps, const arma::mat &cov_mat_curr, const arma::mat &cov_mat_targets) const;
+    
+    void _write_progress_if_needed(WritingOptions options, int opt_step, const arma::mat &prec_mat_curr, const arma::mat &cov_mat_curr) const;
     
 private:
     
@@ -73,6 +87,8 @@ public:
     arma::vec get_deriv_vec(const arma::mat &cov_mat_curr, const arma::mat &cov_mat_true) const;
 
     arma::mat get_hessian(const arma::mat &cov_mat_curr, const arma::mat &cov_mat_true) const;
+    
+    virtual arma::mat solve(const arma::mat &cov_mat_true, const arma::mat &prec_mat_init, int no_opt_steps, LogOptions log_options=LogOptions(), WritingOptions writing_options=WritingOptions()) const = 0;
 };
 
 }

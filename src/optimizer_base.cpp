@@ -28,6 +28,7 @@ SOFTWARE.
 */
 
 #include "../include/ggm_inversion_bits/optimizer_base.hpp"
+#include "../include/ggm_inversion_bits/helpers.hpp"
 
 namespace ggm {
 
@@ -79,12 +80,29 @@ void OptimizerBase::_move(OptimizerBase& other) {
     _dim = other._dim;
 };
 
-void OptimizerBase::_log_progress_if_needed(bool log_progress, int log_interval, int opt_step, int no_opt_steps, const arma::mat &cov_mat_curr) const {
-    if (log_progress) {
-        if (opt_step % log_interval == 0) {
+void OptimizerBase::_log_progress_if_needed(LogOptions options, int opt_step, int no_opt_steps, const arma::mat &cov_mat_curr, const arma::mat &cov_mat_targets) const {
+    if (options.log_progress) {
+        if (opt_step % options.log_interval == 0) {
             std::cout << "   Inversion: " << opt_step << " / " << no_opt_steps << std::endl;
             std::cout << "   Cov mat curr: " << std::endl;
             std::cout << cov_mat_curr << std::endl;
+            std::cout << "   Cov mat targets: " << std::endl;
+            std::cout << cov_mat_targets << std::endl;
+        }
+    }
+}
+
+void OptimizerBase::_write_progress_if_needed(WritingOptions options, int opt_step, const arma::mat &prec_mat_curr, const arma::mat &cov_mat_curr) const {
+    if (options.write_progress) {
+        assert (options.write_dir != "");
+        
+        if (opt_step % options.write_interval == 0) {
+            // Write
+            std::string fname = options.write_dir + "prec_mat.txt";
+            write_mat(fname, opt_step, opt_step!=0, prec_mat_curr);
+            
+            fname = options.write_dir + "cov_mat.txt";
+            write_mat(fname, opt_step, opt_step!=0, cov_mat_curr);
         }
     }
 }
