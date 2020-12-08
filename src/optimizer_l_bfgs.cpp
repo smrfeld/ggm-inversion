@@ -150,7 +150,7 @@ arma::mat OptimizerLBFGS::solve(const arma::mat &cov_mat_true, const arma::mat &
         _log_progress_if_needed(log_options, i, no_opt_steps, cov_mat_curr, cov_mat_true);
         
         // Write progress if needed
-        _write_progress_if_needed(writing_options, i, prec_mat_curr, cov_mat_curr);
+        _write_progress_if_needed(writing_options, i, prec_mat_curr, cov_mat_curr, cov_mat_true);
         
         // Check convergence
         double obj_func_new = get_obj_func_val(cov_mat_curr, cov_mat_true);

@@ -87,13 +87,19 @@ std::string get_line_of_file(std::string fname, int opt_step);
 void write_mat(std::string fname, bool append, const arma::mat &mat);
 
 void write_mat(std::string fname, int opt_step, bool append, const arma::mat &mat);
+
 void write_mats(std::string fname, int opt_step, bool append, const arma::mat &mat1, const arma::mat &mat2);
+
+void write_submat(std::string fname, bool append, const arma::mat &mat, const std::vector<std::pair<int,int>> &idx_pairs);
+
+void write_submat(std::string fname, int opt_step, bool append, const arma::mat &mat, const std::vector<std::pair<int,int>> &idx_pairs);
 
 void read_mat_from_line(std::string line, arma::mat &mat, int n_rows, int n_cols);
 void read_mats_from_line(std::string line, arma::mat &mat1, int n_rows1, int n_cols1, arma::mat &mat2, int n_rows2, int n_cols2);
 
 int _read_mat_from_vec(const std::vector<double> v, int idx_start, arma::mat &mat, int n_rows, int n_cols);
 
+void _write_submat_to_stream(std::ofstream &f, const arma::mat &mat, const std::vector<std::pair<int,int>> &idx_pairs);
 void _write_mat_to_stream(std::ofstream &f, const arma::mat &mat);
 
 double get_min_eigenval(const arma::mat &mat);

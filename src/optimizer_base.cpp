@@ -92,17 +92,22 @@ void OptimizerBase::_log_progress_if_needed(LogOptions options, int opt_step, in
     }
 }
 
-void OptimizerBase::_write_progress_if_needed(WritingOptions options, int opt_step, const arma::mat &prec_mat_curr, const arma::mat &cov_mat_curr) const {
+void OptimizerBase::_write_progress_if_needed(WritingOptions options, int opt_step, const arma::mat &prec_mat_curr, const arma::mat &cov_mat_curr, const arma::mat &cov_mat_true) const {
     if (options.write_progress) {
         assert (options.write_dir != "");
         
         if (opt_step % options.write_interval == 0) {
             // Write
             std::string fname = options.write_dir + "prec_mat.txt";
-            write_mat(fname, opt_step, opt_step!=0, prec_mat_curr);
+            write_submat(fname, opt_step, opt_step!=0, prec_mat_curr, _idx_pairs_free);
             
             fname = options.write_dir + "cov_mat.txt";
-            write_mat(fname, opt_step, opt_step!=0, cov_mat_curr);
+            write_submat(fname, opt_step, opt_step!=0, cov_mat_curr, _idx_pairs_free);
+            
+            if (opt_step == 0) {
+                fname = options.write_dir + "cov_mat_targets.txt";
+                write_submat(fname, false, cov_mat_true, _idx_pairs_free);
+            }
         }
     }
 }

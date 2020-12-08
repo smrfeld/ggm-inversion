@@ -240,6 +240,13 @@ std::string get_line_of_file(std::string fname, int opt_step) {
     }
 }
 
+void _write_submat_to_stream(std::ofstream &f, const arma::mat &mat, const std::vector<std::pair<int,int>> &idx_pairs) {
+    f << std::setprecision(16);
+    for (auto pr: idx_pairs) {
+        f << " " << mat(pr.first, pr.second);
+    }
+}
+
 void _write_mat_to_stream(std::ofstream &f, const arma::mat &mat) {
     f << std::setprecision(16);
     for (auto i=0; i<mat.n_rows; i++) {
@@ -291,6 +298,50 @@ void write_mat(std::string fname, int opt_step, bool append, const arma::mat &ma
     
     f.close();
 }
+
+void write_submat(std::string fname, bool append, const arma::mat &mat, const std::vector<std::pair<int,int>> &idx_pairs) {
+    std::ofstream f;
+    if (append) {
+        f.open(fname, std::ofstream::app);
+    } else {
+        f.open(fname, std::ofstream::out);
+    }
+    
+    if (!f.is_open()) {
+        throw std::invalid_argument("File: " + fname + " does not exist for writing.");
+    }
+    
+    // Opt step and rate
+    _write_submat_to_stream(f, mat, idx_pairs);
+    
+    // newline
+    f << "\n";
+    
+    f.close();
+}
+
+void write_submat(std::string fname, int opt_step, bool append, const arma::mat &mat, const std::vector<std::pair<int,int>> &idx_pairs) {
+    std::ofstream f;
+    if (append) {
+        f.open(fname, std::ofstream::app);
+    } else {
+        f.open(fname, std::ofstream::out);
+    }
+    
+    if (!f.is_open()) {
+        throw std::invalid_argument("File: " + fname + " does not exist for writing.");
+    }
+    
+    // Opt step and rate
+    f << opt_step;
+    _write_submat_to_stream(f, mat, idx_pairs);
+
+    // newline
+    f << "\n";
+    
+    f.close();
+}
+
 
 void write_mats(std::string fname, int opt_step, bool append, const arma::mat &mat1, const arma::mat &mat2) {
     

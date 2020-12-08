@@ -1,8 +1,8 @@
 //
 /*
-File: optimizer_l_bfgs.cpp
+File: optimizer_nlopt.hpp
 Created by: Oliver K. Ernst
-Date: 12/4/20
+Date: 5/27/20
 
 MIT License
 
@@ -25,30 +25,45 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
-*/ 
+*/
 
-#include "../include/ggm_inversion_bits/optimizer_sgd.hpp"
+#include "optimizer_base.hpp"
+
+#include <nlopt.hpp>
+
+#ifndef OPTIMIZER_NLOPT_H
+#define OPTIMIZER_NLOPT_H
 
 namespace ggm {
 
-arma::mat OptimizerSGD::solve(const arma::mat &cov_mat_true, const arma::mat &prec_mat_init, int no_opt_steps, LogOptions log_options, WritingOptions writing_options) const {
+class OptimizerNLOpt;
 
-    arma::mat prec_mat_curr = prec_mat_init;
-        
-    for (size_t i=0; i<no_opt_steps; i++) {
-        arma::mat cov_mat_curr = arma::inv(prec_mat_curr);
-                    
-        // Log if needed
-        _log_progress_if_needed(log_options, i, no_opt_steps, cov_mat_curr, cov_mat_true);
-        
-        // Write if needed
-        _write_progress_if_needed(writing_options, i, prec_mat_curr, cov_mat_curr, cov_mat_true);
-        
-        arma::mat derivs = get_deriv_mat(cov_mat_curr, cov_mat_true);
-        prec_mat_curr -= lr * derivs;
-    }
+struct InputObjFuncVal {
+    const OptimizerNLOpt *optimizer_nlopt;
+    arma::mat cov_mat_true;
+};
+
+double nlopt_obj_func(const std::vector<double> &prec_mat_std_vec, std::vector<double> &deriv_std_vec, void* input_obj_func_val);
+
+class OptimizerNLOpt : public OptimizerBase {
+private:
+            
+public:
     
-    return prec_mat_curr;
-}
+    // Algorithm
+    nlopt::algorithm algorithm = nlopt::algorithm::LD_LBFGS_NOCEDAL;
+    
+    // Tolerance
+    double tol = 1e-10;
+    
+    arma::mat std_vec_to_mat(const std::vector<double> &vec) const;
+    std::vector<double> mat_to_std_vec(const arma::mat &mat) const;
+    
+    using OptimizerBase::OptimizerBase;
+        
+    arma::mat solve(const arma::mat &cov_mat_true, const arma::mat &prec_mat_init, int no_opt_steps, LogOptions log_options=LogOptions(), WritingOptions writing_options=WritingOptions()) const override;
+};
 
 }
+
+#endif

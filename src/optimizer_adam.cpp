@@ -45,7 +45,7 @@ arma::mat OptimizerAdam::solve(const arma::mat &cov_mat_true, const arma::mat &p
         _log_progress_if_needed(log_options, i, no_opt_steps, cov_mat_curr, cov_mat_true);
         
         // Write
-        _write_progress_if_needed(writing_options, i, prec_mat_curr, cov_mat_curr);
+        _write_progress_if_needed(writing_options, i, prec_mat_curr, cov_mat_curr, cov_mat_true);
         
         arma::mat derivs = get_deriv_mat(cov_mat_curr, cov_mat_true);
 
