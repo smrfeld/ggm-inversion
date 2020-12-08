@@ -141,7 +141,7 @@ double OptimizerBase::_get_second_deriv_inverse_mat(const arma::mat &cov_mat_cur
     return ret;
 }
 
-arma::mat OptimizerBase::_vec_to_mat(const arma::vec &vec) const {
+arma::mat OptimizerBase::vec_to_mat(const arma::vec &vec) const {
     
     arma::mat mat = arma::zeros(_dim,_dim);
     for (size_t i=0; i<_idx_pairs_free.size(); i++) {
@@ -152,7 +152,7 @@ arma::mat OptimizerBase::_vec_to_mat(const arma::vec &vec) const {
     
     return mat;
 }
-arma::vec OptimizerBase::_mat_to_vec(const arma::mat &mat) const {
+arma::vec OptimizerBase::mat_to_vec(const arma::mat &mat) const {
     
     arma::vec vec(_idx_pairs_free.size());
     for (size_t i=0; i<_idx_pairs_free.size(); i++) {
@@ -200,7 +200,7 @@ arma::mat OptimizerBase::get_deriv_mat(const arma::mat &cov_mat_curr, const arma
 
 arma::vec OptimizerBase::get_deriv_vec(const arma::mat &cov_mat_curr, const arma::mat &cov_mat_true) const {
     arma::mat deriv_mat = get_deriv_mat(cov_mat_curr, cov_mat_true);
-    return _mat_to_vec(deriv_mat);
+    return mat_to_vec(deriv_mat);
 }
 
 arma::mat OptimizerBase::get_hessian(const arma::mat &cov_mat_curr, const arma::mat &cov_mat_true) const {

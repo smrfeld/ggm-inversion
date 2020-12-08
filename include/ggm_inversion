@@ -4,6 +4,6 @@
 #include "ggm_inversion_bits/optimizer_adam.hpp"
 #include "ggm_inversion_bits/optimizer_l_bfgs.hpp"
 #include "ggm_inversion_bits/optimizer_sgd.hpp"
-#include "ggm_inversion_bits/optimizer_nlopt.hpp"
+#include "ggm_inversion_bits/optimizer_optim.hpp"
 
 #endif

@@ -51,7 +51,7 @@ private:
 public:
     
     // Algorithm
-    nlopt::algorithm algorithm = nlopt::algorithm::LD_LBFGS_NOCEDAL;
+    nlopt::algorithm algorithm = nlopt::algorithm::LD_LBFGS;
     
     // Tolerance
     double tol = 1e-10;

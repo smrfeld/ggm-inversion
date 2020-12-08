@@ -32,12 +32,12 @@ SOFTWARE.
 namespace ggm {
 
 bool OptimizerLBFGS::_check_armijo_condition(double obj_func_0, const arma::mat &prec_mat_curr, const arma::mat &cov_mat_true, double alpha, const arma::vec &updates, double c, double ax) const {
-    arma::mat cov_mat_step = arma::inv(prec_mat_curr + alpha * _vec_to_mat(updates));
+    arma::mat cov_mat_step = arma::inv(prec_mat_curr + alpha * vec_to_mat(updates));
     return obj_func_0 - get_obj_func_val(cov_mat_step, cov_mat_true) >= alpha * c * ax;
 }
 
 bool OptimizerLBFGS::_check_wolfe_condition(const arma::mat &prec_mat_curr, const arma::mat &cov_mat_true, double alpha, const arma::vec &updates, double c, double ax) const {
-    arma::mat cov_mat_step = arma::inv(prec_mat_curr + alpha * _vec_to_mat(updates));
+    arma::mat cov_mat_step = arma::inv(prec_mat_curr + alpha * vec_to_mat(updates));
     return - arma::dot(updates, get_deriv_vec(cov_mat_step, cov_mat_true)) <= - c * ax;
 }
 
@@ -89,7 +89,7 @@ OptimizerLBFGS::RetSolveSGD OptimizerLBFGS::_solve_sgd_initial(const arma::mat &
         // Check curvature
         // Except first step; first step is always SGD
         if (i != 0) {
-            arma::vec s_vec = _mat_to_vec(prec_mat_curr) - vals_last;
+            arma::vec s_vec = mat_to_vec(prec_mat_curr) - vals_last;
             arma::vec y_vec = deriv_vec - derivs_last;
             double curvature = arma::dot(s_vec, y_vec);
             std::cout << "*SGD* Curvature: " << curvature << std::endl;
@@ -108,12 +108,12 @@ OptimizerLBFGS::RetSolveSGD OptimizerLBFGS::_solve_sgd_initial(const arma::mat &
         }
                 
         // Advance
-        vals_last = _mat_to_vec(prec_mat_curr);
+        vals_last = mat_to_vec(prec_mat_curr);
         derivs_last = deriv_vec;
         
         // Just SGD with small LR
         arma::vec update_vec = - lr_sgd_init * deriv_vec;
-        prec_mat_curr += _vec_to_mat(update_vec);
+        prec_mat_curr += vec_to_mat(update_vec);
     }
     
     // Fail
@@ -164,7 +164,7 @@ arma::mat OptimizerLBFGS::solve(const arma::mat &cov_mat_true, const arma::mat &
         
         // Set change
         // k-1 : (val at k) - (val at k-1)
-        arma::vec s_vec = _mat_to_vec(prec_mat_curr) - vals_last;
+        arma::vec s_vec = mat_to_vec(prec_mat_curr) - vals_last;
         arma::vec y_vec = deriv_vec - derivs_last;
         double curvature = arma::dot(s_vec, y_vec);
         std::cout << "*LBFGS* Curvature: " << curvature << std::endl;
@@ -232,7 +232,7 @@ arma::mat OptimizerLBFGS::solve(const arma::mat &cov_mat_true, const arma::mat &
          */
         
         // Advance
-        vals_last = _mat_to_vec(prec_mat_curr);
+        vals_last = mat_to_vec(prec_mat_curr);
         derivs_last = deriv_vec;
         
         // Update
@@ -241,7 +241,7 @@ arma::mat OptimizerLBFGS::solve(const arma::mat &cov_mat_true, const arma::mat &
         
         std::cout << "Opt step: " << i << " / " << no_opt_steps << " - step size: " << step_size << " - Obj func: " << obj_func_new << std::endl;
         
-        prec_mat_curr += step_size * _vec_to_mat(update_vec);
+        prec_mat_curr += step_size * vec_to_mat(update_vec);
         
         // Advance obj func
         obj_func_prev = obj_func_new;

@@ -39,10 +39,14 @@ double nlopt_obj_func(const std::vector<double> &prec_mat_std_vec, std::vector<d
     arma::mat cov_mat_true = input->cov_mat_true;
     
     arma::mat prec_mat_curr = optimizer->std_vec_to_mat(prec_mat_std_vec);
-    arma::mat cov_mat_curr = arma::inv_sympd(prec_mat_curr);
+    arma::mat cov_mat_curr = arma::inv(prec_mat_curr);
     
     // Obj func val
     double obj_func_val = optimizer->get_obj_func_val(cov_mat_curr, cov_mat_true);
+
+    std::cout << "---" << std::endl;
+    std::cout << obj_func_val << std::endl;
+    std::cout << prec_mat_curr << std::endl;
     
     // Get deriv
     arma::mat deriv_mat = optimizer->get_deriv_mat(cov_mat_curr, cov_mat_true);
@@ -88,13 +92,22 @@ arma::mat OptimizerNLOpt::solve(const arma::mat &cov_mat_true, const arma::mat &
     // Tolerance
     opt.set_ftol_abs(tol);
     
+    auto abc = opt.get_algorithm();
+    std::cout << opt.num_params() << std::endl;
+    
     // Run
-    std::vector<double> prec_mat_init_std_vec = mat_to_std_vec(prec_mat_init);
+    std::vector<double> prec_mat_std_vec = mat_to_std_vec(prec_mat_init);
     double obj_func_final;
-    auto res = opt.optimize(prec_mat_init_std_vec, obj_func_final);
+    for (auto i=0; i<prec_mat_std_vec.size(); i++) {
+        std::cout << i << " " << prec_mat_std_vec.at(i) << std::endl;
+    }
+    // auto res = opt.optimize(prec_mat_std_vec, obj_func_final);
+    std::cout << res << std::endl;
     
     // Clean up!
     delete input;
+    
+    return std_vec_to_mat(prec_mat_std_vec);
 }
 
 };

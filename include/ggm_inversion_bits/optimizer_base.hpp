@@ -56,9 +56,6 @@ protected:
     double _get_first_deriv_inverse_mat(const arma::mat &cov_mat_curr, int d1, int d2, int n1, int n2) const;
     double _get_second_deriv_inverse_mat(const arma::mat &cov_mat_curr, int d1, int d2, int d3, int d4, int n1, int n2) const;
 
-    arma::mat _vec_to_mat(const arma::vec &vec) const;
-    arma::vec _mat_to_vec(const arma::mat &mat) const;
-
     void _log_progress_if_needed(LogOptions options, int opt_step, int no_opt_steps, const arma::mat &cov_mat_curr, const arma::mat &cov_mat_targets) const;
     
     void _write_progress_if_needed(WritingOptions options, int opt_step, const arma::mat &prec_mat_curr, const arma::mat &cov_mat_curr, const arma::mat &cov_mat_true) const;
@@ -81,6 +78,9 @@ public:
     OptimizerBase& operator=(OptimizerBase&& other);
     virtual ~OptimizerBase();
 
+    arma::mat vec_to_mat(const arma::vec &vec) const;
+    arma::vec mat_to_vec(const arma::mat &mat) const;
+    
     double get_obj_func_val(const arma::mat &cov_mat_curr, const arma::mat &cov_mat_true) const;
     
     arma::mat get_deriv_mat(const arma::mat &cov_mat_curr, const arma::mat &cov_mat_true) const;

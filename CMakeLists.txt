@@ -23,13 +23,13 @@ set(SOURCE_FILES
     ${PROJECT_INCLUDE_DIR}/optimizer_l_bfgs.hpp
     ${PROJECT_INCLUDE_DIR}/optimizer_sgd.hpp
     ${PROJECT_INCLUDE_DIR}/helpers.hpp
-    ${PROJECT_INCLUDE_DIR}/optimizer_nlopt.hpp
+    ${PROJECT_INCLUDE_DIR}/optimizer_optim.hpp
     ${PROJECT_SOURCE_DIR}/optimizer_adam.cpp
     ${PROJECT_SOURCE_DIR}/optimizer_base.cpp
     ${PROJECT_SOURCE_DIR}/optimizer_l_bfgs.cpp
     ${PROJECT_SOURCE_DIR}/optimizer_sgd.cpp
     ${PROJECT_SOURCE_DIR}/helpers.cpp
-    ${PROJECT_SOURCE_DIR}/optimizer_nlopt.cpp
+    ${PROJECT_SOURCE_DIR}/optimizer_optim.cpp
 )
 
 # Set up such that XCode organizes the files correctly
@@ -37,13 +37,13 @@ source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} FILES ${SOURCE_FILES})
 
 # Required library
 find_library(ARMADILLO_LIB armadillo HINTS /usr/local/lib/ REQUIRED)
-find_library(NLOPT_LIB nlopt HINTS /usr/local/lib/ REQUIRED)
+find_library(OPTIM_LIB optim HINTS /usr/local/lib/ REQUIRED)
 
 # Add library
 add_library(ggm_inversion SHARED ${SOURCE_FILES})
 
 # Link
-target_link_libraries(ggm_inversion PUBLIC ${ARMADILLO_LIB} ${NLOPT_LIB})
+target_link_libraries(ggm_inversion PUBLIC ${ARMADILLO_LIB} ${OPTIM_LIB})
 
 # Include directories
 target_include_directories(ggm_inversion PRIVATE include/ggm_inversion_bits)
