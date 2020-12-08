@@ -41,10 +41,11 @@ public:
     double adam_beta_2 = 0.999;
     double adam_eps = 1e-8;
     double lr = 1.0;
+    int no_opt_steps = 100;
     
     using OptimizerBase::OptimizerBase;
         
-    arma::mat solve(const arma::mat &cov_mat_true, const arma::mat &prec_mat_init, int no_opt_steps, Options options=Options()) const override;
+    arma::mat solve(const arma::mat &cov_mat_true, const arma::mat &prec_mat_init, Options options=Options()) const override;
 };
 
 }

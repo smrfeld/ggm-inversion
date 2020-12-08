@@ -31,7 +31,7 @@ SOFTWARE.
 
 namespace ggm {
 
-arma::mat OptimizerSGD::solve(const arma::mat &cov_mat_true, const arma::mat &prec_mat_init, int no_opt_steps, Options options) const {
+arma::mat OptimizerSGD::solve(const arma::mat &cov_mat_true, const arma::mat &prec_mat_init, Options options) const {
 
     arma::mat prec_mat_curr = prec_mat_init;
         
