@@ -45,8 +45,10 @@ double optim_obj_func(const arma::vec &prec_mat_vec, arma::vec *deriv_vec, void*
     double obj_func_val = optimizer->get_obj_func_val(cov_mat_curr, cov_mat_true);
     
     // Get deriv
-    arma::mat deriv_mat = optimizer->get_deriv_mat(cov_mat_curr, cov_mat_true);
-    *deriv_vec = optimizer->mat_to_vec(deriv_mat);
+    if (deriv_vec != nullptr) {
+        arma::mat deriv_mat = optimizer->get_deriv_mat(cov_mat_curr, cov_mat_true);
+        *deriv_vec = optimizer->mat_to_vec(deriv_mat);
+    }
     
     return obj_func_val;
 }
@@ -60,14 +62,65 @@ arma::mat OptimizerOptim::solve(const arma::mat &cov_mat_true, const arma::mat &
     InputObjFuncVal *input = new InputObjFuncVal();
     input->optimizer = this;
     input->cov_mat_true = cov_mat_true;
+        
+    // Solve
+    bool success;
+    if (_alg == OptimAlg::lbfgs) {
+        // LBFS
+        success = optim::lbfgs(prec_mat_vec, optim_obj_func, input, settings);
+    } else if (_alg == OptimAlg::bfgs) {
+        // BFGS
+        success = optim::bfgs(prec_mat_vec, optim_obj_func, input, settings);
+    } else if (_alg == OptimAlg::cg) {
+        // CG
+        success = optim::cg(prec_mat_vec, optim_obj_func, input, settings);
+    } else {
+        // GD
+        success = optim::gd(prec_mat_vec, optim_obj_func, input, settings);
+    }
     
-    bool success = optim::lbfgs(prec_mat_vec, optim_obj_func, input);
-    assert (success);
+    // Must succeed
+    if (!success) {
+        std::cerr << "Failed to converge after: " << settings.opt_iter << " iterations" << std::endl;
+    } else {
+        std::cout << "Converged after: " << settings.opt_iter << " iterations" << std::endl;
+    }
+    std::cout << "Obj func value: " << settings.opt_fn_value << std::endl;
+    std::cout << "Error value: " << settings.opt_error_value << std::endl;
+    std::cout << "Prec mat: " << std::endl;
+    std::cout << vec_to_mat(prec_mat_vec) << std::endl;
+    std::cout << "Cov mat: " << std::endl;
+    std::cout << arma::inv(vec_to_mat(prec_mat_vec)) << std::endl;
     
     // Clean up!
     delete input;
     
     return vec_to_mat(prec_mat_vec);
+}
+
+void OptimizerOptim::set_alg_adam(double lr) {
+    _alg = OptimAlg::adam;
+    settings.gd_settings.method = 6;
+    settings.gd_settings.par_step_size = lr;
+}
+
+void OptimizerOptim::set_alg_lbfgs() {
+    _alg = OptimAlg::lbfgs;
+}
+
+void OptimizerOptim::set_alg_bfgs() {
+    _alg = OptimAlg::bfgs;
+}
+
+void OptimizerOptim::set_alg_sgd(double lr){
+    _alg = OptimAlg::sgd;
+    settings.gd_settings.method = 0;
+    settings.gd_settings.par_step_size = lr;
+}
+
+void OptimizerOptim::set_alg_cg(double lr){
+    _alg = OptimAlg::cg;
+    settings.gd_settings.par_step_size = lr;
 }
 
 };

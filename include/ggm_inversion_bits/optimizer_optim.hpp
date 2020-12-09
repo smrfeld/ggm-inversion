@@ -46,13 +46,24 @@ struct InputObjFuncVal {
 
 double optim_obj_func(const arma::vec &prec_mat_vec, arma::vec *deriv_vec, void* input_obj_func_val);
 
+enum OptimAlg { sgd, adam, lbfgs, bfgs, cg };
+
 class OptimizerOptim : public OptimizerBase {
             
+private:
+    
+    OptimAlg _alg;
+    
 public:
-        
-    // Tolerance
-    double tol = 1e-10;
-        
+    
+    mutable optim::algo_settings_t settings;
+    
+    void set_alg_adam(double lr);
+    void set_alg_lbfgs();
+    void set_alg_bfgs();
+    void set_alg_sgd(double lr);
+    void set_alg_cg(double lr);
+
     using OptimizerBase::OptimizerBase;
 
     arma::mat solve(const arma::mat &cov_mat_true, const arma::mat &prec_mat_init) const override;
