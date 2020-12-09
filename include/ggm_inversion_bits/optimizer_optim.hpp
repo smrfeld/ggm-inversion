@@ -56,6 +56,7 @@ private:
     
 public:
     
+    bool log_result = true;
     mutable optim::algo_settings_t settings;
     
     void set_alg_adam(double lr);

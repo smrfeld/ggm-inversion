@@ -80,17 +80,20 @@ arma::mat OptimizerOptim::solve(const arma::mat &cov_mat_true, const arma::mat &
     }
     
     // Must succeed
-    if (!success) {
-        std::cerr << "Failed to converge after: " << settings.opt_iter << " iterations" << std::endl;
-    } else {
-        std::cout << "Converged after: " << settings.opt_iter << " iterations" << std::endl;
+    if (log_result) {
+        std::cout << "--- Result ---" << std::endl;
+        if (!success) {
+            std::cerr << "Failed to converge after: " << settings.opt_iter << " iterations" << std::endl;
+        } else {
+            std::cout << "Converged after: " << settings.opt_iter << " iterations" << std::endl;
+        }
+        std::cout << "Obj func value: " << settings.opt_fn_value << std::endl;
+        std::cout << "Error value: " << settings.opt_error_value << std::endl;
+        std::cout << "Prec mat: " << std::endl;
+        std::cout << vec_to_mat(prec_mat_vec) << std::endl;
+        std::cout << "Cov mat: " << std::endl;
+        std::cout << arma::inv(vec_to_mat(prec_mat_vec)) << std::endl;
     }
-    std::cout << "Obj func value: " << settings.opt_fn_value << std::endl;
-    std::cout << "Error value: " << settings.opt_error_value << std::endl;
-    std::cout << "Prec mat: " << std::endl;
-    std::cout << vec_to_mat(prec_mat_vec) << std::endl;
-    std::cout << "Cov mat: " << std::endl;
-    std::cout << arma::inv(vec_to_mat(prec_mat_vec)) << std::endl;
     
     // Clean up!
     delete input;
