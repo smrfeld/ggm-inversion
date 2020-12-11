@@ -13,6 +13,7 @@ using namespace std;
 using namespace ggm;
 
 int main() {
+    
     std::vector<std::pair<int,int>> idx_pairs_free;
     idx_pairs_free.push_back(std::make_pair(0, 0));
     idx_pairs_free.push_back(std::make_pair(1, 1));
@@ -37,7 +38,12 @@ int main() {
     
     arma::mat prec_mat_init = 0.01 * arma::eye(5,5);
     opt.lr = 1e-3;
-    arma::mat prec_mat_solved = opt.solve(cov_mat_true, prec_mat_init, 5e5);
+    opt.no_opt_steps = 5e4;
+    opt.options.write_interval = opt.no_opt_steps / 100;
+    opt.options.write_progress = true;
+    opt.options.write_dir = "../output/test_5d_adam/data/";
+    ensure_dir_exists(opt.options.write_dir);
+    arma::mat prec_mat_solved = opt.solve(cov_mat_true, prec_mat_init);
     
     report_results(prec_mat_solved, cov_mat_true, idx_pairs_free, opt);
 

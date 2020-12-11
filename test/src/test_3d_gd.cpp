@@ -27,11 +27,16 @@ int main() {
         {0, 30, 50}
     };
     
-    OptimizerSGD opt(3, idx_pairs_free);
+    OptimizerGD opt(3, idx_pairs_free);
     
-    double lr = 1e-9;
-    arma::mat prec_mat_init = 0.01 * arma::eye(n_rows, n_cols);
-    arma::mat prec_mat_solved = opt.solve(cov_mat_true, prec_mat_init, lr, 500);
+    arma::mat prec_mat_init = 0.01 * arma::eye(3, 3);
+    opt.lr = 1e-9;
+    opt.no_opt_steps = 500;
+    opt.options.write_interval = opt.no_opt_steps / 100;
+    opt.options.write_progress = true;
+    opt.options.write_dir = "../output/test_3d_gd/data/";
+    ensure_dir_exists(opt.options.write_dir);
+    arma::mat prec_mat_solved = opt.solve(cov_mat_true, prec_mat_init);
 
     report_results(prec_mat_solved, cov_mat_true, idx_pairs_free, opt);
     

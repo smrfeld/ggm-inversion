@@ -34,7 +34,7 @@ SOFTWARE.
 
 namespace ggm {
 
-class OptimizerSGD : public OptimizerBase {
+class OptimizerGD : public OptimizerBase {
 public:
     
     double lr = 1.0;

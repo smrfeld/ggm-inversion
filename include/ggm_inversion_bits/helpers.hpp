@@ -104,6 +104,8 @@ void _write_mat_to_stream(std::ofstream &f, const arma::mat &mat);
 
 double get_min_eigenval(const arma::mat &mat);
 
+void ensure_dir_exists(std::string dir);
+
 };
 
 #endif

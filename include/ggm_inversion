@@ -1,9 +1,10 @@
 #ifndef GGM_INVERSION_BITS_H
 #define GGM_INVERSION_BITS_H
 
+#include "ggm_inversion_bits/helpers.hpp"
 #include "ggm_inversion_bits/optimizer_adam.hpp"
 #include "ggm_inversion_bits/optimizer_l_bfgs.hpp"
-#include "ggm_inversion_bits/optimizer_sgd.hpp"
+#include "ggm_inversion_bits/optimizer_gd.hpp"
 #include "ggm_inversion_bits/optimizer_optim.hpp"
 
 #endif

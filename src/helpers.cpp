@@ -429,6 +429,12 @@ double get_min_eigenval(const arma::mat &mat) {
     return min_eigenval;
 }
 
+void ensure_dir_exists(std::string dir) {
+    if (!std::filesystem::is_directory(dir) || !std::filesystem::exists(dir)) {
+        std::filesystem::create_directories(dir);
+    }
+}
+
 };
 
 
