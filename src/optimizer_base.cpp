@@ -80,14 +80,26 @@ void OptimizerBase::_move(OptimizerBase& other) {
     _dim = other._dim;
 };
 
-void OptimizerBase::_log_progress_if_needed(Options options, int opt_step, int no_opt_steps, const arma::mat &cov_mat_curr, const arma::mat &cov_mat_targets) const {
+void OptimizerBase::_log_progress_if_needed(Options options, int opt_step, int no_opt_steps, const arma::mat &cov_mat_curr, const arma::mat &cov_mat_targets, const arma::mat &prec_mat_curr) const {
     if (options.log_progress) {
         if (opt_step % options.log_interval == 0) {
-            std::cout << "   Inversion: " << opt_step << " / " << no_opt_steps << std::endl;
-            std::cout << "   Cov mat curr: " << std::endl;
-            std::cout << cov_mat_curr << std::endl;
-            std::cout << "   Cov mat targets: " << std::endl;
-            std::cout << cov_mat_targets << std::endl;
+            
+            // Measure errors
+            arma::vec cov_vec_targets = mat_to_vec(cov_mat_targets);
+            arma::vec cov_vec_curr = mat_to_vec(cov_mat_curr);
+            arma::vec cov_vec_perc_err = abs(cov_vec_curr - cov_vec_targets) / abs(cov_vec_curr);
+            double ave_err = arma::mean(cov_vec_perc_err);
+            double max_err = arma::max(cov_vec_perc_err);
+            
+            std::cout << "   Inversion: " << opt_step << " / " << no_opt_steps << " ave err: " << 100.0*ave_err << "% max err: " << 100.0*max_err << "%" << std::endl;
+            if (options.log_mats) {
+                std::cout << "   Cov mat curr: " << std::endl;
+                std::cout << cov_mat_curr << std::endl;
+                std::cout << "   Cov mat targets: " << std::endl;
+                std::cout << cov_mat_targets << std::endl;
+                std::cout << "   Prec mat curr: " << std::endl;
+                std::cout << prec_mat_curr << std::endl;
+            }
         }
     }
 }

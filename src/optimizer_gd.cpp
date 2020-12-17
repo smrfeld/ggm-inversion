@@ -39,7 +39,7 @@ arma::mat OptimizerGD::solve(const arma::mat &cov_mat_true, const arma::mat &pre
         arma::mat cov_mat_curr = arma::inv(prec_mat_curr);
                     
         // Log if needed
-        _log_progress_if_needed(options, i, no_opt_steps, cov_mat_curr, cov_mat_true);
+        _log_progress_if_needed(options, i, no_opt_steps, cov_mat_curr, cov_mat_true, prec_mat_curr);
         
         // Write if needed
         _write_progress_if_needed(options, i, prec_mat_curr, cov_mat_curr, cov_mat_true);
