@@ -1,6 +1,6 @@
 //
 /*
-File: optimizer_base.hpp
+File: newtons_method_v3.hpp
 Created by: Oliver K. Ernst
 Date: 5/27/20
 
@@ -32,21 +32,18 @@ SOFTWARE.
 #include <string>
 #include <armadillo>
 
-#ifndef OPTIMIZER_BASE_H
-#define OPTIMIZER_BASE_H
+#ifndef NEWTONS_METHOD_V3_H
+#define NEWTONS_METHOD_V3_H
 
 namespace ggm {
 
-class OptimizerBase {
+class NewtonsMethodv3 {
         
 protected:
     
-    std::vector<std::pair<int,int>> _idx_pairs_free;
+    std::vector<std::pair<int,int>> _idx_pairs_free, _idx_pairs_non_free;
     int _dim;
     
-    double _get_first_deriv_inverse_mat(const arma::mat &cov_mat_curr, int d1, int d2, int n1, int n2) const;
-    double _get_second_deriv_inverse_mat(const arma::mat &cov_mat_curr, int d1, int d2, int d3, int d4, int n1, int n2) const;
-
     void _log_progress_if_needed(Options options, int opt_step, int no_opt_steps, const arma::mat &cov_mat_curr, const arma::mat &cov_mat_targets, const arma::mat &prec_mat_curr) const;
     
     void _write_progress_if_needed(Options options, int opt_step, const arma::mat &prec_mat_curr, const arma::mat &cov_mat_curr, const arma::mat &cov_mat_true) const;
@@ -56,30 +53,32 @@ private:
     /// Internal clean up
     void _clean_up();
     /// Internal copy
-    void _copy(const OptimizerBase& other);
+    void _copy(const NewtonsMethodv3& other);
     /// Internal move
-    void _move(OptimizerBase &other);
+    void _move(NewtonsMethodv3 &other);
 
 public:
     
-    OptimizerBase(int dim, const std::vector<std::pair<int,int>> &idx_pairs_free);
-    OptimizerBase(const OptimizerBase& other);
-    OptimizerBase& operator=(const OptimizerBase& other);
-    OptimizerBase(OptimizerBase&& other);
-    OptimizerBase& operator=(OptimizerBase&& other);
-    virtual ~OptimizerBase();
+    int no_opt_steps = 100;
+    Options options;
+    
+    NewtonsMethodv3(int dim, const std::vector<std::pair<int,int>> &idx_pairs_free, const std::vector<std::pair<int,int>> &idx_pairs_non_free);
+    NewtonsMethodv3(const NewtonsMethodv3& other);
+    NewtonsMethodv3& operator=(const NewtonsMethodv3& other);
+    NewtonsMethodv3(NewtonsMethodv3&& other);
+    NewtonsMethodv3& operator=(NewtonsMethodv3&& other);
+    ~NewtonsMethodv3();
+    
+    arma::mat free_vec_to_mat(const arma::vec &vec) const;
+    arma::mat non_free_vec_to_mat(const arma::vec &vec) const;
 
-    arma::mat vec_to_mat(const arma::vec &vec) const;
-    arma::vec mat_to_vec(const arma::mat &mat) const;
+    arma::mat get_i_mat(int k, int l) const;
+    arma::vec upper_tri_to_vec(const arma::mat &mat) const;
     
-    double get_obj_func_val(const arma::mat &cov_mat_curr, const arma::mat &cov_mat_true) const;
-    
-    arma::mat get_deriv_mat(const arma::mat &cov_mat_curr, const arma::mat &cov_mat_true) const;
-    arma::vec get_deriv_vec(const arma::mat &cov_mat_curr, const arma::mat &cov_mat_true) const;
+    arma::vec get_eqs(const arma::mat &prec_mat_curr, const arma::mat &cov_mat_curr) const;
+    arma::mat get_jacobian(const arma::mat &prec_mat_curr, const arma::mat &cov_mat_curr) const;
 
-    arma::mat get_hessian(const arma::mat &cov_mat_curr, const arma::mat &cov_mat_true) const;
-    
-    virtual arma::mat solve(const arma::mat &cov_mat_true, const arma::mat &prec_mat_init) const = 0;
+    std::pair<arma::mat,arma::mat> solve(const arma::mat &cov_mat_true, const arma::mat &prec_mat_init) const;
 };
 
 }

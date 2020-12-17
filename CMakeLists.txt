@@ -18,15 +18,16 @@ set(PROJECT_INCLUDE_DIR "include/ggm_inversion_bits")
 
 # Source files
 set(SOURCE_FILES
+    ${PROJECT_INCLUDE_DIR}/newtons_method.hpp
+    ${PROJECT_INCLUDE_DIR}/options.hpp
     ${PROJECT_INCLUDE_DIR}/optimizer_adam.hpp
     ${PROJECT_INCLUDE_DIR}/optimizer_base.hpp
-    ${PROJECT_INCLUDE_DIR}/optimizer_l_bfgs.hpp
     ${PROJECT_INCLUDE_DIR}/optimizer_gd.hpp
     ${PROJECT_INCLUDE_DIR}/helpers.hpp
     ${PROJECT_INCLUDE_DIR}/optimizer_optim.hpp
+    ${PROJECT_SOURCE_DIR}/newtons_method.cpp
     ${PROJECT_SOURCE_DIR}/optimizer_adam.cpp
     ${PROJECT_SOURCE_DIR}/optimizer_base.cpp
-    ${PROJECT_SOURCE_DIR}/optimizer_l_bfgs.cpp
     ${PROJECT_SOURCE_DIR}/optimizer_gd.cpp
     ${PROJECT_SOURCE_DIR}/helpers.cpp
     ${PROJECT_SOURCE_DIR}/optimizer_optim.cpp
