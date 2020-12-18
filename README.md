@@ -2,6 +2,8 @@
 
 ## Summary
 
+[See also the LaTeX version of the docs.](docs/doc.pdf).
+
 The goal of this library is to solve the problem of calculating the inverse of a symmetric positive definite matrix (e.g. a covariance matrix) when the constraints are mixed between the covariance matrix `\Sigma` and the precision matrix `B = \Sigma^{-1}`. In particular, constraints of the following form are considered:
 ```
 \Sigma_{ij} = \theta_{ij}
