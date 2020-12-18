@@ -29,9 +29,9 @@ B * \Sigma - I = 0
 \sum_{kl} ((B^{-1})_{kl} - \Sigma_{kl})^2
 ```
 
-The first approach is generally the preferred one, using Newton's root finding method. See the [Newton's root finding method example](test/src/root_find_newton_5d.cpp).
+**If** an initial guess sufficiently close to the inverse is available, then the first root finding method is preferred. See the [Newton's root finding method example](test/src/root_find_newton_5d.cpp).
 
-The second one also works well, but typically you need a good optimizer like ADAM. Currently, only first order methods (in the gradients) are included. Two classes of optimizers are supported:
+Minimizing the L2 loss is slower but more robust if such a guess is not available. Currently, only first order methods (in the gradients) are included. Two classes of optimizers are supported:
 * Optimizers from the [Optim library](https://github.com/kthohr/optim).
 * Several home-grown optimizers, including gradient descent (GD) and ADAM.
 See the [ADAM L2 loss minimzer example](test/src/l2_adam_5d.cpp).

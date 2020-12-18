@@ -40,10 +40,7 @@ namespace ginv {
 class L2OptimizerBase : public SolverBase {
         
 protected:
-    
-    std::vector<std::pair<int,int>> _idx_pairs_free;
-    int _dim;
-    
+        
     double _get_first_deriv_inverse_mat(const arma::mat &cov_mat_curr, int d1, int d2, int n1, int n2) const;
     double _get_second_deriv_inverse_mat(const arma::mat &cov_mat_curr, int d1, int d2, int d3, int d4, int n1, int n2) const;
 
@@ -64,6 +61,8 @@ public:
     
     using SolverBase::SolverBase;
         
+    std::pair<double,double> get_err(const arma::mat &cov_mat_curr, const arma::mat &cov_mat_targets) const;
+    
     double get_obj_func_val(const arma::mat &cov_mat_curr, const arma::mat &cov_mat_true) const;
     
     arma::mat get_deriv_mat(const arma::mat &cov_mat_curr, const arma::mat &cov_mat_true) const;

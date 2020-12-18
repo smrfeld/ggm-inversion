@@ -32,16 +32,25 @@ SOFTWARE.
 
 namespace ginv {
 
+std::pair<double,double> L2OptimizerBase::get_err(const arma::mat &cov_mat_curr, const arma::mat &cov_mat_targets) const {
+    
+    arma::vec cov_vec_targets = free_mat_to_vec(cov_mat_targets);
+    arma::vec cov_vec_curr = free_mat_to_vec(cov_mat_curr);
+    arma::vec cov_vec_perc_err = abs(cov_vec_curr - cov_vec_targets) / abs(cov_vec_curr);
+    double ave_err = arma::mean(cov_vec_perc_err);
+    double max_err = arma::max(cov_vec_perc_err);
+    
+    return std::make_pair(ave_err, max_err);
+}
+
 void L2OptimizerBase::_log_progress_if_needed(Options options, int opt_step, int no_opt_steps, const arma::mat &cov_mat_curr, const arma::mat &cov_mat_targets, const arma::mat &prec_mat_curr) const {
     if (options.log_progress) {
         if (opt_step % options.log_interval == 0) {
             
             // Measure errors
-            arma::vec cov_vec_targets = free_mat_to_vec(cov_mat_targets);
-            arma::vec cov_vec_curr = free_mat_to_vec(cov_mat_curr);
-            arma::vec cov_vec_perc_err = abs(cov_vec_curr - cov_vec_targets) / abs(cov_vec_curr);
-            double ave_err = arma::mean(cov_vec_perc_err);
-            double max_err = arma::max(cov_vec_perc_err);
+            auto pr = get_err(cov_mat_curr, cov_mat_targets);
+            double ave_err = pr.first;
+            double max_err = pr.second;
             
             std::cout << "   Inversion: " << opt_step << " / " << no_opt_steps << " ave err: " << 100.0*ave_err << "% max err: " << 100.0*max_err << "%" << std::endl;
             if (options.log_mats) {
@@ -72,6 +81,12 @@ void L2OptimizerBase::_write_progress_if_needed(Options options, int opt_step, c
                 fname = options.write_dir + "cov_mat_targets.txt";
                 write_submat(fname, false, cov_mat_true, _idx_pairs_free);
             }
+            
+            auto pr = get_err(cov_mat_curr, cov_mat_true);
+            double ave_err = pr.first;
+            double max_err = pr.second;
+            fname = options.write_dir + "errs.txt";
+            write_mat(fname, opt_step, opt_step!=0, {{ave_err, max_err}});
         }
     }
 }

@@ -61,7 +61,7 @@ Note that there are as many equations as unknowns.
 \item Minimize the $L_2$ loss:
 %---------------
 \begin{equation}
-L_2( \{ \sigma_{kl} \} ) = \sum_{kl} \left [ \sigma_{kl} - (B^{-1})_{kl} \right ]^2
+L_2( \{ B_{ij} \} | \{ \sigma_{kl} \} ) = \sum_{kl} \left [ \sigma_{kl} - (B^{-1})_{kl} \right ]^2
 \end{equation}
 %---------------
 where $\sigma_{kl} = ((B^*)^{-1})_{kl}$ are the given numerical values.
@@ -82,7 +82,7 @@ In this case, we are learning both the unknown elements of $B$ and the elements 
 
 \end{enumerate}
 
-The third method is generally the preferred one.
+\textbf{If} an initial guess sufficiently close to the inverse is available, then the third method is preferred. Minimizing the $L_2$ loss is slower but more robust if such a guess is not available.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -144,7 +144,7 @@ where $I_{ij}$ is all zeros except $1$ at $(i,j)$ \textbf{and} at $(j,i)$.
 Minimize the $L_2$ loss:
 %---------------
 \begin{equation}
-L_2( \{ \sigma_{kl} \} ) = \sum_{kl} \left [ \sigma_{kl} - (B^{-1})_{kl} \right ]^2
+L_2 ( \{ B_{ij} \} | \{ \sigma_{kl} \} ) = \sum_{kl} \left [ \sigma_{kl} - (B^{-1})_{kl} \right ]^2
 \end{equation}
 %---------------
 where $\sigma_{kl} = ((B^*)^{-1})_{kl}$ are the given numerical values.
@@ -152,6 +152,16 @@ where $\sigma_{kl} = ((B^*)^{-1})_{kl}$ are the given numerical values.
 In this case, we are learning only the unknown elements of $B$.
 
 The first order gradients are:
+%---------------
+\begin{equation}
+\begin{split}
+\frac{\partial L_2}{\partial B_{ij}}
+=
+- 2 \sum_{kl} \left [ \sigma_{kl} - (B^{-1})_{kl} \right ]
+\frac{\partial (B^{-1})_{kl}}{\partial B_{ij}}
+\end{split}
+\end{equation}
+%---------------
 %---------------
 \begin{equation}
 \begin{split}

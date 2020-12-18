@@ -171,12 +171,7 @@ std::pair<arma::mat,arma::mat> RootFindingNewton::solve(const arma::mat &cov_mat
         // Update
         arma::vec residuals = get_residuals(prec_mat_curr, cov_mat_curr);
         arma::mat jac = get_jacobian(prec_mat_curr, cov_mat_curr);
-        std::cout << "Jac" << std::endl;
-        std::cout << jac << std::endl;
-        std::cout << "Residuals" << std::endl;
-        std::cout << residuals << std::endl;
-        // arma::vec update_vec = arma::solve(jac, - f);
-        arma::vec update_vec = arma::solve(jac + arma::diagmat(residuals), - residuals);
+        arma::vec update_vec = arma::solve(jac, - residuals);
 
         // Update
         arma::vec update_vec_b = update_vec.subvec(0, _idx_pairs_free.size()-1);
