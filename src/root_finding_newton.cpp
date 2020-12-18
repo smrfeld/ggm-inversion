@@ -32,84 +32,16 @@ SOFTWARE.
 
 namespace ginv {
 
-bool RootFindingNewton::_check_pair_exists(const std::vector<std::pair<int,int>> &pairs, std::pair<int,int> pr_search) const {
-                
-    auto it = std::find(pairs.begin(), pairs.end(), pr_search);
-    if (it != pairs.end()) {
-        return true;
-    }
-    
-    std::pair<int,int> pr_reverse = std::make_pair(pr_search.second, pr_search.first);
-    auto it2 = std::find(pairs.begin(), pairs.end(), pr_reverse);
-    if (it2 != pairs.end()) {
-        return true;
-    } else {
-        return false;
-    }
-}
-
-RootFindingNewton::RootFindingNewton(int dim, const std::vector<std::pair<int,int>> &idx_pairs_free) : SolverBase(dim, idx_pairs_free) {
-    
-    // Non-free idxs
-    for (auto i=0; i<_dim; i++) {
-        for (auto j=i; j<_dim; j++) {
-            std::pair<int,int> pr = std::make_pair(i,j);
-            if (!_check_pair_exists(_idx_pairs_free, pr)) {
-                _idx_pairs_non_free.push_back(pr);
-            }
-        }
-    }
-}
-
-RootFindingNewton::RootFindingNewton(const RootFindingNewton& other) : SolverBase(other) {
-    _copy(other);
-};
-RootFindingNewton::RootFindingNewton(RootFindingNewton&& other) : SolverBase(std::move(other)) {
-    _move(other);
-};
-RootFindingNewton& RootFindingNewton::operator=(const RootFindingNewton& other) {
-    if (this != &other) {
-        _clean_up();
-        SolverBase::operator=(other);
-        _copy(other);
-    };
-    return *this;
-};
-RootFindingNewton& RootFindingNewton::operator=(RootFindingNewton&& other) {
-    if (this != &other) {
-        _clean_up();
-        SolverBase::operator=(std::move(other));
-        _move(other);
-    };
-    return *this;
-};
-RootFindingNewton::~RootFindingNewton()
-{
-    _clean_up();
-};
-void RootFindingNewton::_clean_up() {
-    // Nothing....
-};
-
-void RootFindingNewton::_copy(const RootFindingNewton& other) {
-    _idx_pairs_free = other._idx_pairs_free;
-    _dim = other._dim;
-};
-void RootFindingNewton::_move(RootFindingNewton& other) {
-    _idx_pairs_free = other._idx_pairs_free;
-    _dim = other._dim;
-};
-
 void RootFindingNewton::_log_progress_if_needed(Options options, int opt_step, int no_opt_steps, const arma::mat &cov_mat_curr, const arma::mat &cov_mat_targets, const arma::mat &prec_mat_curr) const {
     if (options.log_progress) {
         if (opt_step % options.log_interval == 0) {
             
             // Measure residuals
             arma::vec res = get_residuals(prec_mat_curr, cov_mat_curr);
-            double max_res = arma::max(res);
-            double mean_res = arma::mean(res);
+            double max_abs_res = arma::max(abs(res));
+            double mean_abs_res = arma::mean(abs(res));
             
-            std::cout << "   Inversion: " << opt_step << " / " << no_opt_steps << " ave residual: " << mean_res << " max residual: " << max_res << std::endl;
+            std::cout << "   Inversion: " << opt_step << " / " << no_opt_steps << " ave absolute residual: " << mean_abs_res << " max absolute residual: " << max_abs_res << std::endl;
 
             if (options.log_mats) {
                 std::cout << "   Cov mat curr: " << std::endl;
@@ -193,30 +125,6 @@ arma::mat RootFindingNewton::get_jacobian(const arma::mat &prec_mat_curr, const 
     return jac;
 }
 
-arma::mat RootFindingNewton::free_vec_to_mat(const arma::vec &vec) const {
-    
-    arma::mat mat = arma::zeros(_dim,_dim);
-    for (size_t i=0; i<_idx_pairs_free.size(); i++) {
-        auto pr = _idx_pairs_free.at(i);
-        mat(pr.first, pr.second) = vec(i);
-        mat(pr.second, pr.first) = vec(i);
-    }
-    
-    return mat;
-}
-
-arma::mat RootFindingNewton::non_free_vec_to_mat(const arma::vec &vec) const {
-    
-    arma::mat mat = arma::zeros(_dim,_dim);
-    for (size_t i=0; i<_idx_pairs_non_free.size(); i++) {
-        auto pr = _idx_pairs_non_free.at(i);
-        mat(pr.first, pr.second) = vec(i);
-        mat(pr.second, pr.first) = vec(i);
-    }
-    
-    return mat;
-}
-
 bool RootFindingNewton::_check_convergence(const arma::mat &prec_mat_curr, const arma::mat &cov_mat_curr) const {
 
     arma::vec residuals = get_residuals(prec_mat_curr, cov_mat_curr);
@@ -261,9 +169,14 @@ std::pair<arma::mat,arma::mat> RootFindingNewton::solve(const arma::mat &cov_mat
         _write_progress_if_needed(options, i, prec_mat_curr, cov_mat_curr);
         
         // Update
-        arma::vec f = get_residuals(prec_mat_curr, cov_mat_curr);
+        arma::vec residuals = get_residuals(prec_mat_curr, cov_mat_curr);
         arma::mat jac = get_jacobian(prec_mat_curr, cov_mat_curr);
-        arma::vec update_vec = arma::solve(jac, - f);
+        std::cout << "Jac" << std::endl;
+        std::cout << jac << std::endl;
+        std::cout << "Residuals" << std::endl;
+        std::cout << residuals << std::endl;
+        // arma::vec update_vec = arma::solve(jac, - f);
+        arma::vec update_vec = arma::solve(jac + arma::diagmat(residuals), - residuals);
 
         // Update
         arma::vec update_vec_b = update_vec.subvec(0, _idx_pairs_free.size()-1);

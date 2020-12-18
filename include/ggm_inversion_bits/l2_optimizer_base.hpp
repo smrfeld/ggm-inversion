@@ -63,10 +63,7 @@ private:
 public:
     
     using SolverBase::SolverBase;
-    
-    arma::mat vec_to_mat(const arma::vec &vec) const;
-    arma::vec mat_to_vec(const arma::mat &mat) const;
-    
+        
     double get_obj_func_val(const arma::mat &cov_mat_curr, const arma::mat &cov_mat_true) const;
     
     arma::mat get_deriv_mat(const arma::mat &cov_mat_curr, const arma::mat &cov_mat_true) const;

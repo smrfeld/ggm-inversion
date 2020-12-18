@@ -41,6 +41,16 @@ SolverBase::SolverBase(int dim, const std::vector<std::pair<int,int>> &idx_pairs
         assert(pr.first < _dim);
         assert(pr.second < _dim);
     }
+    
+    // Non-free idxs
+    for (auto i=0; i<_dim; i++) {
+        for (auto j=i; j<_dim; j++) {
+            std::pair<int,int> pr = std::make_pair(i,j);
+            if (!_check_pair_exists(_idx_pairs_free, pr)) {
+                _idx_pairs_non_free.push_back(pr);
+            }
+        }
+    }
 }
 
 SolverBase::SolverBase(const SolverBase& other) {
@@ -79,6 +89,96 @@ void SolverBase::_move(SolverBase& other) {
     _idx_pairs_free = other._idx_pairs_free;
     _dim = other._dim;
 };
+
+bool SolverBase::_check_pair_exists(const std::vector<std::pair<int,int>> &pairs, std::pair<int,int> pr_search) const {
+                
+    auto it = std::find(pairs.begin(), pairs.end(), pr_search);
+    if (it != pairs.end()) {
+        return true;
+    }
+    
+    std::pair<int,int> pr_reverse = std::make_pair(pr_search.second, pr_search.first);
+    auto it2 = std::find(pairs.begin(), pairs.end(), pr_reverse);
+    if (it2 != pairs.end()) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+std::vector<std::pair<int,int>> SolverBase::get_idx_pairs_free() const {
+    return _idx_pairs_free;
+}
+
+int SolverBase::get_dim() const {
+    return _dim;
+}
+
+arma::mat SolverBase::free_vec_to_mat(const arma::vec &vec) const {
+    
+    arma::mat mat = arma::zeros(_dim,_dim);
+    for (size_t i=0; i<_idx_pairs_free.size(); i++) {
+        auto pr = _idx_pairs_free.at(i);
+        mat(pr.first, pr.second) = vec(i);
+        mat(pr.second, pr.first) = vec(i);
+    }
+    
+    return mat;
+}
+
+arma::mat SolverBase::non_free_vec_to_mat(const arma::vec &vec) const {
+    
+    arma::mat mat = arma::zeros(_dim,_dim);
+    for (size_t i=0; i<_idx_pairs_non_free.size(); i++) {
+        auto pr = _idx_pairs_non_free.at(i);
+        mat(pr.first, pr.second) = vec(i);
+        mat(pr.second, pr.first) = vec(i);
+    }
+    
+    return mat;
+}
+
+arma::vec SolverBase::free_mat_to_vec(const arma::mat &mat) const {
+    
+    arma::vec vec(_idx_pairs_free.size());
+    for (size_t i=0; i<_idx_pairs_free.size(); i++) {
+        auto pr = _idx_pairs_free.at(i);
+        vec(i) = mat(pr.first, pr.second);
+    }
+    
+    return vec;
+}
+
+arma::vec SolverBase::non_free_mat_to_vec(const arma::mat &mat) const {
+    
+    arma::vec vec(_idx_pairs_non_free.size());
+    for (size_t i=0; i<_idx_pairs_non_free.size(); i++) {
+        auto pr = _idx_pairs_non_free.at(i);
+        vec(i) = mat(pr.first, pr.second);
+    }
+    
+    return vec;
+}
+
+arma::mat SolverBase::zero_free_elements(const arma::mat &mat) const {
+    arma::mat out = mat;
+    for (auto pr: _idx_pairs_free) {
+        out(pr.first,pr.second) = 0;
+        out(pr.second,pr.first) = 0;
+    }
+    
+    return out;
+}
+
+arma::mat SolverBase::zero_non_free_elements(const arma::mat &mat) const {
+    arma::mat out = mat;
+    for (auto pr: _idx_pairs_non_free) {
+        out(pr.first,pr.second) = 0;
+        out(pr.second,pr.first) = 0;
+    }
+    
+    return out;
+}
 
 };
 

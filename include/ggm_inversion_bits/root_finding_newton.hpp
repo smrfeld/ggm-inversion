@@ -40,11 +40,7 @@ namespace ginv {
 class RootFindingNewton : public SolverBase {
         
 protected:
-    
-    bool _check_pair_exists(const std::vector<std::pair<int,int>> &pairs, std::pair<int,int> pr_search) const;
-    
-    std::vector<std::pair<int,int>> _idx_pairs_non_free;
-    
+            
     bool _check_convergence(const arma::mat &prec_mat_curr, const arma::mat &cov_mat_curr) const;
     
     void _log_progress_if_needed(Options options, int opt_step, int no_opt_steps, const arma::mat &cov_mat_curr, const arma::mat &cov_mat_targets, const arma::mat &prec_mat_curr) const;
@@ -67,16 +63,8 @@ public:
     int conv_max_no_opt_steps = 100;
     Options options;
     
-    RootFindingNewton(int dim, const std::vector<std::pair<int,int>> &idx_pairs_free);
-    RootFindingNewton(const RootFindingNewton& other);
-    RootFindingNewton& operator=(const RootFindingNewton& other);
-    RootFindingNewton(RootFindingNewton&& other);
-    RootFindingNewton& operator=(RootFindingNewton&& other);
-    ~RootFindingNewton();
+    using SolverBase::SolverBase;
     
-    arma::mat free_vec_to_mat(const arma::vec &vec) const;
-    arma::mat non_free_vec_to_mat(const arma::vec &vec) const;
-
     arma::mat get_i_mat(int k, int l) const;
     arma::vec upper_tri_to_vec(const arma::mat &mat) const;
     

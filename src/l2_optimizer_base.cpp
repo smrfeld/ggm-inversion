@@ -37,8 +37,8 @@ void L2OptimizerBase::_log_progress_if_needed(Options options, int opt_step, int
         if (opt_step % options.log_interval == 0) {
             
             // Measure errors
-            arma::vec cov_vec_targets = mat_to_vec(cov_mat_targets);
-            arma::vec cov_vec_curr = mat_to_vec(cov_mat_curr);
+            arma::vec cov_vec_targets = free_mat_to_vec(cov_mat_targets);
+            arma::vec cov_vec_curr = free_mat_to_vec(cov_mat_curr);
             arma::vec cov_vec_perc_err = abs(cov_vec_curr - cov_vec_targets) / abs(cov_vec_curr);
             double ave_err = arma::mean(cov_vec_perc_err);
             double max_err = arma::max(cov_vec_perc_err);
@@ -105,28 +105,6 @@ double L2OptimizerBase::_get_second_deriv_inverse_mat(const arma::mat &cov_mat_c
     return ret;
 }
 
-arma::mat L2OptimizerBase::vec_to_mat(const arma::vec &vec) const {
-    
-    arma::mat mat = arma::zeros(_dim,_dim);
-    for (size_t i=0; i<_idx_pairs_free.size(); i++) {
-        auto pr = _idx_pairs_free.at(i);
-        mat(pr.first, pr.second) = vec(i);
-        mat(pr.second, pr.first) = vec(i);
-    }
-    
-    return mat;
-}
-arma::vec L2OptimizerBase::mat_to_vec(const arma::mat &mat) const {
-    
-    arma::vec vec(_idx_pairs_free.size());
-    for (size_t i=0; i<_idx_pairs_free.size(); i++) {
-        auto pr = _idx_pairs_free.at(i);
-        vec(i) = mat(pr.first, pr.second);
-    }
-    
-    return vec;
-}
-
 double L2OptimizerBase::get_obj_func_val(const arma::mat &cov_mat_curr, const arma::mat &cov_mat_true) const {
 
     double val = 0.0;
@@ -164,7 +142,7 @@ arma::mat L2OptimizerBase::get_deriv_mat(const arma::mat &cov_mat_curr, const ar
 
 arma::vec L2OptimizerBase::get_deriv_vec(const arma::mat &cov_mat_curr, const arma::mat &cov_mat_true) const {
     arma::mat deriv_mat = get_deriv_mat(cov_mat_curr, cov_mat_true);
-    return mat_to_vec(deriv_mat);
+    return free_mat_to_vec(deriv_mat);
 }
 
 arma::mat L2OptimizerBase::get_hessian(const arma::mat &cov_mat_curr, const arma::mat &cov_mat_true) const {

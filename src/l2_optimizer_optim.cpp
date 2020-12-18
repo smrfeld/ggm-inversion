@@ -38,7 +38,7 @@ double optim_obj_func(const arma::vec &prec_mat_vec, arma::vec *deriv_vec, void*
     const L2OptimizerOptim *optimizer = input->optimizer;
     arma::mat cov_mat_true = input->cov_mat_true;
     
-    arma::mat prec_mat_curr = optimizer->vec_to_mat(prec_mat_vec);
+    arma::mat prec_mat_curr = optimizer->free_vec_to_mat(prec_mat_vec);
     arma::mat cov_mat_curr = arma::inv(prec_mat_curr);
     
     // Obj func val
@@ -47,7 +47,7 @@ double optim_obj_func(const arma::vec &prec_mat_vec, arma::vec *deriv_vec, void*
     // Get deriv
     if (deriv_vec != nullptr) {
         arma::mat deriv_mat = optimizer->get_deriv_mat(cov_mat_curr, cov_mat_true);
-        *deriv_vec = optimizer->mat_to_vec(deriv_mat);
+        *deriv_vec = optimizer->free_mat_to_vec(deriv_mat);
     }
     
     return obj_func_val;
@@ -56,7 +56,7 @@ double optim_obj_func(const arma::vec &prec_mat_vec, arma::vec *deriv_vec, void*
 std::pair<arma::mat,arma::mat> L2OptimizerOptim::solve(const arma::mat &cov_mat_true, const arma::mat &prec_mat_init) const {
     
     // Init
-    arma::vec prec_mat_vec = mat_to_vec(prec_mat_init);
+    arma::vec prec_mat_vec = free_mat_to_vec(prec_mat_init);
     
     // Optional input
     InputObjFuncVal *input = new InputObjFuncVal();
@@ -90,15 +90,15 @@ std::pair<arma::mat,arma::mat> L2OptimizerOptim::solve(const arma::mat &cov_mat_
         std::cout << "Obj func value: " << settings.opt_fn_value << std::endl;
         std::cout << "Error value: " << settings.opt_error_value << std::endl;
         std::cout << "Prec mat: " << std::endl;
-        std::cout << vec_to_mat(prec_mat_vec) << std::endl;
+        std::cout << free_vec_to_mat(prec_mat_vec) << std::endl;
         std::cout << "Cov mat: " << std::endl;
-        std::cout << arma::inv(vec_to_mat(prec_mat_vec)) << std::endl;
+        std::cout << arma::inv(free_vec_to_mat(prec_mat_vec)) << std::endl;
     }
     
     // Clean up!
     delete input;
     
-    arma::mat prec_mat_sol = vec_to_mat(prec_mat_vec);
+    arma::mat prec_mat_sol = free_vec_to_mat(prec_mat_vec);
     return std::make_pair(arma::inv(prec_mat_sol), prec_mat_sol);
 }
 

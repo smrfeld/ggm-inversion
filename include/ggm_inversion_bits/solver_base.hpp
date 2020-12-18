@@ -41,10 +41,12 @@ class SolverBase {
         
 protected:
     
-    std::vector<std::pair<int,int>> _idx_pairs_free;
+    std::vector<std::pair<int,int>> _idx_pairs_free, _idx_pairs_non_free;
     int _dim;
     
 private:
+    
+    bool _check_pair_exists(const std::vector<std::pair<int,int>> &pairs, std::pair<int,int> pr_search) const;
     
     /// Internal clean up
     void _clean_up();
@@ -62,6 +64,17 @@ public:
     SolverBase& operator=(SolverBase&& other);
     virtual ~SolverBase();
     
+    std::vector<std::pair<int,int>> get_idx_pairs_free() const;
+    int get_dim() const;
+    
+    arma::mat free_vec_to_mat(const arma::vec &vec) const;
+    arma::mat non_free_vec_to_mat(const arma::vec &vec) const;
+    arma::vec free_mat_to_vec(const arma::mat &mat) const;
+    arma::vec non_free_mat_to_vec(const arma::mat &mat) const;
+
+    arma::mat zero_free_elements(const arma::mat &mat) const;
+    arma::mat zero_non_free_elements(const arma::mat &mat) const;
+
     virtual std::pair<arma::mat,arma::mat> solve(const arma::mat &cov_mat_true, const arma::mat &prec_mat_init) const = 0;
 };
 
