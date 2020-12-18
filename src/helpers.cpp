@@ -38,7 +38,7 @@ SOFTWARE.
 #include <fstream>
 #include <random>
 
-namespace ggm {
+namespace ginv {
 
 double get_random_number(double min, double max)
 {

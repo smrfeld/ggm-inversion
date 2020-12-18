@@ -1,0 +1,1711 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 12.0' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       158,          7]
+NotebookDataLength[     70104,       1703]
+NotebookOptionsPosition[     66320,       1630]
+NotebookOutlinePosition[     66716,       1646]
+CellTagsIndexPosition[     66673,       1643]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+
+Cell[CellGroupData[{
+Cell["Covs", "Title",
+ CellChangeTimes->{{3.81724691155824*^9, 
+  3.8172469119068737`*^9}},ExpressionUUID->"4bbb19c2-f450-4977-91b2-\
+58af684d572f"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"utIdxs", "=", 
+  RowBox[{"Flatten", "[", 
+   RowBox[{"Table", "[", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"5", "*", 
+       RowBox[{"(", 
+        RowBox[{"j", "-", "1"}], ")"}]}], "+", "i"}], ",", 
+     RowBox[{"{", 
+      RowBox[{"j", ",", "5"}], "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{"i", ",", "j", ",", "5"}], "}"}]}], "]"}], "]"}]}]], "Input",
+ CellChangeTimes->{{3.817246505531761*^9, 3.817246515693598*^9}},
+ CellLabel->"In[51]:=",ExpressionUUID->"16080999-6fd4-417e-a406-8522938ff3ec"],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{
+  "1", ",", "2", ",", "3", ",", "4", ",", "5", ",", "7", ",", "8", ",", "9", 
+   ",", "10", ",", "13", ",", "14", ",", "15", ",", "19", ",", "20", ",", 
+   "25"}], "}"}]], "Output",
+ CellChangeTimes->{{3.817246510454361*^9, 3.817246515933107*^9}},
+ CellLabel->"Out[51]=",ExpressionUUID->"46615ad8-2f30-4a58-841d-af25e809a58a"]
+}, Open  ]],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"SetDirectory", "[", 
+   RowBox[{"NotebookDirectory", "[", "]"}], "]"}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"covData", "=", 
+   RowBox[{"Import", "[", 
+    RowBox[{"\"\<data/cov_mat.txt\>\"", ",", "\"\<Table\>\""}], "]"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"opts", "=", 
+    RowBox[{"covData", "[", 
+     RowBox[{"[", 
+      RowBox[{";;", ",", "1"}], "]"}], "]"}]}], ";"}], 
+  "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"covs", "=", 
+   RowBox[{"{", "}"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"Do", "[", "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"i", "=", 
+      RowBox[{"k", "+", "1"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"covVec", "=", 
+      RowBox[{"covData", "[", 
+       RowBox[{"[", 
+        RowBox[{";;", ",", "i"}], "]"}], "]"}]}], ";", "\[IndentingNewLine]", 
+     
+     RowBox[{"AppendTo", "[", 
+      RowBox[{"covs", ",", 
+       RowBox[{"Transpose", "[", 
+        RowBox[{"{", 
+         RowBox[{"opts", ",", "covVec"}], "}"}], "]"}]}], "]"}], ";"}], 
+    "\[IndentingNewLine]", ",", 
+    RowBox[{"{", 
+     RowBox[{"k", ",", "utIdxs"}], "}"}]}], "]"}], ";"}]}], "Input",
+ CellChangeTimes->{{3.816657483605199*^9, 3.816657541284648*^9}, {
+   3.816661300232854*^9, 3.8166613205890903`*^9}, {3.816661418330168*^9, 
+   3.8166614524058027`*^9}, {3.8172462500579243`*^9, 3.817246437499683*^9}, {
+   3.8172465005041122`*^9, 3.817246566557939*^9}, 
+   3.817246615403748*^9},ExpressionUUID->"c62d430c-08a6-4695-848e-\
+622132261b57"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"pCov", "=", 
+  RowBox[{"Show", "[", "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"ListLinePlot", "[", "covs", "]"}], ",", "\[IndentingNewLine]", 
+    RowBox[{"ImageSize", "\[Rule]", "500"}], ",", "\[IndentingNewLine]", 
+    RowBox[{"PlotLabel", "\[Rule]", "\"\<Cov. mat\>\""}], ",", 
+    "\[IndentingNewLine]", 
+    RowBox[{"FrameLabel", "\[Rule]", 
+     RowBox[{"{", "\"\<Optimization step\>\"", "}"}]}]}], 
+   "\[IndentingNewLine]", "]"}]}]], "Input",
+ CellChangeTimes->{{3.816661453653747*^9, 3.816661458178955*^9}, {
+  3.8166616539118853`*^9, 3.81666167648997*^9}, {3.816661716103423*^9, 
+  3.816661747111882*^9}, {3.816661794461163*^9, 3.81666180181161*^9}, {
+  3.8166618477098827`*^9, 3.81666190382857*^9}, {3.817246161138885*^9, 
+  3.817246161409602*^9}, {3.817246587947876*^9, 3.8172465881275873`*^9}},
+ CellLabel->"In[67]:=",ExpressionUUID->"edfb5650-ae02-45c9-8918-377f7e666434"],
+
+Cell[BoxData[
+ GraphicsBox[{{}, {{}, {}, 
+    {RGBColor[0.9, 0.36, 0.054], PointSize[
+      NCache[
+       Rational[1, 72], 0.013888888888888888`]], AbsoluteThickness[1.6], 
+     CapForm["Butt"], 
+     StyleBox[
+      LineBox[{{0., 100.}, {1., 100.}, {2., 100.}, {3., 100.}, {4., 100.}, {
+       5., 100.}, {6., 100.}, {7., 100.}, {8., 100.}, {9., 100.}}],
+      FontSize->24]}, 
+    {RGBColor[0.365248, 0.427802, 0.758297], PointSize[
+      NCache[
+       Rational[1, 72], 0.013888888888888888`]], AbsoluteThickness[1.6], 
+     CapForm["Butt"], 
+     StyleBox[
+      LineBox[{{0., 0.}, {1., 0.}, {2., 21.22463122463123}, {3., 
+       3.333333333333339}, {4., 3.333333333333333}, {5., 3.333333333333333}, {
+       6., 3.333333333333333}, {7., 3.333333333333333}, {8., 
+       3.333333333333333}, {9., 3.333333333333333}}],
+      FontSize->24]}, 
+    {RGBColor[0.945109, 0.593901, 0.], PointSize[
+      NCache[
+       Rational[1, 72], 0.013888888888888888`]], AbsoluteThickness[1.6], 
+     CapForm["Butt"], 
+     StyleBox[
+      LineBox[{{0., 0.}, {1., 0.}, {2., 4.244926244926248}, {3., 
+       0.6666666666666674}, {4., 0.6666666666666665}, {5., 
+       0.6666666666666667}, {6., 0.6666666666666665}, {7., 
+       0.6666666666666669}, {8., 0.6666666666666666}, {9., 
+       0.6666666666666667}}],
+      FontSize->24]}, 
+    {RGBColor[0.645957, 0.253192, 0.685109], PointSize[
+      NCache[
+       Rational[1, 72], 0.013888888888888888`]], AbsoluteThickness[1.6], 
+     CapForm["Butt"], 
+     StyleBox[
+      LineBox[{{0., 20.}, {1., 20.}, {2., 20.}, {3., 20.}, {4., 20.}, {5., 
+       20.}, {6., 20.}, {7., 20.}, {8., 20.}, {9., 20.}}],
+      FontSize->24]}, 
+    {RGBColor[0.285821, 0.56, 0.450773], PointSize[
+      NCache[
+       Rational[1, 72], 0.013888888888888888`]], AbsoluteThickness[1.6], 
+     CapForm["Butt"], 
+     StyleBox[
+      LineBox[{{0., 0.}, {1., 1.851851851851852}, {2., 5.000000000000001}, {
+       3., 5.}, {4., 5.}, {5., 5.}, {6., 5.}, {7., 5.}, {8., 5.}, {9., 5.}}],
+      FontSize->24]}, 
+    {RGBColor[0.7, 0.336, 0.], PointSize[
+      NCache[
+       Rational[1, 72], 0.013888888888888888`]], AbsoluteThickness[1.6], 
+     CapForm["Butt"], 
+     StyleBox[
+      LineBox[{{0., 80.}, {1., 80.}, {2., 80.}, {3., 80.}, {4., 80.}, {5., 
+       80.}, {6., 80.}, {7., 80.}, {8., 80.}, {9., 80.}}],
+      FontSize->24]}, 
+    {RGBColor[0.491486, 0.345109, 0.8], PointSize[
+      NCache[
+       Rational[1, 72], 0.013888888888888888`]], AbsoluteThickness[1.6], 
+     CapForm["Butt"], 
+     StyleBox[
+      LineBox[{{0., 30.}, {1., 30.}, {2., 30.}, {3., 30.}, {4., 30.}, {5., 
+       30.}, {6., 30.}, {7., 30.}, {8., 30.}, {9., 30.}}],
+      FontSize->24]}, 
+    {RGBColor[0.71788, 0.568653, 0.], PointSize[
+      NCache[
+       Rational[1, 72], 0.013888888888888888`]], AbsoluteThickness[1.6], 
+     CapForm["Butt"], 
+     StyleBox[
+      LineBox[{{0., 0.}, {1., 0.}, {2., 42.44926244926246}, {3., 
+       6.666666666666679}, {4., 6.666666666666665}, {5., 6.666666666666667}, {
+       6., 6.666666666666666}, {7., 6.666666666666667}, {8., 
+       6.666666666666666}, {9., 6.666666666666667}}],
+      FontSize->24]}, 
+    {RGBColor[0.70743, 0.224, 0.542415], PointSize[
+      NCache[
+       Rational[1, 72], 0.013888888888888888`]], AbsoluteThickness[1.6], 
+     CapForm["Butt"], 
+     StyleBox[
+      LineBox[{{0., 0.}, {1., -19.04761904761905}, {2., 40.00000000000004}, {
+       3., 40.}, {4., 40.}, {5., 40.}, {6., 40.}, {7., 40.}, {8., 40.}, {9., 
+       40.}}],
+      FontSize->24]}, 
+    {RGBColor[0.287228, 0.490217, 0.664674], PointSize[
+      NCache[
+       Rational[1, 72], 0.013888888888888888`]], AbsoluteThickness[1.6], 
+     CapForm["Butt"], 
+     StyleBox[
+      LineBox[{{0., 6.}, {1., 6.}, {2., 6.}, {3., 6.}, {4., 6.}, {5., 6.}, {
+       6., 6.}, {7., 6.}, {8., 6.}, {9., 6.}}],
+      FontSize->24]}, 
+    {RGBColor[0.982289285128704, 0.5771321368979874, 0.011542503255145636`], 
+     PointSize[
+      NCache[
+       Rational[1, 72], 0.013888888888888888`]], AbsoluteThickness[1.6], 
+     CapForm["Butt"], 
+     StyleBox[
+      LineBox[{{0., 0.}, {1., -10.29601029601029}, {2., 8.489852489852499}, {
+       3., 1.333333333333334}, {4., 1.333333333333333}, {5., 
+       1.333333333333333}, {6., 1.333333333333333}, {7., 1.333333333333334}, {
+       8., 1.333333333333333}, {9., 1.333333333333333}}],
+      FontSize->24]}, 
+    {RGBColor[0.5876740325800278, 0.2877284499870081, 0.7500695697462922], 
+     PointSize[
+      NCache[
+       Rational[1, 72], 0.013888888888888888`]], AbsoluteThickness[1.6], 
+     CapForm["Butt"], 
+     StyleBox[
+      LineBox[{{0., 8.}, {1., 8.}, {2., 8.}, {3., 8.}, {4., 8.}, {5., 8.}, {
+       6., 8.}, {7., 8.}, {8., 8.}, {9., 8.}}],
+      FontSize->24]}, 
+    {RGBColor[0.4262088601796793, 0.5581552810007578, 0.2777996730417023], 
+     PointSize[
+      NCache[
+       Rational[1, 72], 0.013888888888888888`]], AbsoluteThickness[1.6], 
+     CapForm["Butt"], 
+     StyleBox[
+      LineBox[{{0., 40.}, {1., 40.}, {2., 40.}, {3., 40.}, {4., 40.}, {5., 
+       40.}, {6., 40.}, {7., 40.}, {8., 40.}, {9., 40.}}],
+      FontSize->24]}, 
+    {RGBColor[0.9431487543762861, 0.414555896337833, 0.07140829055870854], 
+     PointSize[
+      NCache[
+       Rational[1, 72], 0.013888888888888888`]], AbsoluteThickness[1.6], 
+     CapForm["Butt"], 
+     StyleBox[
+      LineBox[{{0., 10.}, {1., 10.}, {2., 10.}, {3., 10.}, {4., 10.}, {5., 
+       10.}, {6., 10.}, {7., 10.}, {8., 10.}, {9., 10.}}],
+      FontSize->24]}, 
+    {RGBColor[0.41497437140121635`, 0.393632147507352, 0.7842993779115092], 
+     PointSize[
+      NCache[
+       Rational[1, 72], 0.013888888888888888`]], AbsoluteThickness[1.6], 
+     CapForm["Butt"], 
+     StyleBox[
+      LineBox[{{0., 60.}, {1., 60.}, {2., 60.}, {3., 60.}, {4., 60.}, {5., 
+       60.}, {6., 60.}, {7., 60.}, {8., 60.}, {9., 60.}}],
+      FontSize->24]}}, {{}, {}}},
+  AspectRatio->NCache[GoldenRatio^(-1), 0.6180339887498948],
+  Axes->{False, False},
+  AxesLabel->{None, None},
+  AxesOrigin->{0, 0},
+  BaseStyle->{FontSize -> 24},
+  DisplayFunction->Identity,
+  Frame->{{True, True}, {True, True}},
+  FrameLabel->{
+    FormBox["\"Optimization step\"", TraditionalForm]},
+  FrameStyle->Automatic,
+  FrameTicks->{{Automatic, Automatic}, {Automatic, Automatic}},
+  GridLines->{{0}, {0}},
+  GridLinesStyle->Directive[
+    GrayLevel[0.5, 0.4]],
+  ImageSize->500,
+  LabelStyle->{FontFamily -> "Times"},
+  Method->{
+   "OptimizePlotMarkers" -> True, "OptimizePlotMarkers" -> True, 
+    "CoordinatesToolOptions" -> {"DisplayFunction" -> ({
+        Identity[
+         Part[#, 1]], 
+        Identity[
+         Part[#, 2]]}& ), "CopiedValueFunction" -> ({
+        Identity[
+         Part[#, 1]], 
+        Identity[
+         Part[#, 2]]}& )}},
+  PlotLabel->FormBox["\"Cov. mat\"", TraditionalForm],
+  PlotRange->{{0, 9.}, {-19.04761904761905, 100.}},
+  PlotRangeClipping->True,
+  PlotRangePadding->{{
+     Scaled[0.02], 
+     Scaled[0.02]}, {
+     Scaled[0.05], 
+     Scaled[0.05]}},
+  Ticks->{Automatic, Automatic}]], "Output",
+ CellChangeTimes->{{3.816661454596744*^9, 3.816661458483761*^9}, {
+   3.816661565595117*^9, 3.816661595299838*^9}, {3.8166616595211678`*^9, 
+   3.8166616768704977`*^9}, 3.81666174965624*^9, 3.816661802122843*^9, {
+   3.816661845684634*^9, 3.816661904183132*^9}, {3.817245906262743*^9, 
+   3.8172459279181347`*^9}, {3.817246153162793*^9, 3.8172461620751657`*^9}, {
+   3.817246585384158*^9, 3.817246588437872*^9}},
+ CellLabel->"Out[67]=",ExpressionUUID->"5e359cc7-7fd4-4042-930b-870ea251886b"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"CreateDirectory", "[", "\"\<figures\>\"", "]"}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{"Export", "[", 
+  RowBox[{"\"\<figures/cov.png\>\"", ",", "pCov", ",", 
+   RowBox[{"ImageResolution", "\[Rule]", "200"}]}], "]"}]}], "Input",
+ CellChangeTimes->{{3.816661977163455*^9, 3.8166619828264647`*^9}, {
+  3.816662035637505*^9, 3.8166620750958242`*^9}},
+ CellLabel->"In[68]:=",ExpressionUUID->"895fe2bb-6e18-4242-951d-bc54d4334a6f"],
+
+Cell[BoxData[
+ TemplateBox[{
+  "CreateDirectory", "filex", 
+   "\"\\!\\(\\*RowBox[{\\\"\\\\\\\"/Users/oernst/software_private/ggm_\
+inversion/test/output/root_find_newton_5d/figures\\\\\\\"\\\"}]\\) already \
+exists.\"", 2, 68, 17, 24416997456800356831, "Local"},
+  "MessageTemplate"]], "Message", "MSG",
+ CellChangeTimes->{3.8172465919399977`*^9},
+ CellLabel->
+  "During evaluation of \
+In[68]:=",ExpressionUUID->"0053d7c0-c348-4811-be0e-7835cde4f562"],
+
+Cell[BoxData["\<\"figures/cov.png\"\>"], "Output",
+ CellChangeTimes->{{3.8166620466244907`*^9, 3.816662075611167*^9}, 
+   3.817246193674485*^9, 3.8172465922044*^9},
+ CellLabel->"Out[69]=",ExpressionUUID->"0d7f4791-b34a-4891-b141-d381845ab5f2"]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Prec mat", "Title",
+ CellChangeTimes->{{3.8172469143806343`*^9, 
+  3.817246915271834*^9}},ExpressionUUID->"d66a73e1-d7f2-47e3-a710-\
+5b43b9a6c416"],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"SetDirectory", "[", 
+   RowBox[{"NotebookDirectory", "[", "]"}], "]"}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"precData", "=", 
+   RowBox[{"Import", "[", 
+    RowBox[{"\"\<data/prec_mat.txt\>\"", ",", "\"\<Table\>\""}], "]"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"opts", "=", 
+    RowBox[{"precData", "[", 
+     RowBox[{"[", 
+      RowBox[{";;", ",", "1"}], "]"}], "]"}]}], ";"}], 
+  "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"precs", "=", 
+   RowBox[{"{", "}"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"Do", "[", "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"i", "=", 
+      RowBox[{"k", "+", "1"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"precVec", "=", 
+      RowBox[{"precData", "[", 
+       RowBox[{"[", 
+        RowBox[{";;", ",", "i"}], "]"}], "]"}]}], ";", "\[IndentingNewLine]", 
+     
+     RowBox[{"AppendTo", "[", 
+      RowBox[{"precs", ",", 
+       RowBox[{"Transpose", "[", 
+        RowBox[{"{", 
+         RowBox[{"opts", ",", "precVec"}], "}"}], "]"}]}], "]"}], ";"}], 
+    "\[IndentingNewLine]", ",", 
+    RowBox[{"{", 
+     RowBox[{"k", ",", "utIdxs"}], "}"}]}], "]"}], ";"}]}], "Input",
+ CellChangeTimes->{{3.81724660536681*^9, 3.817246630523651*^9}},
+ CellLabel->"In[70]:=",ExpressionUUID->"cbc64a08-321a-48c7-a811-823a76ae4446"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"pPrec", "=", 
+  RowBox[{"ListLinePlot", "[", 
+   RowBox[{"precs", ",", 
+    RowBox[{"PlotRange", "\[Rule]", "All"}], ",", 
+    RowBox[{"PlotLabel", "\[Rule]", "\"\<Prec. mat\>\""}], ",", 
+    RowBox[{"FrameLabel", "\[Rule]", 
+     RowBox[{"{", "\"\<Optimization step\>\"", "}"}]}], ",", 
+    RowBox[{"ImageSize", "\[Rule]", "500"}]}], "]"}]}]], "Input",
+ CellChangeTimes->{{3.81666151322358*^9, 3.816661515267318*^9}, {
+  3.81666160047005*^9, 3.816661647034788*^9}, {3.8166616785245237`*^9, 
+  3.81666167956983*^9}},
+ CellLabel->"In[75]:=",ExpressionUUID->"9c48554c-16e4-48c5-88d3-11728d2cec10"],
+
+Cell[BoxData[
+ GraphicsBox[{{}, {{}, {}, 
+    {RGBColor[0.9, 0.36, 0.054], PointSize[
+      NCache[
+       Rational[1, 72], 0.013888888888888888`]], AbsoluteThickness[1.6], 
+     CapForm["Butt"], 
+     StyleBox[
+      LineBox[{{0., 0.03}, {1., 0.01111111111111111}, {2., 
+       0.01111111111111111}, {3., 0.01111111111111111}, {4., 
+       0.01111111111111111}, {5., 0.01111111111111111}, {6., 
+       0.01111111111111111}, {7., 0.01111111111111111}, {8., 
+       0.01111111111111111}, {9., 0.01111111111111111}}],
+      FontSize->24]}, 
+    {RGBColor[0.365248, 0.427802, 0.758297], PointSize[
+      NCache[
+       Rational[1, 72], 0.013888888888888888`]], AbsoluteThickness[1.6], 
+     CapForm["Butt"], 
+     StyleBox[
+      LineBox[{{0., 0.}, {1., 0.}, {2., 0.}, {3., 0.}, {4., 0.}, {5., 0.}, {
+       6., 0.}, {7., 0.}, {8., 0.}, {9., 0.}}],
+      FontSize->24]}, 
+    {RGBColor[0.945109, 0.593901, 0.], PointSize[
+      NCache[
+       Rational[1, 72], 0.013888888888888888`]], AbsoluteThickness[1.6], 
+     CapForm["Butt"], 
+     StyleBox[
+      LineBox[{{0., 0.}, {1., 0.}, {2., 0.}, {3., 0.}, {4., 0.}, {5., 0.}, {
+       6., 0.}, {7., 0.}, {8., 0.}, {9., 0.}}],
+      FontSize->24]}, 
+    {RGBColor[0.645957, 0.253192, 0.685109], PointSize[
+      NCache[
+       Rational[1, 72], 0.013888888888888888`]], AbsoluteThickness[1.6], 
+     CapForm["Butt"], 
+     StyleBox[
+      LineBox[{{0., 0.}, {1., -0.005555555555555554}, {
+       2., -0.005555555555555556}, {3., -0.005555555555555556}, {
+       4., -0.005555555555555556}, {5., -0.005555555555555556}, {
+       6., -0.005555555555555556}, {7., -0.005555555555555556}, {
+       8., -0.005555555555555556}, {9., -0.005555555555555556}}],
+      FontSize->24]}, 
+    {RGBColor[0.285821, 0.56, 0.450773], PointSize[
+      NCache[
+       Rational[1, 72], 0.013888888888888888`]], AbsoluteThickness[1.6], 
+     CapForm["Butt"], 
+     StyleBox[
+      LineBox[{{0., 0.}, {1., 0.}, {2., 0.}, {3., 0.}, {4., 0.}, {5., 0.}, {
+       6., 0.}, {7., 0.}, {8., 0.}, {9., 0.}}],
+      FontSize->24]}, 
+    {RGBColor[0.7, 0.336, 0.], PointSize[
+      NCache[
+       Rational[1, 72], 0.013888888888888888`]], AbsoluteThickness[1.6], 
+     CapForm["Butt"], 
+     StyleBox[
+      LineBox[{{0., 0.03}, {1., -0.01428571428571428}, {
+       2., -0.01428571428571429}, {3., -0.01428571428571429}, {
+       4., -0.01428571428571429}, {5., -0.01428571428571429}, {
+       6., -0.01428571428571429}, {7., -0.01428571428571429}, {
+       8., -0.01428571428571429}, {9., -0.01428571428571429}}],
+      FontSize->24]}, 
+    {RGBColor[0.491486, 0.345109, 0.8], PointSize[
+      NCache[
+       Rational[1, 72], 0.013888888888888888`]], AbsoluteThickness[1.6], 
+     CapForm["Butt"], 
+     StyleBox[
+      LineBox[{{0., 0.}, {1., 0.07142857142857141}, {2., 
+       0.07142857142857145}, {3., 0.07142857142857142}, {4., 
+       0.07142857142857142}, {5., 0.07142857142857142}, {6., 
+       0.07142857142857142}, {7., 0.07142857142857142}, {8., 
+       0.07142857142857142}, {9., 0.07142857142857142}}],
+      FontSize->24]}, 
+    {RGBColor[0.71788, 0.568653, 0.], PointSize[
+      NCache[
+       Rational[1, 72], 0.013888888888888888`]], AbsoluteThickness[1.6], 
+     CapForm["Butt"], 
+     StyleBox[
+      LineBox[{{0., 0.}, {1., 0.}, {2., 0.}, {3., 0.}, {4., 0.}, {5., 0.}, {
+       6., 0.}, {7., 0.}, {8., 0.}, {9., 0.}}],
+      FontSize->24]}, 
+    {RGBColor[0.70743, 0.224, 0.542415], PointSize[
+      NCache[
+       Rational[1, 72], 0.013888888888888888`]], AbsoluteThickness[1.6], 
+     CapForm["Butt"], 
+     StyleBox[
+      LineBox[{{0., 0.}, {1., 0.}, {2., 0.}, {3., 0.}, {4., 0.}, {5., 0.}, {
+       6., 0.}, {7., 0.}, {8., 0.}, {9., 0.}}],
+      FontSize->24]}, 
+    {RGBColor[0.287228, 0.490217, 0.664674], PointSize[
+      NCache[
+       Rational[1, 72], 0.013888888888888888`]], AbsoluteThickness[1.6], 
+     CapForm["Butt"], 
+     StyleBox[
+      LineBox[{{0., 0.03}, {1., -0.2316602316602316}, {
+       2., -0.1544401544401545}, {3., -0.1544401544401545}, {
+       4., -0.1544401544401544}, {5., -0.1544401544401544}, {
+       6., -0.1544401544401544}, {7., -0.1544401544401544}, {
+       8., -0.1544401544401544}, {9., -0.1544401544401544}}],
+      FontSize->24]}, 
+    {RGBColor[0.982289285128704, 0.5771321368979874, 0.011542503255145636`], 
+     PointSize[
+      NCache[
+       Rational[1, 72], 0.013888888888888888`]], AbsoluteThickness[1.6], 
+     CapForm["Butt"], 
+     StyleBox[
+      LineBox[{{0., 0.}, {1., 0.}, {2., 0.}, {3., 0.}, {4., 0.}, {5., 0.}, {
+       6., 0.}, {7., 0.}, {8., 0.}, {9., 0.}}],
+      FontSize->24]}, 
+    {RGBColor[0.5876740325800278, 0.2877284499870081, 0.7500695697462922], 
+     PointSize[
+      NCache[
+       Rational[1, 72], 0.013888888888888888`]], AbsoluteThickness[1.6], 
+     CapForm["Butt"], 
+     StyleBox[
+      LineBox[{{0., 0.}, {1., 0.03088803088803088}, {
+       2., -0.02702702702702704}, {3., -0.02702702702702701}, {
+       4., -0.02702702702702703}, {5., -0.02702702702702702}, {
+       6., -0.02702702702702702}, {7., -0.02702702702702702}, {
+       8., -0.02702702702702702}, {9., -0.02702702702702702}}],
+      FontSize->24]}, 
+    {RGBColor[0.4262088601796793, 0.5581552810007578, 0.2777996730417023], 
+     PointSize[
+      NCache[
+       Rational[1, 72], 0.013888888888888888`]], AbsoluteThickness[1.6], 
+     CapForm["Butt"], 
+     StyleBox[
+      LineBox[{{0., 0.03}, {1., 0.02898550724637681}, {2., 
+       0.02886473429951691}, {3., 0.02886473429951691}, {4., 
+       0.02886473429951691}, {5., 0.02886473429951691}, {6., 
+       0.02886473429951691}, {7., 0.02886473429951691}, {8., 
+       0.02886473429951691}, {9., 0.02886473429951691}}],
+      FontSize->24]}, 
+    {RGBColor[0.9431487543762861, 0.414555896337833, 0.07140829055870854], 
+     PointSize[
+      NCache[
+       Rational[1, 72], 0.013888888888888888`]], AbsoluteThickness[1.6], 
+     CapForm["Butt"], 
+     StyleBox[
+      LineBox[{{0., 0.}, {1., -0.004830917874396136}, {
+       2., -0.004347826086956521}, {3., -0.004347826086956522}, {
+       4., -0.004347826086956522}, {5., -0.004347826086956522}, {
+       6., -0.004347826086956522}, {7., -0.004347826086956522}, {
+       8., -0.004347826086956522}, {9., -0.004347826086956522}}],
+      FontSize->24]}, 
+    {RGBColor[0.41497437140121635`, 0.393632147507352, 0.7842993779115092], 
+     PointSize[
+      NCache[
+       Rational[1, 72], 0.013888888888888888`]], AbsoluteThickness[1.6], 
+     CapForm["Butt"], 
+     StyleBox[
+      LineBox[{{0., 0.03}, {1., 0.01335341552732857}, {2., 
+       0.02099490795142969}, {3., 0.02099490795142969}, {4., 
+       0.02099490795142969}, {5., 0.02099490795142969}, {6., 
+       0.02099490795142969}, {7., 0.02099490795142969}, {8., 
+       0.02099490795142969}, {9., 0.02099490795142969}}],
+      FontSize->24]}}, {{}, {}}},
+  AspectRatio->NCache[GoldenRatio^(-1), 0.6180339887498948],
+  Axes->{False, False},
+  AxesLabel->{None, None},
+  AxesOrigin->{0, 0},
+  BaseStyle->{FontSize -> 24},
+  DisplayFunction->Identity,
+  Frame->{{True, True}, {True, True}},
+  FrameLabel->{{None, None}, {
+     FormBox["\"Optimization step\"", TraditionalForm], None}},
+  FrameStyle->Automatic,
+  FrameTicks->{{Automatic, Automatic}, {Automatic, Automatic}},
+  GridLines->{{0}, {0}},
+  GridLinesStyle->Directive[
+    GrayLevel[0.5, 0.4]],
+  ImageSize->500,
+  LabelStyle->{FontFamily -> "Times"},
+  Method->{
+   "OptimizePlotMarkers" -> True, "OptimizePlotMarkers" -> True, 
+    "CoordinatesToolOptions" -> {"DisplayFunction" -> ({
+        Identity[
+         Part[#, 1]], 
+        Identity[
+         Part[#, 2]]}& ), "CopiedValueFunction" -> ({
+        Identity[
+         Part[#, 1]], 
+        Identity[
+         Part[#, 2]]}& )}},
+  PlotLabel->FormBox["\"Prec. mat\"", TraditionalForm],
+  PlotRange->{{0, 9.}, {-0.2316602316602316, 0.07142857142857145}},
+  PlotRangeClipping->True,
+  PlotRangePadding->{{
+     Scaled[0.02], 
+     Scaled[0.02]}, {
+     Scaled[0.05], 
+     Scaled[0.05]}},
+  Ticks->{Automatic, Automatic}]], "Output",
+ CellChangeTimes->{
+  3.816661515513069*^9, {3.816661570645418*^9, 3.816661647678274*^9}, 
+   3.81666167985017*^9, 3.8166618516350193`*^9, 3.8166621284062643`*^9, 
+   3.817246196709221*^9, 3.817246650300734*^9},
+ CellLabel->"Out[75]=",ExpressionUUID->"1cddc1b1-cc1f-4f8f-bf87-3b047926a941"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"CreateDirectory", "[", "\"\<figures\>\"", "]"}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{"Export", "[", 
+  RowBox[{"\"\<figures/prec.png\>\"", ",", "pPrec", ",", 
+   RowBox[{"ImageResolution", "\[Rule]", "200"}]}], "]"}]}], "Input",
+ CellChangeTimes->{{3.816662063390737*^9, 3.816662071417062*^9}},
+ CellLabel->"In[76]:=",ExpressionUUID->"67e8bfc4-c9b0-49d3-af83-2d9e9a15b6cf"],
+
+Cell[BoxData[
+ TemplateBox[{
+  "CreateDirectory", "filex", 
+   "\"\\!\\(\\*RowBox[{\\\"\\\\\\\"/Users/oernst/software_private/ggm_\
+inversion/test/output/root_find_newton_5d/figures\\\\\\\"\\\"}]\\) already \
+exists.\"", 2, 76, 18, 24416997456800356831, "Local"},
+  "MessageTemplate"]], "Message", "MSG",
+ CellChangeTimes->{3.816662071598102*^9, 3.81666212926073*^9, 
+  3.817246688475596*^9},
+ CellLabel->
+  "During evaluation of \
+In[76]:=",ExpressionUUID->"6a4b5ffc-a6c9-47ca-bafe-c9a502d81cc1"],
+
+Cell[BoxData["\<\"figures/prec.png\"\>"], "Output",
+ CellChangeTimes->{3.81666207188932*^9, 3.816662129511059*^9, 
+  3.817246688726082*^9},
+ CellLabel->"Out[77]=",ExpressionUUID->"9b598127-567d-4e74-a834-e39018fef013"]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Invert prec mat", "Title",
+ CellChangeTimes->{{3.8172469172374363`*^9, 
+  3.81724691903342*^9}},ExpressionUUID->"1b890400-c549-427d-8d7b-\
+2ed6a630e6b4"],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"SetDirectory", "[", 
+   RowBox[{"NotebookDirectory", "[", "]"}], "]"}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"precData", "=", 
+   RowBox[{"Import", "[", 
+    RowBox[{"\"\<data/prec_mat.txt\>\"", ",", "\"\<Table\>\""}], "]"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"opts", "=", 
+    RowBox[{"precData", "[", 
+     RowBox[{"[", 
+      RowBox[{";;", ",", "1"}], "]"}], "]"}]}], ";"}], 
+  "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"covsPrec0", "=", 
+   RowBox[{"{", "}"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"Do", "[", "\[IndentingNewLine]", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"precVec", "=", 
+       RowBox[{"precData", "[", 
+        RowBox[{"[", 
+         RowBox[{"optPt", ",", 
+          RowBox[{"2", ";;"}]}], "]"}], "]"}]}], ";", "\[IndentingNewLine]", 
+      RowBox[{"precMat", "=", 
+       RowBox[{"ArrayReshape", "[", 
+        RowBox[{"precVec", ",", 
+         RowBox[{"{", 
+          RowBox[{"5", ",", "5"}], "}"}]}], "]"}]}], ";", 
+      "\[IndentingNewLine]", 
+      RowBox[{"covMat", "=", 
+       RowBox[{"Inverse", "[", "precMat", "]"}]}], ";", "\[IndentingNewLine]", 
+      RowBox[{"covVec", "=", 
+       RowBox[{"Flatten", "[", "covMat", "]"}]}], ";", "\[IndentingNewLine]", 
+      
+      RowBox[{"cov", "=", 
+       RowBox[{"covVec", "[", 
+        RowBox[{"[", "utIdxs", "]"}], "]"}]}], ";", "\[IndentingNewLine]", 
+      "\[IndentingNewLine]", 
+      RowBox[{"AppendTo", "[", 
+       RowBox[{"covsPrec0", ",", "cov"}], "]"}], ";"}], "\[IndentingNewLine]",
+      ",", 
+     RowBox[{"{", 
+      RowBox[{"optPt", ",", 
+       RowBox[{"Length", "[", "precData", "]"}]}], "}"}]}], "]"}], ";"}], 
+  "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"covsPrec", "=", 
+   RowBox[{"{", "}"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"Do", "[", "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"cp", "=", 
+      RowBox[{"covsPrec0", "[", 
+       RowBox[{"[", 
+        RowBox[{";;", ",", "i"}], "]"}], "]"}]}], ";", "\[IndentingNewLine]", 
+     
+     RowBox[{"AppendTo", "[", 
+      RowBox[{"covsPrec", ",", 
+       RowBox[{"Transpose", "[", 
+        RowBox[{"{", 
+         RowBox[{"opts", ",", "cp"}], "}"}], "]"}]}], "]"}], ";"}], 
+    "\[IndentingNewLine]", ",", 
+    RowBox[{"{", 
+     RowBox[{"i", ",", 
+      RowBox[{"Length", "[", "cov", "]"}]}], "}"}]}], "]"}], ";"}]}], "Input",\
+
+ CellChangeTimes->{{3.817246719697167*^9, 3.8172468179991913`*^9}, {
+  3.817246898849049*^9, 3.817247030166731*^9}},
+ CellLabel->
+  "In[126]:=",ExpressionUUID->"49c55c2f-3b5e-4ded-951d-36ae766b8714"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"pInv", "=", 
+  RowBox[{"ListLinePlot", "[", 
+   RowBox[{"covsPrec", ",", 
+    RowBox[{"PlotRange", "\[Rule]", "All"}], ",", 
+    RowBox[{"PlotStyle", "\[Rule]", "Dotted"}]}], "]"}]}]], "Input",
+ CellChangeTimes->{{3.817246995428488*^9, 3.817247007379074*^9}, {
+  3.817247055639845*^9, 3.817247063368071*^9}, {3.8172470950848722`*^9, 
+  3.817247096427164*^9}},
+ CellLabel->
+  "In[138]:=",ExpressionUUID->"95736e58-3833-4a17-b2dd-eaff7fa25e13"],
+
+Cell[BoxData[
+ GraphicsBox[{{}, {{}, {}, 
+    {RGBColor[0.9, 0.36, 0.054], PointSize[
+      NCache[
+       Rational[1, 72], 0.013888888888888888`]], AbsoluteThickness[1.6], 
+     Dashing[{0, Small}], CapForm["Butt"], 
+     StyleBox[
+      LineBox[{{0., 33.333333333333336`}, {1., 101.28712298103086`}, {2., 
+       100.00000000000001`}, {3., 100.00000000000001`}, {4., 
+       100.00000000000001`}, {5., 100.00000000000001`}, {6., 
+       100.00000000000001`}, {7., 100.00000000000001`}, {8., 
+       100.00000000000001`}, {9., 100.00000000000001`}}],
+      FontSize->24]}, 
+    {RGBColor[0.365248, 0.427802, 0.758297], PointSize[
+      NCache[
+       Rational[1, 72], 0.013888888888888888`]], AbsoluteThickness[1.6], 
+     Dashing[{0, Small}], CapForm["Butt"], 
+     StyleBox[
+      LineBox[{{0., 0.}, {1., -23.341888423612037`}, {2., 
+       3.3333333333333344`}, {3., 3.3333333333333344`}, {4., 
+       3.333333333333335}, {5., 3.333333333333333}, {6., 3.333333333333333}, {
+       7., 3.333333333333333}, {8., 3.333333333333333}, {9., 
+       3.333333333333333}}],
+      FontSize->24]}, 
+    {RGBColor[0.945109, 0.593901, 0.], PointSize[
+      NCache[
+       Rational[1, 72], 0.013888888888888888`]], AbsoluteThickness[1.6], 
+     Dashing[{0, Small}], CapForm["Butt"], 
+     StyleBox[
+      LineBox[{{0., 0.}, {1., -4.668377684722407}, {2., 0.6666666666666669}, {
+       3., 0.6666666666666671}, {4., 0.6666666666666672}, {5., 
+       0.6666666666666669}, {6., 0.6666666666666669}, {7., 
+       0.6666666666666669}, {8., 0.6666666666666669}, {9., 
+       0.6666666666666669}}],
+      FontSize->24]}, 
+    {RGBColor[0.645957, 0.253192, 0.685109], PointSize[
+      NCache[
+       Rational[1, 72], 0.013888888888888888`]], AbsoluteThickness[1.6], 
+     Dashing[{0, Small}], CapForm["Butt"], 
+     StyleBox[
+      LineBox[{{0., 0.}, {1., 22.57424596206171}, {2., 20.}, {3., 20.}, {4., 
+       20.}, {5., 20.}, {6., 20.}, {7., 20.}, {8., 20.}, {9., 20.}}],
+      FontSize->24]}, 
+    {RGBColor[0.285821, 0.56, 0.450773], PointSize[
+      NCache[
+       Rational[1, 72], 0.013888888888888888`]], AbsoluteThickness[1.6], 
+     Dashing[{0, Small}], CapForm["Butt"], 
+     StyleBox[
+      LineBox[{{0., 0.}, {1., 18.96528434418478}, {2., 5.000000000000001}, {
+       3., 5.000000000000001}, {4., 5.000000000000002}, {5., 
+       5.000000000000001}, {6., 5.000000000000001}, {7., 5.000000000000001}, {
+       8., 5.000000000000001}, {9., 5.000000000000001}}],
+      FontSize->24]}, 
+    {RGBColor[0.7, 0.336, 0.], PointSize[
+      NCache[
+       Rational[1, 72], 0.013888888888888888`]], AbsoluteThickness[1.6], 
+     Dashing[{0, Small}], CapForm["Butt"], 
+     StyleBox[
+      LineBox[{{0., 33.333333333333336`}, {1., 440.93475617992686`}, {2., 
+       80.}, {3., 80.00000000000004}, {4., 80.00000000000001}, {5., 
+       79.99999999999999}, {6., 79.99999999999999}, {7., 79.99999999999999}, {
+       8., 79.99999999999999}, {9., 79.99999999999999}}],
+      FontSize->24]}, 
+    {RGBColor[0.491486, 0.345109, 0.8], PointSize[
+      NCache[
+       Rational[1, 72], 0.013888888888888888`]], AbsoluteThickness[1.6], 
+     Dashing[{0, Small}], CapForm["Butt"], 
+     StyleBox[
+      LineBox[{{0., 0.}, {1., 102.18695123598538`}, {2., 
+       29.999999999999993`}, {3., 30.000000000000014`}, {4., 
+       30.000000000000007`}, {5., 30.000000000000004`}, {6., 
+       30.000000000000004`}, {7., 30.000000000000004`}, {8., 
+       30.000000000000004`}, {9., 30.000000000000004`}}],
+      FontSize->24]}, 
+    {RGBColor[0.71788, 0.568653, 0.], PointSize[
+      NCache[
+       Rational[1, 72], 0.013888888888888888`]], AbsoluteThickness[1.6], 
+     Dashing[{0, Small}], CapForm["Butt"], 
+     StyleBox[
+      LineBox[{{0., 0.}, {1., -46.68377684722407}, {2., 6.666666666666666}, {
+       3., 6.666666666666666}, {4., 6.666666666666669}, {5., 
+       6.666666666666665}, {6., 6.666666666666665}, {7., 6.666666666666665}, {
+       8., 6.666666666666665}, {9., 6.666666666666665}}],
+      FontSize->24]}, 
+    {RGBColor[0.70743, 0.224, 0.542415], PointSize[
+      NCache[
+       Rational[1, 72], 0.013888888888888888`]], AbsoluteThickness[1.6], 
+     Dashing[{0, Small}], CapForm["Butt"], 
+     StyleBox[
+      LineBox[{{0., 0.}, {1., -253.25948939619056`}, {2., 
+       40.000000000000014`}, {3., 40.}, {4., 40.000000000000014`}, {5., 
+       39.99999999999999}, {6., 39.99999999999999}, {7., 39.99999999999999}, {
+       8., 39.99999999999999}, {9., 39.99999999999999}}],
+      FontSize->24]}, 
+    {RGBColor[0.287228, 0.490217, 0.664674], PointSize[
+      NCache[
+       Rational[1, 72], 0.013888888888888888`]], AbsoluteThickness[1.6], 
+     Dashing[{0, Small}], CapForm["Butt"], 
+     StyleBox[
+      LineBox[{{0., 33.333333333333336`}, {1., 20.437390247197072`}, {2., 
+       5.999999999999998}, {3., 6.000000000000005}, {4., 
+       6.0000000000000036`}, {5., 6.000000000000002}, {6., 
+       6.000000000000002}, {7., 6.000000000000002}, {8., 6.000000000000002}, {
+       9., 6.000000000000002}}],
+      FontSize->24]}, 
+    {RGBColor[0.982289285128704, 0.5771321368979874, 0.011542503255145636`], 
+     PointSize[
+      NCache[
+       Rational[1, 72], 0.013888888888888888`]], AbsoluteThickness[1.6], 
+     Dashing[{0, Small}], CapForm["Butt"], 
+     StyleBox[
+      LineBox[{{0., 0.}, {1., -9.33675536944481}, {2., 1.333333333333333}, {
+       3., 1.333333333333334}, {4., 1.3333333333333341`}, {5., 
+       1.3333333333333335`}, {6., 1.3333333333333335`}, {7., 
+       1.3333333333333335`}, {8., 1.3333333333333335`}, {9., 
+       1.3333333333333335`}}],
+      FontSize->24]}, 
+    {RGBColor[0.5876740325800278, 0.2877284499870081, 0.7500695697462922], 
+     PointSize[
+      NCache[
+       Rational[1, 72], 0.013888888888888888`]], AbsoluteThickness[1.6], 
+     Dashing[{0, Small}], CapForm["Butt"], 
+     StyleBox[
+      LineBox[{{0., 0.}, {1., -50.6518978792381}, {2., 8.000000000000002}, {
+       3., 8.000000000000004}, {4., 8.000000000000005}, {5., 
+       8.000000000000002}, {6., 8.000000000000002}, {7., 8.000000000000002}, {
+       8., 8.000000000000002}, {9., 8.000000000000002}}],
+      FontSize->24]}, 
+    {RGBColor[0.4262088601796793, 0.5581552810007578, 0.2777996730417023], 
+     PointSize[
+      NCache[
+       Rational[1, 72], 0.013888888888888888`]], AbsoluteThickness[1.6], 
+     Dashing[{0, Small}], CapForm["Butt"], 
+     StyleBox[
+      LineBox[{{0., 33.333333333333336`}, {1., 45.14849192412343}, {2., 
+       39.99999999999999}, {3., 39.99999999999999}, {4., 39.99999999999999}, {
+       5., 39.99999999999999}, {6., 39.99999999999999}, {7., 
+       39.99999999999999}, {8., 39.99999999999999}, {9., 39.99999999999999}}],
+      
+      FontSize->24]}, 
+    {RGBColor[0.9431487543762861, 0.414555896337833, 0.07140829055870854], 
+     PointSize[
+      NCache[
+       Rational[1, 72], 0.013888888888888888`]], AbsoluteThickness[1.6], 
+     Dashing[{0, Small}], CapForm["Butt"], 
+     StyleBox[
+      LineBox[{{0., 0.}, {1., 37.93056868836957}, {2., 9.999999999999998}, {
+       3., 10.}, {4., 10.000000000000002`}, {5., 10.}, {6., 10.}, {7., 10.}, {
+       8., 10.}, {9., 10.}}],
+      FontSize->24]}, 
+    {RGBColor[0.41497437140121635`, 0.393632147507352, 0.7842993779115092], 
+     PointSize[
+      NCache[
+       Rational[1, 72], 0.013888888888888888`]], AbsoluteThickness[1.6], 
+     Dashing[{0, Small}], CapForm["Butt"], 
+     StyleBox[
+      LineBox[{{0., 33.333333333333336`}, {1., 205.77333513440485`}, {2., 
+       60.000000000000014`}, {3., 60.}, {4., 60.000000000000014`}, {5., 
+       60.}, {6., 60.}, {7., 60.}, {8., 60.}, {9., 60.}}],
+      FontSize->24]}}, {{}, {}}},
+  AspectRatio->NCache[GoldenRatio^(-1), 0.6180339887498948],
+  Axes->{False, False},
+  AxesLabel->{None, None},
+  AxesOrigin->{0, 0},
+  BaseStyle->{FontSize -> 24},
+  DisplayFunction->Identity,
+  Frame->{{True, True}, {True, True}},
+  FrameLabel->{{None, None}, {None, None}},
+  FrameStyle->Automatic,
+  FrameTicks->{{Automatic, Automatic}, {Automatic, Automatic}},
+  GridLines->{{0}, {0}},
+  GridLinesStyle->Directive[
+    GrayLevel[0.5, 0.4]],
+  ImageSize->400,
+  LabelStyle->{FontFamily -> "Times"},
+  Method->{
+   "OptimizePlotMarkers" -> True, "OptimizePlotMarkers" -> True, 
+    "CoordinatesToolOptions" -> {"DisplayFunction" -> ({
+        Identity[
+         Part[#, 1]], 
+        Identity[
+         Part[#, 2]]}& ), "CopiedValueFunction" -> ({
+        Identity[
+         Part[#, 1]], 
+        Identity[
+         Part[#, 2]]}& )}},
+  PlotRange->{{0, 9.}, {-253.25948939619056`, 440.93475617992686`}},
+  PlotRangeClipping->True,
+  PlotRangePadding->{{
+     Scaled[0.02], 
+     Scaled[0.02]}, {
+     Scaled[0.05], 
+     Scaled[0.05]}},
+  Ticks->{Automatic, Automatic}]], "Output",
+ CellChangeTimes->{{3.817246998212788*^9, 3.81724706370827*^9}, 
+   3.817247096698667*^9},
+ CellLabel->
+  "Out[138]=",ExpressionUUID->"09d5be4e-fa01-44b1-8007-96394cb994a2"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"pCovTog", "=", 
+  RowBox[{"Show", "[", 
+   RowBox[{"pCov", ",", "pInv", ",", 
+    RowBox[{"PlotRange", "\[Rule]", "All"}]}], "]"}]}]], "Input",
+ CellChangeTimes->{{3.817247070950053*^9, 3.817247078895629*^9}, {
+  3.81724730139513*^9, 3.817247302937948*^9}},
+ CellLabel->
+  "In[163]:=",ExpressionUUID->"b3d23d81-23fd-4ebc-9ddb-0fac7a44bee6"],
+
+Cell[BoxData[
+ GraphicsBox[{{{}, {{}, {}, 
+     {RGBColor[0.9, 0.36, 0.054], PointSize[
+       NCache[
+        Rational[1, 72], 0.013888888888888888`]], AbsoluteThickness[1.6], 
+      CapForm["Butt"], 
+      StyleBox[
+       LineBox[{{0., 100.}, {1., 100.}, {2., 100.}, {3., 100.}, {4., 100.}, {
+        5., 100.}, {6., 100.}, {7., 100.}, {8., 100.}, {9., 100.}}],
+       FontSize->24]}, 
+     {RGBColor[0.365248, 0.427802, 0.758297], PointSize[
+       NCache[
+        Rational[1, 72], 0.013888888888888888`]], AbsoluteThickness[1.6], 
+      CapForm["Butt"], 
+      StyleBox[
+       LineBox[{{0., 0.}, {1., 0.}, {2., 21.22463122463123}, {3., 
+        3.333333333333339}, {4., 3.333333333333333}, {5., 
+        3.333333333333333}, {6., 3.333333333333333}, {7., 
+        3.333333333333333}, {8., 3.333333333333333}, {9., 3.333333333333333}}],
+       FontSize->24]}, 
+     {RGBColor[0.945109, 0.593901, 0.], PointSize[
+       NCache[
+        Rational[1, 72], 0.013888888888888888`]], AbsoluteThickness[1.6], 
+      CapForm["Butt"], 
+      StyleBox[
+       LineBox[{{0., 0.}, {1., 0.}, {2., 4.244926244926248}, {3., 
+        0.6666666666666674}, {4., 0.6666666666666665}, {5., 
+        0.6666666666666667}, {6., 0.6666666666666665}, {7., 
+        0.6666666666666669}, {8., 0.6666666666666666}, {9., 
+        0.6666666666666667}}],
+       FontSize->24]}, 
+     {RGBColor[0.645957, 0.253192, 0.685109], PointSize[
+       NCache[
+        Rational[1, 72], 0.013888888888888888`]], AbsoluteThickness[1.6], 
+      CapForm["Butt"], 
+      StyleBox[
+       LineBox[{{0., 20.}, {1., 20.}, {2., 20.}, {3., 20.}, {4., 20.}, {5., 
+        20.}, {6., 20.}, {7., 20.}, {8., 20.}, {9., 20.}}],
+       FontSize->24]}, 
+     {RGBColor[0.285821, 0.56, 0.450773], PointSize[
+       NCache[
+        Rational[1, 72], 0.013888888888888888`]], AbsoluteThickness[1.6], 
+      CapForm["Butt"], 
+      StyleBox[
+       LineBox[{{0., 0.}, {1., 1.851851851851852}, {2., 5.000000000000001}, {
+        3., 5.}, {4., 5.}, {5., 5.}, {6., 5.}, {7., 5.}, {8., 5.}, {9., 5.}}],
+       
+       FontSize->24]}, 
+     {RGBColor[0.7, 0.336, 0.], PointSize[
+       NCache[
+        Rational[1, 72], 0.013888888888888888`]], AbsoluteThickness[1.6], 
+      CapForm["Butt"], 
+      StyleBox[
+       LineBox[{{0., 80.}, {1., 80.}, {2., 80.}, {3., 80.}, {4., 80.}, {5., 
+        80.}, {6., 80.}, {7., 80.}, {8., 80.}, {9., 80.}}],
+       FontSize->24]}, 
+     {RGBColor[0.491486, 0.345109, 0.8], PointSize[
+       NCache[
+        Rational[1, 72], 0.013888888888888888`]], AbsoluteThickness[1.6], 
+      CapForm["Butt"], 
+      StyleBox[
+       LineBox[{{0., 30.}, {1., 30.}, {2., 30.}, {3., 30.}, {4., 30.}, {5., 
+        30.}, {6., 30.}, {7., 30.}, {8., 30.}, {9., 30.}}],
+       FontSize->24]}, 
+     {RGBColor[0.71788, 0.568653, 0.], PointSize[
+       NCache[
+        Rational[1, 72], 0.013888888888888888`]], AbsoluteThickness[1.6], 
+      CapForm["Butt"], 
+      StyleBox[
+       LineBox[{{0., 0.}, {1., 0.}, {2., 42.44926244926246}, {3., 
+        6.666666666666679}, {4., 6.666666666666665}, {5., 
+        6.666666666666667}, {6., 6.666666666666666}, {7., 
+        6.666666666666667}, {8., 6.666666666666666}, {9., 6.666666666666667}}],
+       FontSize->24]}, 
+     {RGBColor[0.70743, 0.224, 0.542415], PointSize[
+       NCache[
+        Rational[1, 72], 0.013888888888888888`]], AbsoluteThickness[1.6], 
+      CapForm["Butt"], 
+      StyleBox[
+       LineBox[{{0., 0.}, {1., -19.04761904761905}, {2., 40.00000000000004}, {
+        3., 40.}, {4., 40.}, {5., 40.}, {6., 40.}, {7., 40.}, {8., 40.}, {9., 
+        40.}}],
+       FontSize->24]}, 
+     {RGBColor[0.287228, 0.490217, 0.664674], PointSize[
+       NCache[
+        Rational[1, 72], 0.013888888888888888`]], AbsoluteThickness[1.6], 
+      CapForm["Butt"], 
+      StyleBox[
+       LineBox[{{0., 6.}, {1., 6.}, {2., 6.}, {3., 6.}, {4., 6.}, {5., 6.}, {
+        6., 6.}, {7., 6.}, {8., 6.}, {9., 6.}}],
+       FontSize->24]}, 
+     {RGBColor[0.982289285128704, 0.5771321368979874, 0.011542503255145636`], 
+      PointSize[
+       NCache[
+        Rational[1, 72], 0.013888888888888888`]], AbsoluteThickness[1.6], 
+      CapForm["Butt"], 
+      StyleBox[
+       LineBox[{{0., 0.}, {1., -10.29601029601029}, {2., 8.489852489852499}, {
+        3., 1.333333333333334}, {4., 1.333333333333333}, {5., 
+        1.333333333333333}, {6., 1.333333333333333}, {7., 
+        1.333333333333334}, {8., 1.333333333333333}, {9., 1.333333333333333}}],
+       FontSize->24]}, 
+     {RGBColor[0.5876740325800278, 0.2877284499870081, 0.7500695697462922], 
+      PointSize[
+       NCache[
+        Rational[1, 72], 0.013888888888888888`]], AbsoluteThickness[1.6], 
+      CapForm["Butt"], 
+      StyleBox[
+       LineBox[{{0., 8.}, {1., 8.}, {2., 8.}, {3., 8.}, {4., 8.}, {5., 8.}, {
+        6., 8.}, {7., 8.}, {8., 8.}, {9., 8.}}],
+       FontSize->24]}, 
+     {RGBColor[0.4262088601796793, 0.5581552810007578, 0.2777996730417023], 
+      PointSize[
+       NCache[
+        Rational[1, 72], 0.013888888888888888`]], AbsoluteThickness[1.6], 
+      CapForm["Butt"], 
+      StyleBox[
+       LineBox[{{0., 40.}, {1., 40.}, {2., 40.}, {3., 40.}, {4., 40.}, {5., 
+        40.}, {6., 40.}, {7., 40.}, {8., 40.}, {9., 40.}}],
+       FontSize->24]}, 
+     {RGBColor[0.9431487543762861, 0.414555896337833, 0.07140829055870854], 
+      PointSize[
+       NCache[
+        Rational[1, 72], 0.013888888888888888`]], AbsoluteThickness[1.6], 
+      CapForm["Butt"], 
+      StyleBox[
+       LineBox[{{0., 10.}, {1., 10.}, {2., 10.}, {3., 10.}, {4., 10.}, {5., 
+        10.}, {6., 10.}, {7., 10.}, {8., 10.}, {9., 10.}}],
+       FontSize->24]}, 
+     {RGBColor[0.41497437140121635`, 0.393632147507352, 0.7842993779115092], 
+      PointSize[
+       NCache[
+        Rational[1, 72], 0.013888888888888888`]], AbsoluteThickness[1.6], 
+      CapForm["Butt"], 
+      StyleBox[
+       LineBox[{{0., 60.}, {1., 60.}, {2., 60.}, {3., 60.}, {4., 60.}, {5., 
+        60.}, {6., 60.}, {7., 60.}, {8., 60.}, {9., 60.}}],
+       FontSize->24]}}, {{}, {}}}, {{}, {{}, {}, 
+     {RGBColor[0.9, 0.36, 0.054], PointSize[
+       NCache[
+        Rational[1, 72], 0.013888888888888888`]], AbsoluteThickness[1.6], 
+      Dashing[{0, Small}], CapForm["Butt"], 
+      StyleBox[
+       LineBox[{{0., 33.333333333333336`}, {1., 101.28712298103086`}, {2., 
+        100.00000000000001`}, {3., 100.00000000000001`}, {4., 
+        100.00000000000001`}, {5., 100.00000000000001`}, {6., 
+        100.00000000000001`}, {7., 100.00000000000001`}, {8., 
+        100.00000000000001`}, {9., 100.00000000000001`}}],
+       FontSize->24]}, 
+     {RGBColor[0.365248, 0.427802, 0.758297], PointSize[
+       NCache[
+        Rational[1, 72], 0.013888888888888888`]], AbsoluteThickness[1.6], 
+      Dashing[{0, Small}], CapForm["Butt"], 
+      StyleBox[
+       LineBox[{{0., 0.}, {1., -23.341888423612037`}, {2., 
+        3.3333333333333344`}, {3., 3.3333333333333344`}, {4., 
+        3.333333333333335}, {5., 3.333333333333333}, {6., 
+        3.333333333333333}, {7., 3.333333333333333}, {8., 
+        3.333333333333333}, {9., 3.333333333333333}}],
+       FontSize->24]}, 
+     {RGBColor[0.945109, 0.593901, 0.], PointSize[
+       NCache[
+        Rational[1, 72], 0.013888888888888888`]], AbsoluteThickness[1.6], 
+      Dashing[{0, Small}], CapForm["Butt"], 
+      StyleBox[
+       LineBox[{{0., 0.}, {1., -4.668377684722407}, {2., 
+        0.6666666666666669}, {3., 0.6666666666666671}, {4., 
+        0.6666666666666672}, {5., 0.6666666666666669}, {6., 
+        0.6666666666666669}, {7., 0.6666666666666669}, {8., 
+        0.6666666666666669}, {9., 0.6666666666666669}}],
+       FontSize->24]}, 
+     {RGBColor[0.645957, 0.253192, 0.685109], PointSize[
+       NCache[
+        Rational[1, 72], 0.013888888888888888`]], AbsoluteThickness[1.6], 
+      Dashing[{0, Small}], CapForm["Butt"], 
+      StyleBox[
+       LineBox[{{0., 0.}, {1., 22.57424596206171}, {2., 20.}, {3., 20.}, {4., 
+        20.}, {5., 20.}, {6., 20.}, {7., 20.}, {8., 20.}, {9., 20.}}],
+       FontSize->24]}, 
+     {RGBColor[0.285821, 0.56, 0.450773], PointSize[
+       NCache[
+        Rational[1, 72], 0.013888888888888888`]], AbsoluteThickness[1.6], 
+      Dashing[{0, Small}], CapForm["Butt"], 
+      StyleBox[
+       LineBox[{{0., 0.}, {1., 18.96528434418478}, {2., 5.000000000000001}, {
+        3., 5.000000000000001}, {4., 5.000000000000002}, {5., 
+        5.000000000000001}, {6., 5.000000000000001}, {7., 
+        5.000000000000001}, {8., 5.000000000000001}, {9., 5.000000000000001}}],
+       FontSize->24]}, 
+     {RGBColor[0.7, 0.336, 0.], PointSize[
+       NCache[
+        Rational[1, 72], 0.013888888888888888`]], AbsoluteThickness[1.6], 
+      Dashing[{0, Small}], CapForm["Butt"], 
+      StyleBox[
+       LineBox[{{0., 33.333333333333336`}, {1., 440.93475617992686`}, {2., 
+        80.}, {3., 80.00000000000004}, {4., 80.00000000000001}, {5., 
+        79.99999999999999}, {6., 79.99999999999999}, {7., 
+        79.99999999999999}, {8., 79.99999999999999}, {9., 79.99999999999999}}],
+       FontSize->24]}, 
+     {RGBColor[0.491486, 0.345109, 0.8], PointSize[
+       NCache[
+        Rational[1, 72], 0.013888888888888888`]], AbsoluteThickness[1.6], 
+      Dashing[{0, Small}], CapForm["Butt"], 
+      StyleBox[
+       LineBox[{{0., 0.}, {1., 102.18695123598538`}, {2., 
+        29.999999999999993`}, {3., 30.000000000000014`}, {4., 
+        30.000000000000007`}, {5., 30.000000000000004`}, {6., 
+        30.000000000000004`}, {7., 30.000000000000004`}, {8., 
+        30.000000000000004`}, {9., 30.000000000000004`}}],
+       FontSize->24]}, 
+     {RGBColor[0.71788, 0.568653, 0.], PointSize[
+       NCache[
+        Rational[1, 72], 0.013888888888888888`]], AbsoluteThickness[1.6], 
+      Dashing[{0, Small}], CapForm["Butt"], 
+      StyleBox[
+       LineBox[{{0., 0.}, {1., -46.68377684722407}, {2., 6.666666666666666}, {
+        3., 6.666666666666666}, {4., 6.666666666666669}, {5., 
+        6.666666666666665}, {6., 6.666666666666665}, {7., 
+        6.666666666666665}, {8., 6.666666666666665}, {9., 6.666666666666665}}],
+       FontSize->24]}, 
+     {RGBColor[0.70743, 0.224, 0.542415], PointSize[
+       NCache[
+        Rational[1, 72], 0.013888888888888888`]], AbsoluteThickness[1.6], 
+      Dashing[{0, Small}], CapForm["Butt"], 
+      StyleBox[
+       LineBox[{{0., 0.}, {1., -253.25948939619056`}, {2., 
+        40.000000000000014`}, {3., 40.}, {4., 40.000000000000014`}, {5., 
+        39.99999999999999}, {6., 39.99999999999999}, {7., 
+        39.99999999999999}, {8., 39.99999999999999}, {9., 39.99999999999999}}],
+       FontSize->24]}, 
+     {RGBColor[0.287228, 0.490217, 0.664674], PointSize[
+       NCache[
+        Rational[1, 72], 0.013888888888888888`]], AbsoluteThickness[1.6], 
+      Dashing[{0, Small}], CapForm["Butt"], 
+      StyleBox[
+       LineBox[{{0., 33.333333333333336`}, {1., 20.437390247197072`}, {2., 
+        5.999999999999998}, {3., 6.000000000000005}, {4., 
+        6.0000000000000036`}, {5., 6.000000000000002}, {6., 
+        6.000000000000002}, {7., 6.000000000000002}, {8., 
+        6.000000000000002}, {9., 6.000000000000002}}],
+       FontSize->24]}, 
+     {RGBColor[0.982289285128704, 0.5771321368979874, 0.011542503255145636`], 
+      PointSize[
+       NCache[
+        Rational[1, 72], 0.013888888888888888`]], AbsoluteThickness[1.6], 
+      Dashing[{0, Small}], CapForm["Butt"], 
+      StyleBox[
+       LineBox[{{0., 0.}, {1., -9.33675536944481}, {2., 1.333333333333333}, {
+        3., 1.333333333333334}, {4., 1.3333333333333341`}, {5., 
+        1.3333333333333335`}, {6., 1.3333333333333335`}, {7., 
+        1.3333333333333335`}, {8., 1.3333333333333335`}, {9., 
+        1.3333333333333335`}}],
+       FontSize->24]}, 
+     {RGBColor[0.5876740325800278, 0.2877284499870081, 0.7500695697462922], 
+      PointSize[
+       NCache[
+        Rational[1, 72], 0.013888888888888888`]], AbsoluteThickness[1.6], 
+      Dashing[{0, Small}], CapForm["Butt"], 
+      StyleBox[
+       LineBox[{{0., 0.}, {1., -50.6518978792381}, {2., 8.000000000000002}, {
+        3., 8.000000000000004}, {4., 8.000000000000005}, {5., 
+        8.000000000000002}, {6., 8.000000000000002}, {7., 
+        8.000000000000002}, {8., 8.000000000000002}, {9., 8.000000000000002}}],
+       FontSize->24]}, 
+     {RGBColor[0.4262088601796793, 0.5581552810007578, 0.2777996730417023], 
+      PointSize[
+       NCache[
+        Rational[1, 72], 0.013888888888888888`]], AbsoluteThickness[1.6], 
+      Dashing[{0, Small}], CapForm["Butt"], 
+      StyleBox[
+       LineBox[{{0., 33.333333333333336`}, {1., 45.14849192412343}, {2., 
+        39.99999999999999}, {3., 39.99999999999999}, {4., 
+        39.99999999999999}, {5., 39.99999999999999}, {6., 
+        39.99999999999999}, {7., 39.99999999999999}, {8., 
+        39.99999999999999}, {9., 39.99999999999999}}],
+       FontSize->24]}, 
+     {RGBColor[0.9431487543762861, 0.414555896337833, 0.07140829055870854], 
+      PointSize[
+       NCache[
+        Rational[1, 72], 0.013888888888888888`]], AbsoluteThickness[1.6], 
+      Dashing[{0, Small}], CapForm["Butt"], 
+      StyleBox[
+       LineBox[{{0., 0.}, {1., 37.93056868836957}, {2., 9.999999999999998}, {
+        3., 10.}, {4., 10.000000000000002`}, {5., 10.}, {6., 10.}, {7., 
+        10.}, {8., 10.}, {9., 10.}}],
+       FontSize->24]}, 
+     {RGBColor[0.41497437140121635`, 0.393632147507352, 0.7842993779115092], 
+      PointSize[
+       NCache[
+        Rational[1, 72], 0.013888888888888888`]], AbsoluteThickness[1.6], 
+      Dashing[{0, Small}], CapForm["Butt"], 
+      StyleBox[
+       LineBox[{{0., 33.333333333333336`}, {1., 205.77333513440485`}, {2., 
+        60.000000000000014`}, {3., 60.}, {4., 60.000000000000014`}, {5., 
+        60.}, {6., 60.}, {7., 60.}, {8., 60.}, {9., 60.}}],
+       FontSize->24]}}, {{}, {}}}},
+  AspectRatio->NCache[GoldenRatio^(-1), 0.6180339887498948],
+  Axes->{False, False},
+  AxesLabel->{None, None},
+  AxesOrigin->{0, 0},
+  BaseStyle->{FontSize -> 24},
+  DisplayFunction->Identity,
+  Frame->{{True, True}, {True, True}},
+  FrameLabel->{
+    FormBox["\"Optimization step\"", TraditionalForm]},
+  FrameStyle->Automatic,
+  FrameTicks->{{Automatic, Automatic}, {Automatic, Automatic}},
+  GridLines->{{0}, {0}},
+  GridLinesStyle->Directive[
+    GrayLevel[0.5, 0.4]],
+  ImageSize->500,
+  LabelStyle->{FontFamily -> "Times"},
+  Method->{
+   "OptimizePlotMarkers" -> True, "OptimizePlotMarkers" -> True, 
+    "CoordinatesToolOptions" -> {"DisplayFunction" -> ({
+        Identity[
+         Part[#, 1]], 
+        Identity[
+         Part[#, 2]]}& ), "CopiedValueFunction" -> ({
+        Identity[
+         Part[#, 1]], 
+        Identity[
+         Part[#, 2]]}& )}},
+  PlotLabel->FormBox["\"Cov. mat\"", TraditionalForm],
+  PlotRange->All,
+  PlotRangeClipping->True,
+  PlotRangePadding->{{
+     Scaled[0.02], 
+     Scaled[0.02]}, {
+     Scaled[0.05], 
+     Scaled[0.05]}},
+  Ticks->{Automatic, Automatic}]], "Output",
+ CellChangeTimes->{{3.817247074580871*^9, 3.817247097304084*^9}, 
+   3.8172473032521353`*^9},
+ CellLabel->
+  "Out[163]=",ExpressionUUID->"e901f174-728e-4da9-8d5d-b9b9996ede26"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"CreateDirectory", "[", "\"\<figures\>\"", "]"}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{"Export", "[", 
+  RowBox[{"\"\<figures/cov_tog.png\>\"", ",", "pCovTog", ",", 
+   RowBox[{"ImageResolution", "\[Rule]", "200"}]}], "]"}]}], "Input",
+ CellChangeTimes->{{3.817247307361055*^9, 3.817247312047949*^9}},
+ CellLabel->
+  "In[164]:=",ExpressionUUID->"1f4bf23c-5665-44f7-8bc2-e5cc90a35dec"],
+
+Cell[BoxData[
+ TemplateBox[{
+  "CreateDirectory", "filex", 
+   "\"\\!\\(\\*RowBox[{\\\"\\\\\\\"/Users/oernst/software_private/ggm_\
+inversion/test/output/root_find_newton_5d/figures\\\\\\\"\\\"}]\\) already \
+exists.\"", 2, 164, 24, 24416997456800356831, "Local"},
+  "MessageTemplate"]], "Message", "MSG",
+ CellChangeTimes->{3.817247312490181*^9},
+ CellLabel->
+  "During evaluation of \
+In[164]:=",ExpressionUUID->"c274f9f2-95d7-4373-8f9a-937c1675c4d7"],
+
+Cell[BoxData["\<\"figures/cov_tog.png\"\>"], "Output",
+ CellChangeTimes->{3.817247312758232*^9},
+ CellLabel->
+  "Out[165]=",ExpressionUUID->"2e8733fa-4c0f-42d8-a0d9-cd8e36db83f1"]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Residuals", "Title",
+ CellChangeTimes->{{3.817247128674721*^9, 
+  3.817247130142233*^9}},ExpressionUUID->"6d03b54e-6a53-4f55-a682-\
+6595b438813d"],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"precData", "=", 
+   RowBox[{"Import", "[", 
+    RowBox[{"\"\<data/prec_mat.txt\>\"", ",", "\"\<Table\>\""}], "]"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"covData", "=", 
+    RowBox[{"Import", "[", 
+     RowBox[{"\"\<data/cov_mat.txt\>\"", ",", "\"\<Table\>\""}], "]"}]}], 
+   ";"}], "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"residuals", "=", 
+   RowBox[{"{", "}"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"Do", "[", "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"precMat", "=", 
+      RowBox[{"ArrayReshape", "[", 
+       RowBox[{
+        RowBox[{"precData", "[", 
+         RowBox[{"[", 
+          RowBox[{"optStep", ",", 
+           RowBox[{"2", ";;"}]}], "]"}], "]"}], ",", 
+        RowBox[{"{", 
+         RowBox[{"5", ",", "5"}], "}"}]}], "]"}]}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"covMat", "=", 
+      RowBox[{"ArrayReshape", "[", 
+       RowBox[{
+        RowBox[{"covData", "[", 
+         RowBox[{"[", 
+          RowBox[{"optStep", ",", 
+           RowBox[{"2", ";;"}]}], "]"}], "]"}], ",", 
+        RowBox[{"{", 
+         RowBox[{"5", ",", "5"}], "}"}]}], "]"}]}], ";", 
+     "\[IndentingNewLine]", "\[IndentingNewLine]", 
+     RowBox[{"residuals0", "=", 
+      RowBox[{"Flatten", "[", 
+       RowBox[{
+        RowBox[{"precMat", ".", "covMat"}], "-", 
+        RowBox[{"IdentityMatrix", "[", "5", "]"}]}], "]"}]}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"residuals0", "=", 
+      RowBox[{"residuals0", "[", 
+       RowBox[{"[", "utIdxs", "]"}], "]"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"AppendTo", "[", 
+      RowBox[{"residuals", ",", "residuals0"}], "]"}], ";"}], 
+    "\[IndentingNewLine]", ",", 
+    RowBox[{"{", 
+     RowBox[{"optStep", ",", 
+      RowBox[{"Length", "[", "precData", "]"}]}], "}"}]}], "]"}], 
+  ";"}]}], "Input",
+ CellChangeTimes->{{3.817247137027285*^9, 3.817247229124021*^9}},
+ CellLabel->
+  "In[151]:=",ExpressionUUID->"727675f3-fb63-4e9c-943e-5056bb4a0b54"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"pRes", "=", 
+  RowBox[{"ListLinePlot", "[", 
+   RowBox[{
+    RowBox[{"Transpose", "[", "residuals", "]"}], ",", 
+    RowBox[{"PlotRange", "\[Rule]", "All"}], ",", 
+    RowBox[{"PlotLabel", "\[Rule]", "\"\<Residuals\>\""}], ",", 
+    RowBox[{"FrameLabel", "\[Rule]", 
+     RowBox[{"{", "\"\<Optimization step\>\"", "}"}]}]}], "]"}]}]], "Input",
+ CellChangeTimes->{{3.817247229858015*^9, 3.817247273933736*^9}},
+ CellLabel->
+  "In[160]:=",ExpressionUUID->"0705aefe-e7b2-4f44-a25d-53ef291822c3"],
+
+Cell[BoxData[
+ GraphicsBox[{{}, {{}, {}, 
+    {RGBColor[0.9, 0.36, 0.054], PointSize[
+      NCache[
+       Rational[1, 72], 0.013888888888888888`]], AbsoluteThickness[1.6], 
+     CapForm["Butt"], 
+     StyleBox[
+      LineBox[{{1., 2.}, {2., -1.1102230246251565`*^-16}, {
+       3., -2.220446049250313*^-16}, {4., -2.220446049250313*^-16}, {
+       5., -2.220446049250313*^-16}, {6., -2.220446049250313*^-16}, {
+       7., -2.220446049250313*^-16}, {8., -2.220446049250313*^-16}, {
+       9., -2.220446049250313*^-16}, {10., -2.220446049250313*^-16}}],
+      FontSize->24]}, 
+    {RGBColor[0.365248, 0.427802, 0.758297], PointSize[
+      NCache[
+       Rational[1, 72], 0.013888888888888888`]], AbsoluteThickness[1.6], 
+     CapForm["Butt"], 
+     StyleBox[
+      LineBox[{{1., 0.}, {2., 0.}, {3., -2.7755575615628914`*^-17}, {
+       4., -2.0816681711721685`*^-17}, {5., 0.}, {
+       6., -1.3877787807814457`*^-17}, {7., -6.938893903907228*^-18}, {
+       8., -1.3877787807814457`*^-17}, {9., -6.938893903907228*^-18}, {
+       10., -1.3877787807814457`*^-17}}],
+      FontSize->24]}, 
+    {RGBColor[0.945109, 0.593901, 0.], PointSize[
+      NCache[
+       Rational[1, 72], 0.013888888888888888`]], AbsoluteThickness[1.6], 
+     CapForm["Butt"], 
+     StyleBox[
+      LineBox[{{1., 0.}, {2., 0.05720005720005716}, {
+       3., -2.7755575615628914`*^-17}, {4., 3.469446951953614*^-18}, {
+       5., -8.673617379884035*^-19}, {6., 1.734723475976807*^-18}, {
+       7., -8.673617379884035*^-19}, {8., -2.6020852139652106`*^-18}, {9., 
+       0.}, {10., 1.734723475976807*^-18}}],
+      FontSize->24]}, 
+    {RGBColor[0.645957, 0.253192, 0.685109], PointSize[
+      NCache[
+       Rational[1, 72], 0.013888888888888888`]], AbsoluteThickness[1.6], 
+     CapForm["Butt"], 
+     StyleBox[
+      LineBox[{{1., 0.6}, {2., 5.551115123125783*^-17}, {
+       3., -2.7755575615628914`*^-17}, {4., -2.7755575615628914`*^-17}, {
+       5., -2.7755575615628914`*^-17}, {6., -2.7755575615628914`*^-17}, {
+       7., -2.7755575615628914`*^-17}, {8., -2.7755575615628914`*^-17}, {
+       9., -2.7755575615628914`*^-17}, {10., -2.7755575615628914`*^-17}}],
+      FontSize->24]}, 
+    {RGBColor[0.285821, 0.56, 0.450773], PointSize[
+      NCache[
+       Rational[1, 72], 0.013888888888888888`]], AbsoluteThickness[1.6], 
+     CapForm["Butt"], 
+     StyleBox[
+      LineBox[{{1., 0.}, {2., -0.03497942386831274}, {3., 0.}, {
+       4., -6.938893903907228*^-18}, {5., -6.938893903907228*^-18}, {
+       6., -6.938893903907228*^-18}, {7., -6.938893903907228*^-18}, {
+       8., -6.938893903907228*^-18}, {9., -6.938893903907228*^-18}, {
+       10., -6.938893903907228*^-18}}],
+      FontSize->24]}, 
+    {RGBColor[0.7, 0.336, 0.], PointSize[
+      NCache[
+       Rational[1, 72], 0.013888888888888888`]], AbsoluteThickness[1.6], 
+     CapForm["Butt"], 
+     StyleBox[
+      LineBox[{{1., 1.4}, {2., 0.}, {3., 4.440892098500626*^-16}, {
+       4., -4.440892098500626*^-16}, {5., -4.440892098500626*^-16}, {
+       6., -4.440892098500626*^-16}, {7., -4.440892098500626*^-16}, {
+       8., -4.440892098500626*^-16}, {9., -4.440892098500626*^-16}, {
+       10., -4.440892098500626*^-16}}],
+      FontSize->24]}, 
+    {RGBColor[0.491486, 0.345109, 0.8], PointSize[
+      NCache[
+       Rational[1, 72], 0.013888888888888888`]], AbsoluteThickness[1.6], 
+     CapForm["Butt"], 
+     StyleBox[
+      LineBox[{{1., 0.8999999999999999}, {2., 1.1102230246251565`*^-16}, {3., 
+       0.}, {4., -1.6653345369377348`*^-16}, {
+       5., -1.6653345369377348`*^-16}, {6., -1.6653345369377348`*^-16}, {
+       7., -1.6653345369377348`*^-16}, {8., -1.6653345369377348`*^-16}, {
+       9., -1.6653345369377348`*^-16}, {10., -1.6653345369377348`*^-16}}],
+      FontSize->24]}, 
+    {RGBColor[0.71788, 0.568653, 0.], PointSize[
+      NCache[
+       Rational[1, 72], 0.013888888888888888`]], AbsoluteThickness[1.6], 
+     CapForm["Butt"], 
+     StyleBox[
+      LineBox[{{1., 0.}, {2., -0.7354293068578778}, {3., 
+       4.440892098500626*^-16}, {4., -1.8041124150158794`*^-16}, {
+       5., -4.163336342344337*^-17}, {6., -6.938893903907228*^-17}, {
+       7., -5.551115123125783*^-17}, {8., 0.}, {
+       9., -5.551115123125783*^-17}, {10., -6.938893903907228*^-17}}],
+      FontSize->24]}, 
+    {RGBColor[0.70743, 0.224, 0.542415], PointSize[
+      NCache[
+       Rational[1, 72], 0.013888888888888888`]], AbsoluteThickness[1.6], 
+     CapForm["Butt"], 
+     StyleBox[
+      LineBox[{{1., 0.}, {2., 0.8435374149659862}, {
+       3., -5.551115123125783*^-16}, {4., -2.220446049250313*^-16}, {
+       5., -2.220446049250313*^-16}, {6., -2.220446049250313*^-16}, {
+       7., -2.220446049250313*^-16}, {8., -2.220446049250313*^-16}, {
+       9., -2.220446049250313*^-16}, {10., -2.220446049250313*^-16}}],
+      FontSize->24]}, 
+    {RGBColor[0.287228, 0.490217, 0.664674], PointSize[
+      NCache[
+       Rational[1, 72], 0.013888888888888888`]], AbsoluteThickness[1.6], 
+     CapForm["Butt"], 
+     StyleBox[
+      LineBox[{{1., -0.8200000000000001}, {2., -2.220446049250313*^-16}, {3., 
+       4.440892098500626*^-16}, {4., -3.3306690738754696`*^-16}, {5., 0.}, {
+       6., 0.}, {7., 0.}, {8., 0.}, {9., 0.}, {10., 0.}}],
+      FontSize->24]}, 
+    {RGBColor[0.982289285128704, 0.5771321368979874, 0.011542503255145636`], 
+     PointSize[
+      NCache[
+       Rational[1, 72], 0.013888888888888888`]], AbsoluteThickness[1.6], 
+     CapForm["Butt"], 
+     StyleBox[
+      LineBox[{{1., 0.}, {2., 2.6940564392301827`}, {3., 
+       1.4506457749700994`}, {4., 8.326672684688674*^-16}, {
+       5., -5.551115123125783*^-17}, {6., 1.1102230246251565`*^-16}, {7., 
+       5.551115123125783*^-17}, {8., -5.551115123125783*^-17}, {9., 
+       5.551115123125783*^-17}, {10., 1.1102230246251565`*^-16}}],
+      FontSize->24]}, 
+    {RGBColor[0.5876740325800278, 0.2877284499870081, 0.7500695697462922], 
+     PointSize[
+      NCache[
+       Rational[1, 72], 0.013888888888888888`]], AbsoluteThickness[1.6], 
+     CapForm["Butt"], 
+     StyleBox[
+      LineBox[{{1., 0.24}, {2., -1.360544217687075}, {3., 
+       2.886579864025407*^-15}, {4., 2.220446049250313*^-16}, {
+       5., -2.220446049250313*^-16}, {6., 2.220446049250313*^-16}, {7., 
+       2.220446049250313*^-16}, {8., 2.220446049250313*^-16}, {9., 
+       2.220446049250313*^-16}, {10., 2.220446049250313*^-16}}],
+      FontSize->24]}, 
+    {RGBColor[0.4262088601796793, 0.5581552810007578, 0.2777996730417023], 
+     PointSize[
+      NCache[
+       Rational[1, 72], 0.013888888888888888`]], AbsoluteThickness[1.6], 
+     CapForm["Butt"], 
+     StyleBox[
+      LineBox[{{1., 0.19999999999999996`}, {2., -2.220446049250313*^-16}, {3.,
+        0.}, {4., 0.}, {5., 0.}, {6., 0.}, {7., 0.}, {8., 0.}, {9., 0.}, {10.,
+        0.}}],
+      FontSize->24]}, 
+    {RGBColor[0.9431487543762861, 0.414555896337833, 0.07140829055870854], 
+     PointSize[
+      NCache[
+       Rational[1, 72], 0.013888888888888888`]], AbsoluteThickness[1.6], 
+     CapForm["Butt"], 
+     StyleBox[
+      LineBox[{{1., 0.3}, {2., -0.010288065843621519`}, {3., 
+       5.551115123125783*^-17}, {4., 0.}, {5., 0.}, {6., 0.}, {7., 0.}, {8., 
+       0.}, {9., 0.}, {10., 0.}}],
+      FontSize->24]}, 
+    {RGBColor[0.41497437140121635`, 0.393632147507352, 0.7842993779115092], 
+     PointSize[
+      NCache[
+       Rational[1, 72], 0.013888888888888888`]], AbsoluteThickness[1.6], 
+     CapForm["Butt"], 
+     StyleBox[
+      LineBox[{{1., 0.7999999999999998}, {2., -2.220446049250313*^-16}, {
+       3., -1.1102230246251565`*^-16}, {4., 0.}, {5., 0.}, {6., 0.}, {7., 
+       0.}, {8., 0.}, {9., 0.}, {10., 0.}}],
+      FontSize->24]}}, {{}, {}}},
+  AspectRatio->NCache[GoldenRatio^(-1), 0.6180339887498948],
+  Axes->{False, False},
+  AxesLabel->{None, None},
+  AxesOrigin->{0.8125000000000003, 0},
+  BaseStyle->{FontSize -> 24},
+  DisplayFunction->Identity,
+  Frame->{{True, True}, {True, True}},
+  FrameLabel->{{None, None}, {
+     FormBox["\"Optimization step\"", TraditionalForm], None}},
+  FrameStyle->Automatic,
+  FrameTicks->{{Automatic, Automatic}, {Automatic, Automatic}},
+  GridLines->{{0}, {0}},
+  GridLinesStyle->Directive[
+    GrayLevel[0.5, 0.4]],
+  ImageSize->400,
+  LabelStyle->{FontFamily -> "Times"},
+  Method->{
+   "OptimizePlotMarkers" -> True, "OptimizePlotMarkers" -> True, 
+    "CoordinatesToolOptions" -> {"DisplayFunction" -> ({
+        Identity[
+         Part[#, 1]], 
+        Identity[
+         Part[#, 2]]}& ), "CopiedValueFunction" -> ({
+        Identity[
+         Part[#, 1]], 
+        Identity[
+         Part[#, 2]]}& )}},
+  PlotLabel->FormBox["\"Residuals\"", TraditionalForm],
+  PlotRange->{{0.8125000000000003, 10.}, {-1.360544217687075, 
+   2.6940564392301827`}},
+  PlotRangeClipping->True,
+  PlotRangePadding->{{
+     Scaled[0.02], 
+     Scaled[0.02]}, {
+     Scaled[0.05], 
+     Scaled[0.05]}},
+  Ticks->{Automatic, Automatic}]], "Output",
+ CellChangeTimes->{{3.817247231113573*^9, 3.817247274141959*^9}},
+ CellLabel->
+  "Out[160]=",ExpressionUUID->"e8d65a74-e7c2-4b3b-abc8-55e0bd82f2ba"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"CreateDirectory", "[", "\"\<figures\>\"", "]"}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{"Export", "[", 
+  RowBox[{"\"\<figures/residuals.png\>\"", ",", "pRes", ",", 
+   RowBox[{"ImageResolution", "\[Rule]", "200"}]}], "]"}]}], "Input",
+ CellChangeTimes->{{3.817247281069269*^9, 3.817247285005517*^9}},
+ CellLabel->
+  "In[161]:=",ExpressionUUID->"c35b616b-5090-4d78-b51e-36f8bf2c802d"],
+
+Cell[BoxData[
+ TemplateBox[{
+  "CreateDirectory", "filex", 
+   "\"\\!\\(\\*RowBox[{\\\"\\\\\\\"/Users/oernst/software_private/ggm_\
+inversion/test/output/root_find_newton_5d/figures\\\\\\\"\\\"}]\\) already \
+exists.\"", 2, 161, 23, 24416997456800356831, "Local"},
+  "MessageTemplate"]], "Message", "MSG",
+ CellChangeTimes->{3.817247285245034*^9},
+ CellLabel->
+  "During evaluation of \
+In[161]:=",ExpressionUUID->"0fb66284-70b2-4f96-9231-7c3ce4e7f986"],
+
+Cell[BoxData["\<\"figures/residuals.png\"\>"], "Output",
+ CellChangeTimes->{3.817247285451951*^9},
+ CellLabel->
+  "Out[162]=",ExpressionUUID->"4f080b16-8dfc-4c96-80ef-9da1dec8b46b"]
+}, Open  ]]
+}, Open  ]]
+},
+WindowSize->{808, 911},
+WindowMargins->{{Automatic, 10}, {Automatic, 9}},
+FrontEndVersion->"12.2 for Mac OS X x86 (64-bit) (December 12, 2020)",
+StyleDefinitions->"Default.nb",
+ExpressionUUID->"a7241d21-76c8-4e8a-acb4-a515c641e6e7"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[CellGroupData[{
+Cell[580, 22, 148, 3, 98, "Title",ExpressionUUID->"4bbb19c2-f450-4977-91b2-58af684d572f"],
+Cell[CellGroupData[{
+Cell[753, 29, 527, 14, 30, "Input",ExpressionUUID->"16080999-6fd4-417e-a406-8522938ff3ec"],
+Cell[1283, 45, 366, 7, 34, "Output",ExpressionUUID->"46615ad8-2f30-4a58-841d-af25e809a58a"]
+}, Open  ]],
+Cell[1664, 55, 1596, 44, 220, "Input",ExpressionUUID->"c62d430c-08a6-4695-848e-622132261b57"],
+Cell[CellGroupData[{
+Cell[3285, 103, 916, 16, 136, "Input",ExpressionUUID->"edfb5650-ae02-45c9-8918-377f7e666434"],
+Cell[4204, 121, 7507, 179, 386, "Output",ExpressionUUID->"5e359cc7-7fd4-4042-930b-870ea251886b"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[11748, 305, 467, 9, 52, "Input",ExpressionUUID->"895fe2bb-6e18-4242-951d-bc54d4334a6f"],
+Cell[12218, 316, 453, 10, 24, "Message",ExpressionUUID->"0053d7c0-c348-4811-be0e-7835cde4f562"],
+Cell[12674, 328, 243, 3, 34, "Output",ExpressionUUID->"0d7f4791-b34a-4891-b141-d381845ab5f2"]
+}, Open  ]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[12966, 337, 153, 3, 98, "Title",ExpressionUUID->"d66a73e1-d7f2-47e3-a710-5b43b9a6c416"],
+Cell[13122, 342, 1395, 40, 220, "Input",ExpressionUUID->"cbc64a08-321a-48c7-a811-823a76ae4446"],
+Cell[CellGroupData[{
+Cell[14542, 386, 619, 12, 52, "Input",ExpressionUUID->"9c48554c-16e4-48c5-88d3-11728d2cec10"],
+Cell[15164, 400, 8271, 194, 375, "Output",ExpressionUUID->"1cddc1b1-cc1f-4f8f-bf87-3b047926a941"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[23472, 599, 416, 8, 52, "Input",ExpressionUUID->"67e8bfc4-c9b0-49d3-af83-2d9e9a15b6cf"],
+Cell[23891, 609, 497, 11, 24, "Message",ExpressionUUID->"6a4b5ffc-a6c9-47ca-bafe-c9a502d81cc1"],
+Cell[24391, 622, 218, 3, 34, "Output",ExpressionUUID->"9b598127-567d-4e74-a834-e39018fef013"]
+}, Open  ]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[24658, 631, 159, 3, 98, "Title",ExpressionUUID->"1b890400-c549-427d-8d7b-2ed6a630e6b4"],
+Cell[24820, 636, 2683, 77, 430, "Input",ExpressionUUID->"49c55c2f-3b5e-4ded-951d-36ae766b8714"],
+Cell[CellGroupData[{
+Cell[27528, 717, 466, 10, 30, "Input",ExpressionUUID->"95736e58-3833-4a17-b2dd-eaff7fa25e13"],
+Cell[27997, 729, 8858, 197, 258, "Output",ExpressionUUID->"09d5be4e-fa01-44b1-8007-96394cb994a2"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[36892, 931, 364, 8, 30, "Input",ExpressionUUID->"b3d23d81-23fd-4ebc-9ddb-0fac7a44bee6"],
+Cell[37259, 941, 15035, 335, 379, "Output",ExpressionUUID->"e901f174-728e-4da9-8d5d-b9b9996ede26"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[52331, 1281, 425, 9, 52, "Input",ExpressionUUID->"1f4bf23c-5665-44f7-8bc2-e5cc90a35dec"],
+Cell[52759, 1292, 453, 10, 24, "Message",ExpressionUUID->"c274f9f2-95d7-4373-8f9a-937c1675c4d7"],
+Cell[53215, 1304, 179, 3, 34, "Output",ExpressionUUID->"2e8733fa-4c0f-42d8-a0d9-cd8e36db83f1"]
+}, Open  ]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[53443, 1313, 152, 3, 98, "Title",ExpressionUUID->"6d03b54e-6a53-4f55-a682-6595b438813d"],
+Cell[53598, 1318, 2048, 57, 262, "Input",ExpressionUUID->"727675f3-fb63-4e9c-943e-5056bb4a0b54"],
+Cell[CellGroupData[{
+Cell[55671, 1379, 516, 11, 52, "Input",ExpressionUUID->"0705aefe-e7b2-4f44-a25d-53ef291822c3"],
+Cell[56190, 1392, 9001, 203, 329, "Output",ExpressionUUID->"e8d65a74-e7c2-4b3b-abc8-55e0bd82f2ba"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[65228, 1600, 424, 9, 52, "Input",ExpressionUUID->"c35b616b-5090-4d78-b51e-36f8bf2c802d"],
+Cell[65655, 1611, 453, 10, 24, "Message",ExpressionUUID->"0fb66284-70b2-4f96-9231-7c3ce4e7f986"],
+Cell[66111, 1623, 181, 3, 34, "Output",ExpressionUUID->"4f080b16-8dfc-4c96-80ef-9da1dec8b46b"]
+}, Open  ]]
+}, Open  ]]
+}
+]
+*)
+

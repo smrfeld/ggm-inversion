@@ -27,15 +27,15 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-#include "../include/ggm_inversion_bits/optimizer_optim.hpp"
+#include "../include/ggm_inversion_bits/l2_optimizer_optim.hpp"
 
-namespace ggm {
+namespace ginv {
 
 double optim_obj_func(const arma::vec &prec_mat_vec, arma::vec *deriv_vec, void* input_obj_func_val) {
 
     // Get input
     InputObjFuncVal* input = static_cast<InputObjFuncVal*>(input_obj_func_val);
-    const OptimizerOptim *optimizer = input->optimizer;
+    const L2OptimizerOptim *optimizer = input->optimizer;
     arma::mat cov_mat_true = input->cov_mat_true;
     
     arma::mat prec_mat_curr = optimizer->vec_to_mat(prec_mat_vec);
@@ -53,7 +53,7 @@ double optim_obj_func(const arma::vec &prec_mat_vec, arma::vec *deriv_vec, void*
     return obj_func_val;
 }
 
-arma::mat OptimizerOptim::solve(const arma::mat &cov_mat_true, const arma::mat &prec_mat_init) const {
+arma::mat L2OptimizerOptim::solve(const arma::mat &cov_mat_true, const arma::mat &prec_mat_init) const {
     
     // Init
     arma::vec prec_mat_vec = mat_to_vec(prec_mat_init);
@@ -101,27 +101,27 @@ arma::mat OptimizerOptim::solve(const arma::mat &cov_mat_true, const arma::mat &
     return vec_to_mat(prec_mat_vec);
 }
 
-void OptimizerOptim::set_alg_adam(double lr) {
+void L2OptimizerOptim::set_alg_adam(double lr) {
     _alg = OptimAlg::adam;
     settings.gd_settings.method = 6;
     settings.gd_settings.par_step_size = lr;
 }
 
-void OptimizerOptim::set_alg_lbfgs() {
+void L2OptimizerOptim::set_alg_lbfgs() {
     _alg = OptimAlg::lbfgs;
 }
 
-void OptimizerOptim::set_alg_bfgs() {
+void L2OptimizerOptim::set_alg_bfgs() {
     _alg = OptimAlg::bfgs;
 }
 
-void OptimizerOptim::set_alg_sgd(double lr){
+void L2OptimizerOptim::set_alg_sgd(double lr){
     _alg = OptimAlg::sgd;
     settings.gd_settings.method = 0;
     settings.gd_settings.par_step_size = lr;
 }
 
-void OptimizerOptim::set_alg_cg(double lr){
+void L2OptimizerOptim::set_alg_cg(double lr){
     _alg = OptimAlg::cg;
     settings.gd_settings.par_step_size = lr;
 }

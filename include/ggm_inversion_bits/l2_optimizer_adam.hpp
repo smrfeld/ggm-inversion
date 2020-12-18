@@ -1,6 +1,6 @@
 //
 /*
-File: optimizer_l_bfgs.hpp
+File: optimizer_adam.hpp
 Created by: Oliver K. Ernst
 Date: 12/4/20
 
@@ -25,24 +25,28 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
-*/
+*/ 
 
-#include "optimizer_base.hpp"
+#include "l2_optimizer_base.hpp"
 
-#ifndef OPTIMIZER_SGD_H
-#define OPTIMIZER_SGD_H
+#ifndef OPTIMIZER_ADAM_H
+#define OPTIMIZER_ADAM_H
 
-namespace ggm {
+namespace ginv {
 
-class OptimizerGD : public OptimizerBase {
+class L2OptimizerAdam : public L2OptimizerBase {
 public:
     
+    double adam_beta_1 = 0.9;
+    double adam_beta_2 = 0.999;
+    double adam_eps = 1e-8;
     double lr = 1.0;
     int no_opt_steps = 100;
+    
     Options options;
     
-    using OptimizerBase::OptimizerBase;
-        
+    using L2OptimizerBase::L2OptimizerBase;
+    
     arma::mat solve(const arma::mat &cov_mat_true, const arma::mat &prec_mat_init) const override;
 };
 

@@ -32,7 +32,7 @@ SOFTWARE.
 #ifndef OPTIONS_H
 #define OPTIONS_H
 
-namespace ggm {
+namespace ginv {
 
 struct Options {
     bool log_progress=false;

@@ -33,7 +33,7 @@ SOFTWARE.
 #ifndef HELPERS_H
 #define HELPERS_H
 
-namespace ggm {
+namespace ginv {
 
 typedef arma::mat::fixed<3,2> VolBounds;
 typedef arma::vec3 Pt;

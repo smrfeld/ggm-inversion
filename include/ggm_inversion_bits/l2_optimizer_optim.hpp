@@ -1,8 +1,8 @@
 //
 /*
-File: optimizer_l_bfgs.cpp
+File: optimizer_optim.hpp
 Created by: Oliver K. Ernst
-Date: 12/4/20
+Date: 5/27/20
 
 MIT License
 
@@ -25,30 +25,51 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
-*/ 
+*/
 
-#include "../include/ggm_inversion_bits/optimizer_gd.hpp"
+#include "l2_optimizer_base.hpp"
 
-namespace ggm {
+#define OPTIM_ENABLE_ARMA_WRAPPERS
+#include <optim/optim.hpp>
 
-arma::mat OptimizerGD::solve(const arma::mat &cov_mat_true, const arma::mat &prec_mat_init) const {
+#ifndef OPTIMIZER_OPTIM_H
+#define OPTIMIZER_OPTIM_H
 
-    arma::mat prec_mat_curr = prec_mat_init;
-        
-    for (size_t i=0; i<no_opt_steps; i++) {
-        arma::mat cov_mat_curr = arma::inv(prec_mat_curr);
-                    
-        // Log if needed
-        _log_progress_if_needed(options, i, no_opt_steps, cov_mat_curr, cov_mat_true, prec_mat_curr);
-        
-        // Write if needed
-        _write_progress_if_needed(options, i, prec_mat_curr, cov_mat_curr, cov_mat_true);
-        
-        arma::mat derivs = get_deriv_mat(cov_mat_curr, cov_mat_true);
-        prec_mat_curr -= lr * derivs;
-    }
+namespace ginv {
+
+class L2OptimizerOptim;
+
+struct InputObjFuncVal {
+    const L2OptimizerOptim *optimizer;
+    arma::mat cov_mat_true;
+};
+
+double optim_obj_func(const arma::vec &prec_mat_vec, arma::vec *deriv_vec, void* input_obj_func_val);
+
+enum OptimAlg { sgd, adam, lbfgs, bfgs, cg };
+
+class L2OptimizerOptim : public L2OptimizerBase {
+            
+private:
     
-    return prec_mat_curr;
-}
+    OptimAlg _alg;
+    
+public:
+    
+    bool log_result = true;
+    mutable optim::algo_settings_t settings;
+    
+    void set_alg_adam(double lr);
+    void set_alg_lbfgs();
+    void set_alg_bfgs();
+    void set_alg_sgd(double lr);
+    void set_alg_cg(double lr);
+
+    using L2OptimizerBase::L2OptimizerBase;
+
+    arma::mat solve(const arma::mat &cov_mat_true, const arma::mat &prec_mat_init) const override;
+};
 
 }
+
+#endif

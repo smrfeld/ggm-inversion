@@ -27,11 +27,11 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-#include "../include/ggm_inversion_bits/optimizer_adam.hpp"
+#include "../include/ggm_inversion_bits/l2_optimizer_adam.hpp"
 
-namespace ggm {
+namespace ginv {
         
-arma::mat OptimizerAdam::solve(const arma::mat &cov_mat_true, const arma::mat &prec_mat_init) const {
+arma::mat L2OptimizerAdam::solve(const arma::mat &cov_mat_true, const arma::mat &prec_mat_init) const {
     
     arma::mat prec_mat_curr = prec_mat_init;
 

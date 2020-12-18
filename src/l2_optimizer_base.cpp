@@ -27,12 +27,12 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-#include "../include/ggm_inversion_bits/optimizer_base.hpp"
+#include "../include/ggm_inversion_bits/l2_optimizer_base.hpp"
 #include "../include/ggm_inversion_bits/helpers.hpp"
 
-namespace ggm {
+namespace ginv {
 
-OptimizerBase::OptimizerBase(int dim, const std::vector<std::pair<int,int>> &idx_pairs_free) {
+L2OptimizerBase::L2OptimizerBase(int dim, const std::vector<std::pair<int,int>> &idx_pairs_free) {
     _idx_pairs_free = idx_pairs_free;
     _dim = dim;
     
@@ -43,44 +43,44 @@ OptimizerBase::OptimizerBase(int dim, const std::vector<std::pair<int,int>> &idx
     }
 }
 
-OptimizerBase::OptimizerBase(const OptimizerBase& other) {
+L2OptimizerBase::L2OptimizerBase(const L2OptimizerBase& other) {
     _copy(other);
 };
-OptimizerBase::OptimizerBase(OptimizerBase&& other) {
+L2OptimizerBase::L2OptimizerBase(L2OptimizerBase&& other) {
     _move(other);
 };
-OptimizerBase& OptimizerBase::operator=(const OptimizerBase& other) {
+L2OptimizerBase& L2OptimizerBase::operator=(const L2OptimizerBase& other) {
     if (this != &other) {
         _clean_up();
         _copy(other);
     };
     return *this;
 };
-OptimizerBase& OptimizerBase::operator=(OptimizerBase&& other) {
+L2OptimizerBase& L2OptimizerBase::operator=(L2OptimizerBase&& other) {
     if (this != &other) {
         _clean_up();
         _move(other);
     };
     return *this;
 };
-OptimizerBase::~OptimizerBase()
+L2OptimizerBase::~L2OptimizerBase()
 {
     _clean_up();
 };
-void OptimizerBase::_clean_up() {
+void L2OptimizerBase::_clean_up() {
     // Nothing....
 };
 
-void OptimizerBase::_copy(const OptimizerBase& other) {
+void L2OptimizerBase::_copy(const L2OptimizerBase& other) {
     _idx_pairs_free = other._idx_pairs_free;
     _dim = other._dim;
 };
-void OptimizerBase::_move(OptimizerBase& other) {
+void L2OptimizerBase::_move(L2OptimizerBase& other) {
     _idx_pairs_free = other._idx_pairs_free;
     _dim = other._dim;
 };
 
-void OptimizerBase::_log_progress_if_needed(Options options, int opt_step, int no_opt_steps, const arma::mat &cov_mat_curr, const arma::mat &cov_mat_targets, const arma::mat &prec_mat_curr) const {
+void L2OptimizerBase::_log_progress_if_needed(Options options, int opt_step, int no_opt_steps, const arma::mat &cov_mat_curr, const arma::mat &cov_mat_targets, const arma::mat &prec_mat_curr) const {
     if (options.log_progress) {
         if (opt_step % options.log_interval == 0) {
             
@@ -104,7 +104,7 @@ void OptimizerBase::_log_progress_if_needed(Options options, int opt_step, int n
     }
 }
 
-void OptimizerBase::_write_progress_if_needed(Options options, int opt_step, const arma::mat &prec_mat_curr, const arma::mat &cov_mat_curr, const arma::mat &cov_mat_true) const {
+void L2OptimizerBase::_write_progress_if_needed(Options options, int opt_step, const arma::mat &prec_mat_curr, const arma::mat &cov_mat_curr, const arma::mat &cov_mat_true) const {
     if (options.write_progress) {
         assert (options.write_dir != "");
         
@@ -124,7 +124,7 @@ void OptimizerBase::_write_progress_if_needed(Options options, int opt_step, con
     }
 }
 
-double OptimizerBase::_get_first_deriv_inverse_mat(const arma::mat &cov_mat_curr, int d1, int d2, int n1, int n2) const {
+double L2OptimizerBase::_get_first_deriv_inverse_mat(const arma::mat &cov_mat_curr, int d1, int d2, int n1, int n2) const {
     double ret = 0.0;
     ret -= cov_mat_curr(n1,d1) * cov_mat_curr(n2,d2);
     if (d1 != d2) {
@@ -134,7 +134,7 @@ double OptimizerBase::_get_first_deriv_inverse_mat(const arma::mat &cov_mat_curr
     return ret;
 }
 
-double OptimizerBase::_get_second_deriv_inverse_mat(const arma::mat &cov_mat_curr, int d1, int d2, int d3, int d4, int n1, int n2) const {
+double L2OptimizerBase::_get_second_deriv_inverse_mat(const arma::mat &cov_mat_curr, int d1, int d2, int d3, int d4, int n1, int n2) const {
     int e = d1;
     int f = d2;
     int a = d3;
@@ -153,7 +153,7 @@ double OptimizerBase::_get_second_deriv_inverse_mat(const arma::mat &cov_mat_cur
     return ret;
 }
 
-arma::mat OptimizerBase::vec_to_mat(const arma::vec &vec) const {
+arma::mat L2OptimizerBase::vec_to_mat(const arma::vec &vec) const {
     
     arma::mat mat = arma::zeros(_dim,_dim);
     for (size_t i=0; i<_idx_pairs_free.size(); i++) {
@@ -164,7 +164,7 @@ arma::mat OptimizerBase::vec_to_mat(const arma::vec &vec) const {
     
     return mat;
 }
-arma::vec OptimizerBase::mat_to_vec(const arma::mat &mat) const {
+arma::vec L2OptimizerBase::mat_to_vec(const arma::mat &mat) const {
     
     arma::vec vec(_idx_pairs_free.size());
     for (size_t i=0; i<_idx_pairs_free.size(); i++) {
@@ -175,7 +175,7 @@ arma::vec OptimizerBase::mat_to_vec(const arma::mat &mat) const {
     return vec;
 }
 
-double OptimizerBase::get_obj_func_val(const arma::mat &cov_mat_curr, const arma::mat &cov_mat_true) const {
+double L2OptimizerBase::get_obj_func_val(const arma::mat &cov_mat_curr, const arma::mat &cov_mat_true) const {
 
     double val = 0.0;
     for (auto idx_pair: _idx_pairs_free) {
@@ -188,7 +188,7 @@ double OptimizerBase::get_obj_func_val(const arma::mat &cov_mat_curr, const arma
     return val;
 }
 
-arma::mat OptimizerBase::get_deriv_mat(const arma::mat &cov_mat_curr, const arma::mat &cov_mat_true) const {
+arma::mat L2OptimizerBase::get_deriv_mat(const arma::mat &cov_mat_curr, const arma::mat &cov_mat_true) const {
     
     arma::mat derivs = arma::zeros(_dim, _dim);
     for (auto idx_pair_deriv: _idx_pairs_free) {
@@ -210,12 +210,12 @@ arma::mat OptimizerBase::get_deriv_mat(const arma::mat &cov_mat_curr, const arma
     return derivs;
 }
 
-arma::vec OptimizerBase::get_deriv_vec(const arma::mat &cov_mat_curr, const arma::mat &cov_mat_true) const {
+arma::vec L2OptimizerBase::get_deriv_vec(const arma::mat &cov_mat_curr, const arma::mat &cov_mat_true) const {
     arma::mat deriv_mat = get_deriv_mat(cov_mat_curr, cov_mat_true);
     return mat_to_vec(deriv_mat);
 }
 
-arma::mat OptimizerBase::get_hessian(const arma::mat &cov_mat_curr, const arma::mat &cov_mat_true) const {
+arma::mat L2OptimizerBase::get_hessian(const arma::mat &cov_mat_curr, const arma::mat &cov_mat_true) const {
     
     arma::mat hessian = arma::zeros(_idx_pairs_free.size(), _idx_pairs_free.size());
     for (size_t idx_1=0; idx_1<_idx_pairs_free.size(); idx_1++) {

@@ -1,8 +1,8 @@
 //
 /*
-File: optimizer_optim.hpp
+File: optimizer_l_bfgs.hpp
 Created by: Oliver K. Ernst
-Date: 5/27/20
+Date: 12/4/20
 
 MIT License
 
@@ -27,46 +27,22 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-#include "optimizer_base.hpp"
+#include "l2_optimizer_base.hpp"
 
-#define OPTIM_ENABLE_ARMA_WRAPPERS
-#include <optim/optim.hpp>
+#ifndef OPTIMIZER_SGD_H
+#define OPTIMIZER_SGD_H
 
-#ifndef OPTIMIZER_OPTIM_H
-#define OPTIMIZER_OPTIM_H
+namespace ginv {
 
-namespace ggm {
-
-class OptimizerOptim;
-
-struct InputObjFuncVal {
-    const OptimizerOptim *optimizer;
-    arma::mat cov_mat_true;
-};
-
-double optim_obj_func(const arma::vec &prec_mat_vec, arma::vec *deriv_vec, void* input_obj_func_val);
-
-enum OptimAlg { sgd, adam, lbfgs, bfgs, cg };
-
-class OptimizerOptim : public OptimizerBase {
-            
-private:
-    
-    OptimAlg _alg;
-    
+class L2OptimizerGD : public L2OptimizerBase {
 public:
     
-    bool log_result = true;
-    mutable optim::algo_settings_t settings;
+    double lr = 1.0;
+    int no_opt_steps = 100;
+    Options options;
     
-    void set_alg_adam(double lr);
-    void set_alg_lbfgs();
-    void set_alg_bfgs();
-    void set_alg_sgd(double lr);
-    void set_alg_cg(double lr);
-
-    using OptimizerBase::OptimizerBase;
-
+    using L2OptimizerBase::L2OptimizerBase;
+        
     arma::mat solve(const arma::mat &cov_mat_true, const arma::mat &prec_mat_init) const override;
 };
 

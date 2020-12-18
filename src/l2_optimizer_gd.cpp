@@ -1,6 +1,6 @@
 //
 /*
-File: optimizer_l_bfgs.hpp
+File: optimizer_l_bfgs.cpp
 Created by: Oliver K. Ernst
 Date: 12/4/20
 
@@ -27,29 +27,28 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */ 
 
-#include "optimizer_base.hpp"
+#include "../include/ggm_inversion_bits/l2_optimizer_gd.hpp"
 
-#ifndef OPTIMIZER_ADAM_H
-#define OPTIMIZER_ADAM_H
+namespace ginv {
 
-namespace ggm {
+arma::mat L2OptimizerGD::solve(const arma::mat &cov_mat_true, const arma::mat &prec_mat_init) const {
 
-class OptimizerAdam : public OptimizerBase {
-public:
+    arma::mat prec_mat_curr = prec_mat_init;
+        
+    for (size_t i=0; i<no_opt_steps; i++) {
+        arma::mat cov_mat_curr = arma::inv(prec_mat_curr);
+                    
+        // Log if needed
+        _log_progress_if_needed(options, i, no_opt_steps, cov_mat_curr, cov_mat_true, prec_mat_curr);
+        
+        // Write if needed
+        _write_progress_if_needed(options, i, prec_mat_curr, cov_mat_curr, cov_mat_true);
+        
+        arma::mat derivs = get_deriv_mat(cov_mat_curr, cov_mat_true);
+        prec_mat_curr -= lr * derivs;
+    }
     
-    double adam_beta_1 = 0.9;
-    double adam_beta_2 = 0.999;
-    double adam_eps = 1e-8;
-    double lr = 1.0;
-    int no_opt_steps = 100;
-    
-    Options options;
-    
-    using OptimizerBase::OptimizerBase;
-    
-    arma::mat solve(const arma::mat &cov_mat_true, const arma::mat &prec_mat_init) const override;
-};
-
+    return prec_mat_curr;
 }
 
-#endif
+}

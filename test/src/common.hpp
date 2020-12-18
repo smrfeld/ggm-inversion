@@ -8,13 +8,13 @@
 #include <armadillo>
 
 using namespace std;
-using namespace ggm;
+using namespace ginv;
 
 void report_results(
                     const arma::mat &prec_mat_solved,
                     const arma::mat &cov_mat_true,
                     const std::vector<std::pair<int,int>> &idx_pairs_free,
-                    const OptimizerBase &opt
+                    const L2OptimizerBase &opt
                     ) {
     arma::mat cov_mat_solved = arma::inv(prec_mat_solved);
     

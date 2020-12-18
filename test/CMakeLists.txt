@@ -16,20 +16,20 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_DEBUG ${CMAKE_BINARY_DIR}/../bin)
 find_library(ARMADILLO_LIB armadillo HINTS /usr/local/lib/)
 find_library(GGM_INVERSION_LIB ggm_inversion HINTS /usr/local/lib/)
 
-add_executable(test_3d_gd src/test_3d_gd.cpp src/common.hpp)
-target_link_libraries(test_3d_gd PUBLIC ${ARMADILLO_LIB} ${GGM_INVERSION_LIB})
+add_executable(l2_adam_5d src/l2_adam_5d.cpp src/common.hpp)
+target_link_libraries(l2_adam_5d PUBLIC ${ARMADILLO_LIB} ${GGM_INVERSION_LIB})
 
-add_executable(test_5d_gd src/test_5d_gd.cpp src/common.hpp)
-target_link_libraries(test_5d_gd PUBLIC ${ARMADILLO_LIB} ${GGM_INVERSION_LIB})
+add_executable(l2_gd_3d src/l2_gd_3d.cpp src/common.hpp)
+target_link_libraries(l2_gd_3d PUBLIC ${ARMADILLO_LIB} ${GGM_INVERSION_LIB})
 
-add_executable(test_5d_newtons_method src/test_5d_newtons_method.cpp src/common.hpp)
-target_link_libraries(test_5d_newtons_method PUBLIC ${ARMADILLO_LIB} ${GGM_INVERSION_LIB})
+add_executable(l2_gd_5d src/l2_gd_5d.cpp src/common.hpp)
+target_link_libraries(l2_gd_5d PUBLIC ${ARMADILLO_LIB} ${GGM_INVERSION_LIB})
 
-add_executable(test_5d_adam src/test_5d_adam.cpp src/common.hpp)
-target_link_libraries(test_5d_adam PUBLIC ${ARMADILLO_LIB} ${GGM_INVERSION_LIB})
+add_executable(l2_optim_5d src/l2_optim_5d.cpp src/common.hpp)
+target_link_libraries(l2_optim_5d PUBLIC ${ARMADILLO_LIB} ${GGM_INVERSION_LIB})
 
-add_executable(test_5d_optim src/test_5d_optim.cpp src/common.hpp)
-target_link_libraries(test_5d_optim PUBLIC ${ARMADILLO_LIB} ${GGM_INVERSION_LIB})
+add_executable(root_find_newton_5d src/root_find_newton_5d.cpp src/common.hpp)
+target_link_libraries(root_find_newton_5d PUBLIC ${ARMADILLO_LIB} ${GGM_INVERSION_LIB})
 
 # If want to include install target
 # install(TARGETS bmla_layer_1 RUNTIME DESTINATION bin)

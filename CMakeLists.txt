@@ -18,19 +18,19 @@ set(PROJECT_INCLUDE_DIR "include/ggm_inversion_bits")
 
 # Source files
 set(SOURCE_FILES
-    ${PROJECT_INCLUDE_DIR}/newtons_method.hpp
     ${PROJECT_INCLUDE_DIR}/options.hpp
-    ${PROJECT_INCLUDE_DIR}/optimizer_adam.hpp
-    ${PROJECT_INCLUDE_DIR}/optimizer_base.hpp
-    ${PROJECT_INCLUDE_DIR}/optimizer_gd.hpp
+    ${PROJECT_INCLUDE_DIR}/l2_optimizer_adam.hpp
+    ${PROJECT_INCLUDE_DIR}/l2_optimizer_base.hpp
+    ${PROJECT_INCLUDE_DIR}/l2_optimizer_gd.hpp
+    ${PROJECT_INCLUDE_DIR}/root_finding_newton.hpp
     ${PROJECT_INCLUDE_DIR}/helpers.hpp
-    ${PROJECT_INCLUDE_DIR}/optimizer_optim.hpp
-    ${PROJECT_SOURCE_DIR}/newtons_method.cpp
-    ${PROJECT_SOURCE_DIR}/optimizer_adam.cpp
-    ${PROJECT_SOURCE_DIR}/optimizer_base.cpp
-    ${PROJECT_SOURCE_DIR}/optimizer_gd.cpp
+    ${PROJECT_INCLUDE_DIR}/l2_optimizer_optim.hpp
+    ${PROJECT_SOURCE_DIR}/root_finding_newton.cpp
+    ${PROJECT_SOURCE_DIR}/l2_optimizer_adam.cpp
+    ${PROJECT_SOURCE_DIR}/l2_optimizer_base.cpp
+    ${PROJECT_SOURCE_DIR}/l2_optimizer_gd.cpp
     ${PROJECT_SOURCE_DIR}/helpers.cpp
-    ${PROJECT_SOURCE_DIR}/optimizer_optim.cpp
+    ${PROJECT_SOURCE_DIR}/l2_optimizer_optim.cpp
 )
 
 # Set up such that XCode organizes the files correctly

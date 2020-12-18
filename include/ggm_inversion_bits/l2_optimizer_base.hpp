@@ -35,9 +35,9 @@ SOFTWARE.
 #ifndef OPTIMIZER_BASE_H
 #define OPTIMIZER_BASE_H
 
-namespace ggm {
+namespace ginv {
 
-class OptimizerBase {
+class L2OptimizerBase {
         
 protected:
     
@@ -56,18 +56,18 @@ private:
     /// Internal clean up
     void _clean_up();
     /// Internal copy
-    void _copy(const OptimizerBase& other);
+    void _copy(const L2OptimizerBase& other);
     /// Internal move
-    void _move(OptimizerBase &other);
+    void _move(L2OptimizerBase &other);
 
 public:
     
-    OptimizerBase(int dim, const std::vector<std::pair<int,int>> &idx_pairs_free);
-    OptimizerBase(const OptimizerBase& other);
-    OptimizerBase& operator=(const OptimizerBase& other);
-    OptimizerBase(OptimizerBase&& other);
-    OptimizerBase& operator=(OptimizerBase&& other);
-    virtual ~OptimizerBase();
+    L2OptimizerBase(int dim, const std::vector<std::pair<int,int>> &idx_pairs_free);
+    L2OptimizerBase(const L2OptimizerBase& other);
+    L2OptimizerBase& operator=(const L2OptimizerBase& other);
+    L2OptimizerBase(L2OptimizerBase&& other);
+    L2OptimizerBase& operator=(L2OptimizerBase&& other);
+    virtual ~L2OptimizerBase();
 
     arma::mat vec_to_mat(const arma::vec &vec) const;
     arma::vec mat_to_vec(const arma::mat &mat) const;

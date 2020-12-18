@@ -10,7 +10,7 @@
 #include "common.hpp"
 
 using namespace std;
-using namespace ggm;
+using namespace ginv;
 
 int main() {
     std::vector<std::pair<int,int>> idx_pairs_free;
@@ -33,14 +33,14 @@ int main() {
         {0, 0, 8, 10, 60}
     };
     
-    OptimizerGD opt(5, idx_pairs_free);
+    L2OptimizerGD opt(5, idx_pairs_free);
     
     arma::mat prec_mat_init = 0.01 * arma::eye(5,5);
     opt.lr = 1e-9;
     opt.no_opt_steps = 5e3;
     opt.options.write_interval = opt.no_opt_steps / 100;
     opt.options.write_progress = true;
-    opt.options.write_dir = "../output/test_5d_gd/data/";
+    opt.options.write_dir = "../output/l2_gd_5d/data/";
     ensure_dir_exists(opt.options.write_dir);
     arma::mat prec_mat_solved = opt.solve(cov_mat_true, prec_mat_init);
 

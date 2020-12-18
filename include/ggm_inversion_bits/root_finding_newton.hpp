@@ -1,6 +1,6 @@
 //
 /*
-File: newtons_method.hpp
+File: root_finding_newton.hpp
 Created by: Oliver K. Ernst
 Date: 5/27/20
 
@@ -35,39 +35,41 @@ SOFTWARE.
 #ifndef NEWTONS_METHOD_H
 #define NEWTONS_METHOD_H
 
-namespace ggm {
+namespace ginv {
 
-class NewtonsMethod {
+class RootFindingNewton {
         
 protected:
+    
+    bool _check_pair_exists(const std::vector<std::pair<int,int>> &pairs, std::pair<int,int> pr_search) const;
     
     std::vector<std::pair<int,int>> _idx_pairs_free, _idx_pairs_non_free;
     int _dim;
     
     void _log_progress_if_needed(Options options, int opt_step, int no_opt_steps, const arma::mat &cov_mat_curr, const arma::mat &cov_mat_targets, const arma::mat &prec_mat_curr) const;
     
-    void _write_progress_if_needed(Options options, int opt_step, const arma::mat &prec_mat_curr, const arma::mat &cov_mat_curr, const arma::mat &cov_mat_true) const;
+    void _write_progress_if_needed(Options options, int opt_step, const arma::mat &prec_mat_curr, const arma::mat &cov_mat_curr) const;
     
 private:
     
     /// Internal clean up
     void _clean_up();
     /// Internal copy
-    void _copy(const NewtonsMethod& other);
+    void _copy(const RootFindingNewton& other);
     /// Internal move
-    void _move(NewtonsMethod &other);
+    void _move(RootFindingNewton &other);
 
 public:
     
     int no_opt_steps = 100;
     Options options;
     
-    NewtonsMethod(int dim, const std::vector<std::pair<int,int>> &idx_pairs_free, const std::vector<std::pair<int,int>> &idx_pairs_non_free);
-    NewtonsMethod(const NewtonsMethod& other);
-    NewtonsMethod& operator=(const NewtonsMethod& other);
-    NewtonsMethod(NewtonsMethod&& other);
-    NewtonsMethod& operator=(NewtonsMethod&& other);
-    ~NewtonsMethod();
+    RootFindingNewton(int dim, const std::vector<std::pair<int,int>> &idx_pairs_free);
+    RootFindingNewton(const RootFindingNewton& other);
+    RootFindingNewton& operator=(const RootFindingNewton& other);
+    RootFindingNewton(RootFindingNewton&& other);
+    RootFindingNewton& operator=(RootFindingNewton&& other);
+    ~RootFindingNewton();
     
     arma::mat free_vec_to_mat(const arma::vec &vec) const;
     arma::mat non_free_vec_to_mat(const arma::vec &vec) const;

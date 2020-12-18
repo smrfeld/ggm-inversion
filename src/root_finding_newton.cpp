@@ -1,6 +1,6 @@
 //
 /*
-File: newtons_method.cpp
+File: root_finding_newton.cpp
 Created by: Oliver K. Ernst
 Date: 5/27/20
 
@@ -27,14 +27,29 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-#include "../include/ggm_inversion_bits/newtons_method.hpp"
+#include "../include/ggm_inversion_bits/root_finding_newton.hpp"
 #include "../include/ggm_inversion_bits/helpers.hpp"
 
-namespace ggm {
+namespace ginv {
 
-NewtonsMethod::NewtonsMethod(int dim, const std::vector<std::pair<int,int>> &idx_pairs_free, const std::vector<std::pair<int,int>> &idx_pairs_non_free) {
+bool RootFindingNewton::_check_pair_exists(const std::vector<std::pair<int,int>> &pairs, std::pair<int,int> pr_search) const {
+                
+    auto it = std::find(pairs.begin(), pairs.end(), pr_search);
+    if (it != pairs.end()) {
+        return true;
+    }
+    
+    std::pair<int,int> pr_reverse = std::make_pair(pr_search.second, pr_search.first);
+    auto it2 = std::find(pairs.begin(), pairs.end(), pr_reverse);
+    if (it2 != pairs.end()) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+RootFindingNewton::RootFindingNewton(int dim, const std::vector<std::pair<int,int>> &idx_pairs_free) {
     _idx_pairs_free = idx_pairs_free;
-    _idx_pairs_non_free = idx_pairs_non_free;
     _dim = dim;
     
     // Check
@@ -42,46 +57,56 @@ NewtonsMethod::NewtonsMethod(int dim, const std::vector<std::pair<int,int>> &idx
         assert(pr.first < _dim);
         assert(pr.second < _dim);
     }
+
+    // Non-free idxs
+    for (auto i=0; i<_dim; i++) {
+        for (auto j=i; j<_dim; j++) {
+            std::pair<int,int> pr = std::make_pair(i,j);
+            if (!_check_pair_exists(_idx_pairs_free, pr)) {
+                _idx_pairs_non_free.push_back(pr);
+            }
+        }
+    }
 }
 
-NewtonsMethod::NewtonsMethod(const NewtonsMethod& other) {
+RootFindingNewton::RootFindingNewton(const RootFindingNewton& other) {
     _copy(other);
 };
-NewtonsMethod::NewtonsMethod(NewtonsMethod&& other) {
+RootFindingNewton::RootFindingNewton(RootFindingNewton&& other) {
     _move(other);
 };
-NewtonsMethod& NewtonsMethod::operator=(const NewtonsMethod& other) {
+RootFindingNewton& RootFindingNewton::operator=(const RootFindingNewton& other) {
     if (this != &other) {
         _clean_up();
         _copy(other);
     };
     return *this;
 };
-NewtonsMethod& NewtonsMethod::operator=(NewtonsMethod&& other) {
+RootFindingNewton& RootFindingNewton::operator=(RootFindingNewton&& other) {
     if (this != &other) {
         _clean_up();
         _move(other);
     };
     return *this;
 };
-NewtonsMethod::~NewtonsMethod()
+RootFindingNewton::~RootFindingNewton()
 {
     _clean_up();
 };
-void NewtonsMethod::_clean_up() {
+void RootFindingNewton::_clean_up() {
     // Nothing....
 };
 
-void NewtonsMethod::_copy(const NewtonsMethod& other) {
+void RootFindingNewton::_copy(const RootFindingNewton& other) {
     _idx_pairs_free = other._idx_pairs_free;
     _dim = other._dim;
 };
-void NewtonsMethod::_move(NewtonsMethod& other) {
+void RootFindingNewton::_move(RootFindingNewton& other) {
     _idx_pairs_free = other._idx_pairs_free;
     _dim = other._dim;
 };
 
-void NewtonsMethod::_log_progress_if_needed(Options options, int opt_step, int no_opt_steps, const arma::mat &cov_mat_curr, const arma::mat &cov_mat_targets, const arma::mat &prec_mat_curr) const {
+void RootFindingNewton::_log_progress_if_needed(Options options, int opt_step, int no_opt_steps, const arma::mat &cov_mat_curr, const arma::mat &cov_mat_targets, const arma::mat &prec_mat_curr) const {
     if (options.log_progress) {
         if (opt_step % options.log_interval == 0) {
             
@@ -104,34 +129,29 @@ void NewtonsMethod::_log_progress_if_needed(Options options, int opt_step, int n
     }
 }
 
-void NewtonsMethod::_write_progress_if_needed(Options options, int opt_step, const arma::mat &prec_mat_curr, const arma::mat &cov_mat_curr, const arma::mat &cov_mat_true) const {
+void RootFindingNewton::_write_progress_if_needed(Options options, int opt_step, const arma::mat &prec_mat_curr, const arma::mat &cov_mat_curr) const {
     if (options.write_progress) {
         assert (options.write_dir != "");
         
         if (opt_step % options.write_interval == 0) {
             // Write
             std::string fname = options.write_dir + "prec_mat.txt";
-            write_submat(fname, opt_step, opt_step!=0, prec_mat_curr, _idx_pairs_free);
+            write_mat(fname, opt_step, opt_step!=0, prec_mat_curr);
             
             fname = options.write_dir + "cov_mat.txt";
-            write_submat(fname, opt_step, opt_step!=0, cov_mat_curr, _idx_pairs_free);
-            
-            if (opt_step == 0) {
-                fname = options.write_dir + "cov_mat_targets.txt";
-                write_submat(fname, false, cov_mat_true, _idx_pairs_free);
-            }
+            write_mat(fname, opt_step, opt_step!=0, cov_mat_curr);
         }
     }
 }
 
-arma::mat NewtonsMethod::get_i_mat(int k, int l) const {
+arma::mat RootFindingNewton::get_i_mat(int k, int l) const {
     arma::mat x = arma::zeros(_dim, _dim);
     x(k,l) = 1;
     x(l,k) = 1;
     return x;
 }
 
-arma::vec NewtonsMethod::upper_tri_to_vec(const arma::mat &mat) const {
+arma::vec RootFindingNewton::upper_tri_to_vec(const arma::mat &mat) const {
     int no_dofs = (_dim * (_dim + 1) ) / 2;
     
     arma::vec vec(no_dofs);
@@ -146,12 +166,12 @@ arma::vec NewtonsMethod::upper_tri_to_vec(const arma::mat &mat) const {
     return vec;
 }
 
-arma::vec NewtonsMethod::get_eqs(const arma::mat &prec_mat_curr, const arma::mat &cov_mat_curr) const {
+arma::vec RootFindingNewton::get_eqs(const arma::mat &prec_mat_curr, const arma::mat &cov_mat_curr) const {
     arma::mat tmp = prec_mat_curr*cov_mat_curr - arma::eye(_dim,_dim);
     return upper_tri_to_vec(tmp);
 }
 
-arma::mat NewtonsMethod::get_jacobian(const arma::mat &prec_mat_curr, const arma::mat &cov_mat_curr) const {
+arma::mat RootFindingNewton::get_jacobian(const arma::mat &prec_mat_curr, const arma::mat &cov_mat_curr) const {
     
     int no_dofs = (_dim * (_dim + 1) ) / 2;
     arma::mat jac(no_dofs, no_dofs);
@@ -179,7 +199,7 @@ arma::mat NewtonsMethod::get_jacobian(const arma::mat &prec_mat_curr, const arma
     return jac;
 }
 
-arma::mat NewtonsMethod::free_vec_to_mat(const arma::vec &vec) const {
+arma::mat RootFindingNewton::free_vec_to_mat(const arma::vec &vec) const {
     
     arma::mat mat = arma::zeros(_dim,_dim);
     for (size_t i=0; i<_idx_pairs_free.size(); i++) {
@@ -191,7 +211,7 @@ arma::mat NewtonsMethod::free_vec_to_mat(const arma::vec &vec) const {
     return mat;
 }
 
-arma::mat NewtonsMethod::non_free_vec_to_mat(const arma::vec &vec) const {
+arma::mat RootFindingNewton::non_free_vec_to_mat(const arma::vec &vec) const {
     
     arma::mat mat = arma::zeros(_dim,_dim);
     for (size_t i=0; i<_idx_pairs_non_free.size(); i++) {
@@ -203,7 +223,7 @@ arma::mat NewtonsMethod::non_free_vec_to_mat(const arma::vec &vec) const {
     return mat;
 }
 
-std::pair<arma::mat,arma::mat> NewtonsMethod::solve(const arma::mat &cov_mat_true, const arma::mat &prec_mat_init) const {
+std::pair<arma::mat,arma::mat> RootFindingNewton::solve(const arma::mat &cov_mat_true, const arma::mat &prec_mat_init) const {
     
     arma::mat prec_mat_curr = prec_mat_init;
     arma::mat cov_mat_curr = cov_mat_true;
@@ -214,7 +234,7 @@ std::pair<arma::mat,arma::mat> NewtonsMethod::solve(const arma::mat &cov_mat_tru
         _log_progress_if_needed(options, i, no_opt_steps, cov_mat_curr, cov_mat_true, prec_mat_curr);
         
         // Write if needed
-        _write_progress_if_needed(options, i, prec_mat_curr, cov_mat_curr, cov_mat_true);
+        _write_progress_if_needed(options, i, prec_mat_curr, cov_mat_curr);
         
         // Update
         arma::vec f = get_eqs(prec_mat_curr, cov_mat_curr);
@@ -231,7 +251,7 @@ std::pair<arma::mat,arma::mat> NewtonsMethod::solve(const arma::mat &cov_mat_tru
         cov_mat_curr += update_mat_sigma;
     }
     
-    return std::make_pair(prec_mat_curr,cov_mat_curr);
+    return std::make_pair(cov_mat_curr,prec_mat_curr);
 }
 
 };
