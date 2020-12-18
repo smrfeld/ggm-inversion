@@ -111,7 +111,7 @@ void RootFindingNewton::_log_progress_if_needed(Options options, int opt_step, i
         if (opt_step % options.log_interval == 0) {
             
             // Measure residuals
-            arma::vec res = get_eqs(prec_mat_curr, cov_mat_curr);
+            arma::vec res = get_residuals(prec_mat_curr, cov_mat_curr);
             double max_res = arma::max(res);
             double mean_res = arma::mean(res);
             
@@ -166,7 +166,7 @@ arma::vec RootFindingNewton::upper_tri_to_vec(const arma::mat &mat) const {
     return vec;
 }
 
-arma::vec RootFindingNewton::get_eqs(const arma::mat &prec_mat_curr, const arma::mat &cov_mat_curr) const {
+arma::vec RootFindingNewton::get_residuals(const arma::mat &prec_mat_curr, const arma::mat &cov_mat_curr) const {
     arma::mat tmp = prec_mat_curr*cov_mat_curr - arma::eye(_dim,_dim);
     return upper_tri_to_vec(tmp);
 }
@@ -223,21 +223,47 @@ arma::mat RootFindingNewton::non_free_vec_to_mat(const arma::vec &vec) const {
     return mat;
 }
 
+bool RootFindingNewton::_check_convergence(const arma::mat &prec_mat_curr, const arma::mat &cov_mat_curr) const {
+
+    arma::vec residuals = get_residuals(prec_mat_curr, cov_mat_curr);
+    
+    // Max/mean
+    double max_abs_res = arma::max(abs(residuals));
+    double mean_abs_res = arma::mean(abs(residuals));
+    
+    if (max_abs_res < conv_max_abs_res) {
+        std::cout << "Converged: max absolute residual: " << max_abs_res << " is less than limit: " << conv_max_abs_res << std::endl;
+        return true;
+    }
+
+    if (mean_abs_res < conv_mean_abs_res) {
+        std::cout << "Converged: mean absolute residual: " << mean_abs_res << " is less than limit: " << conv_mean_abs_res << std::endl;
+        return true;
+    }
+
+    return false;
+}
+
 std::pair<arma::mat,arma::mat> RootFindingNewton::solve(const arma::mat &cov_mat_true, const arma::mat &prec_mat_init) const {
     
     arma::mat prec_mat_curr = prec_mat_init;
     arma::mat cov_mat_curr = cov_mat_true;
         
-    for (size_t i=0; i<no_opt_steps; i++) {
+    for (size_t i=0; i<conv_max_no_opt_steps; i++) {
+        
+        // Check convergence
+        if (_check_convergence(prec_mat_curr, cov_mat_curr)) {
+            return std::make_pair(cov_mat_curr,prec_mat_curr);
+        }
         
         // Log if needed
-        _log_progress_if_needed(options, i, no_opt_steps, cov_mat_curr, cov_mat_true, prec_mat_curr);
+        _log_progress_if_needed(options, i, conv_max_no_opt_steps, cov_mat_curr, cov_mat_true, prec_mat_curr);
         
         // Write if needed
         _write_progress_if_needed(options, i, prec_mat_curr, cov_mat_curr);
         
         // Update
-        arma::vec f = get_eqs(prec_mat_curr, cov_mat_curr);
+        arma::vec f = get_residuals(prec_mat_curr, cov_mat_curr);
         arma::mat jac = get_jacobian(prec_mat_curr, cov_mat_curr);
         arma::vec update_vec = arma::solve(jac, - f);
 
@@ -250,6 +276,8 @@ std::pair<arma::mat,arma::mat> RootFindingNewton::solve(const arma::mat &cov_mat
         prec_mat_curr += update_mat_b;
         cov_mat_curr += update_mat_sigma;
     }
+    
+    std::cout << "Converged: max no opt steps reached: " << conv_max_no_opt_steps << std::endl;
     
     return std::make_pair(cov_mat_curr,prec_mat_curr);
 }

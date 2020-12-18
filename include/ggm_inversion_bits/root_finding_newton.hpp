@@ -46,6 +46,8 @@ protected:
     std::vector<std::pair<int,int>> _idx_pairs_free, _idx_pairs_non_free;
     int _dim;
     
+    bool _check_convergence(const arma::mat &prec_mat_curr, const arma::mat &cov_mat_curr) const;
+    
     void _log_progress_if_needed(Options options, int opt_step, int no_opt_steps, const arma::mat &cov_mat_curr, const arma::mat &cov_mat_targets, const arma::mat &prec_mat_curr) const;
     
     void _write_progress_if_needed(Options options, int opt_step, const arma::mat &prec_mat_curr, const arma::mat &cov_mat_curr) const;
@@ -61,7 +63,9 @@ private:
 
 public:
     
-    int no_opt_steps = 100;
+    double conv_max_abs_res = 0.01;
+    double conv_mean_abs_res = 0.01;
+    int conv_max_no_opt_steps = 100;
     Options options;
     
     RootFindingNewton(int dim, const std::vector<std::pair<int,int>> &idx_pairs_free);
@@ -77,7 +81,7 @@ public:
     arma::mat get_i_mat(int k, int l) const;
     arma::vec upper_tri_to_vec(const arma::mat &mat) const;
     
-    arma::vec get_eqs(const arma::mat &prec_mat_curr, const arma::mat &cov_mat_curr) const;
+    arma::vec get_residuals(const arma::mat &prec_mat_curr, const arma::mat &cov_mat_curr) const;
     arma::mat get_jacobian(const arma::mat &prec_mat_curr, const arma::mat &cov_mat_curr) const;
 
     std::pair<arma::mat,arma::mat> solve(const arma::mat &cov_mat_true, const arma::mat &prec_mat_init) const;

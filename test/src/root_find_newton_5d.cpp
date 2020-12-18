@@ -36,7 +36,7 @@ int main() {
     RootFindingNewton rfn(5, idx_pairs_free);
     
     arma::mat prec_mat_init = 0.03 * arma::eye(5,5);
-    rfn.no_opt_steps = 10;
+    rfn.conv_max_no_opt_steps = 10;
     rfn.options.log_progress = true;
     rfn.options.log_interval = 1;
     rfn.options.log_mats = true;
