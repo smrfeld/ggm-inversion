@@ -47,6 +47,11 @@ Convergence of the covariance matrix during minimizing the L2 loss:
 Convergence of the precision matrix during minimizing the L2 loss:
 <img src="readme_figures/prec.png" alt="drawing" width="400"/>
 
+## Dependencies
+
+* [spdlog](https://github.com/gabime/spdlog) for logging.
+* [OptimLib](https://github.com/kthohr/optim) C++ optimization library.
+
 ## Building
 
 Build out of a dedicated build directory;
