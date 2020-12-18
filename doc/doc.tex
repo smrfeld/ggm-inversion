@@ -1,0 +1,205 @@
+\documentclass[11pt]{article}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Packages
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\usepackage{oke-header-math}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Mathematics
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Title
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\title{Gaussian graphical model inversion}
+\author{Oliver K. Ernst}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Begin document
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+
+\maketitle
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Problem statement}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Find $B$ given a mix of constraints on $B$ and $\Sigma = B^{-1}$ as follows:
+%---------------
+\begin{equation}
+\begin{split}
+B_{ij} &= 0 \text{ from graphical model} \\
+\Sigma_{kl} &= (B^{-1})_{kl} = \text{given numerically}
+\end{split}
+\label{eq:problem}
+\end{equation}
+%---------------
+Note that there are as many equations as unknowns.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Approaches}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{enumerate}
+\item Solve analytically for small matrices.
+
+\item Minimize the $L_2$ loss:
+%---------------
+\begin{equation}
+L_2( \{ \sigma_{kl} \} ) = \sum_{kl} \left [ \sigma_{kl} - (B^{-1})_{kl} \right ]^2
+\end{equation}
+%---------------
+where $\sigma_{kl} = ((B^*)^{-1})_{kl}$ are the given numerical values.
+
+In this case, we are learning only the unknown elements of $B$.
+
+\item Non-linear root finding with Newtons method of:
+%---------------
+\begin{equation}
+\boldsymbol{F} 
+= \text{upperTriangleToVector}(B \Sigma - I)
+= \boldsymbol{0}
+\end{equation}
+%---------------
+where $\text{upperTriangleToVector}$ constructs a vector from the upper triangle of the matrix, since the matrices are symmetric.
+
+In this case, we are learning both the unknown elements of $B$ and the elements in $\Sigma$.
+
+\end{enumerate}
+
+The third method is generally the preferred one.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Root finding with Newton's method}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Apply Newton's root finding method to the matrix equation:
+%---------------
+\begin{equation}
+\boldsymbol{F} = \text{vec}(B\Sigma - I) = 0
+\end{equation}
+%---------------
+The parameters are split between elements of $B$ and elements of $\Sigma$. Define:
+%---------------
+\begin{equation}
+\begin{split}
+\boldsymbol{b} &= \text{vecOfLearnableParams}(B) \\
+\boldsymbol{\sigma} &= \text{vecOfLearnableParams}(\Sigma) \\
+\boldsymbol{x} &= \begin{pmatrix}
+	\boldsymbol{b} \\
+	\boldsymbol{\sigma}
+\end{pmatrix}
+\end{split}
+\end{equation}
+%---------------
+where $\boldsymbol{x}$ are the params to be learned. Here $\text{vecOfLearnableParams}$ extracts the learnable parameters, i.e. those \textbf{not} given in~(\ref{eq:problem}).
+
+Newton's method has updates $\boldsymbol{h}_x$ of the form:
+%---------------
+\begin{equation}
+\begin{split}
+F_x \boldsymbol{h}_x &= - \boldsymbol{F} \\
+\boldsymbol{x} &\rightarrow \boldsymbol{x} + \boldsymbol{h}_x
+\end{split}
+\end{equation}
+%---------------
+where $F_x$ denotes the Jacobian. The gradients are simply:
+%---------------
+\begin{equation}
+\begin{split}
+\frac{\partial}{\partial B_{ij}} (B\Sigma) &= I_{ij} \Sigma \\
+\frac{\partial}{\partial \Sigma_{ij}} (B\Sigma) &= B I_{ij}
+\end{split}
+\end{equation}
+%---------------
+where $I_{ij}$ is all zeros except $1$ at $(i,j)$ \textbf{and} at $(j,i)$.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Minimize the $L_2$ loss}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Minimize the $L_2$ loss:
+%---------------
+\begin{equation}
+L_2( \{ \sigma_{kl} \} ) = \sum_{kl} \left [ \sigma_{kl} - (B^{-1})_{kl} \right ]^2
+\end{equation}
+%---------------
+where $\sigma_{kl} = ((B^*)^{-1})_{kl}$ are the given numerical values.
+
+In this case, we are learning only the unknown elements of $B$.
+
+The first order gradients are:
+%---------------
+\begin{equation}
+\begin{split}
+\frac{\partial (B^{-1})_{kl}}{\partial B_{ij}}
+&= 
+- \left ( B^{-1} \frac{\partial B}{\partial B_{ij}} B^{-1} \right )_{kl} \\
+&= 
+- \left ( B^{-1} I_{ij} B^{-1} \right )_{kl} \\
+&=
+- (B^{-1})_{ki} (B^{-1})_{jl} - (1 - \delta_{ij}) (B^{-1})_{kj} (B^{-1})_{il}
+\end{split}
+\end{equation}
+%---------------
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Alternative approaches}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{enumerate}
+
+\item Non-linear root finding with Newtons method of:
+%---------------
+\begin{equation}
+\boldsymbol{F} 
+= \text{toVec}(B^{-1} - \Sigma)
+= \begin{pmatrix}
+	(B^{-1})_{kl} - \sigma_{kl} \\
+	\dots
+\end{pmatrix}
+= \boldsymbol{0}
+\end{equation}
+%---------------
+The gradients can be computed as before.
+
+\item Non-linear root finding with Newtons method of:
+%---------------
+\begin{equation}
+\boldsymbol{F} 
+= \text{toVec}((B \Sigma)^{-1} - I)
+= \boldsymbol{0}
+\end{equation}
+%---------------
+This is somewhat popular for generalized inverses, see e.g. ``On the Computation of a Matrix Inverse Square Root" by N. Sherif in Computing 46, 295-305 (1989).
+
+\end{enumerate}
+
+\end{document}
