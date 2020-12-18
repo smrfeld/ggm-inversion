@@ -27,7 +27,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-#include "options.hpp"
+#include "solver_base.hpp"
 
 #include <string>
 #include <armadillo>
@@ -37,14 +37,13 @@ SOFTWARE.
 
 namespace ginv {
 
-class RootFindingNewton {
+class RootFindingNewton : public SolverBase {
         
 protected:
     
     bool _check_pair_exists(const std::vector<std::pair<int,int>> &pairs, std::pair<int,int> pr_search) const;
     
-    std::vector<std::pair<int,int>> _idx_pairs_free, _idx_pairs_non_free;
-    int _dim;
+    std::vector<std::pair<int,int>> _idx_pairs_non_free;
     
     bool _check_convergence(const arma::mat &prec_mat_curr, const arma::mat &cov_mat_curr) const;
     
@@ -84,7 +83,7 @@ public:
     arma::vec get_residuals(const arma::mat &prec_mat_curr, const arma::mat &cov_mat_curr) const;
     arma::mat get_jacobian(const arma::mat &prec_mat_curr, const arma::mat &cov_mat_curr) const;
 
-    std::pair<arma::mat,arma::mat> solve(const arma::mat &cov_mat_true, const arma::mat &prec_mat_init) const;
+    std::pair<arma::mat,arma::mat> solve(const arma::mat &cov_mat_true, const arma::mat &prec_mat_init) const override;
 };
 
 }

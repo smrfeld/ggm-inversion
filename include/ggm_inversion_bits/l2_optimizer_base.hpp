@@ -1,6 +1,6 @@
 //
 /*
-File: optimizer_base.hpp
+File: l2_optimizer_base.hpp
 Created by: Oliver K. Ernst
 Date: 5/27/20
 
@@ -27,7 +27,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-#include "options.hpp"
+#include "solver_base.hpp"
 
 #include <string>
 #include <armadillo>
@@ -37,7 +37,7 @@ SOFTWARE.
 
 namespace ginv {
 
-class L2OptimizerBase {
+class L2OptimizerBase : public SolverBase {
         
 protected:
     
@@ -62,13 +62,8 @@ private:
 
 public:
     
-    L2OptimizerBase(int dim, const std::vector<std::pair<int,int>> &idx_pairs_free);
-    L2OptimizerBase(const L2OptimizerBase& other);
-    L2OptimizerBase& operator=(const L2OptimizerBase& other);
-    L2OptimizerBase(L2OptimizerBase&& other);
-    L2OptimizerBase& operator=(L2OptimizerBase&& other);
-    virtual ~L2OptimizerBase();
-
+    using SolverBase::SolverBase;
+    
     arma::mat vec_to_mat(const arma::vec &vec) const;
     arma::vec mat_to_vec(const arma::mat &mat) const;
     
@@ -78,8 +73,6 @@ public:
     arma::vec get_deriv_vec(const arma::mat &cov_mat_curr, const arma::mat &cov_mat_true) const;
 
     arma::mat get_hessian(const arma::mat &cov_mat_curr, const arma::mat &cov_mat_true) const;
-    
-    virtual arma::mat solve(const arma::mat &cov_mat_true, const arma::mat &prec_mat_init) const = 0;
 };
 
 }

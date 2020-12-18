@@ -1,6 +1,6 @@
 //
 /*
-File: optimizer_optim.hpp
+File: l2_optimizer_optim.hpp
 Created by: Oliver K. Ernst
 Date: 5/27/20
 
@@ -67,7 +67,7 @@ public:
 
     using L2OptimizerBase::L2OptimizerBase;
 
-    arma::mat solve(const arma::mat &cov_mat_true, const arma::mat &prec_mat_init) const override;
+    std::pair<arma::mat, arma::mat> solve(const arma::mat &cov_mat_true, const arma::mat &prec_mat_init) const override;
 };
 
 }

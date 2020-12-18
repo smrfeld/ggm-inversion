@@ -1,6 +1,6 @@
 //
 /*
-File: optimizer_optim.cpp
+File: l2_optimizer_optim.cpp
 Created by: Oliver K. Ernst
 Date: 5/27/20
 
@@ -53,7 +53,7 @@ double optim_obj_func(const arma::vec &prec_mat_vec, arma::vec *deriv_vec, void*
     return obj_func_val;
 }
 
-arma::mat L2OptimizerOptim::solve(const arma::mat &cov_mat_true, const arma::mat &prec_mat_init) const {
+std::pair<arma::mat,arma::mat> L2OptimizerOptim::solve(const arma::mat &cov_mat_true, const arma::mat &prec_mat_init) const {
     
     // Init
     arma::vec prec_mat_vec = mat_to_vec(prec_mat_init);
@@ -98,7 +98,8 @@ arma::mat L2OptimizerOptim::solve(const arma::mat &cov_mat_true, const arma::mat
     // Clean up!
     delete input;
     
-    return vec_to_mat(prec_mat_vec);
+    arma::mat prec_mat_sol = vec_to_mat(prec_mat_vec);
+    return std::make_pair(arma::inv(prec_mat_sol), prec_mat_sol);
 }
 
 void L2OptimizerOptim::set_alg_adam(double lr) {

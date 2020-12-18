@@ -1,8 +1,8 @@
 //
 /*
-File: l2_optimizer_gd.cpp
+File: solver_base.hpp
 Created by: Oliver K. Ernst
-Date: 12/4/20
+Date: 5/27/20
 
 MIT License
 
@@ -25,30 +25,46 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
-*/ 
+*/
 
-#include "../include/ggm_inversion_bits/l2_optimizer_gd.hpp"
+#include "options.hpp"
+
+#include <string>
+#include <armadillo>
+
+#ifndef SOLVER_BASE_H
+#define SOLVER_BASE_H
 
 namespace ginv {
 
-std::pair<arma::mat, arma::mat> L2OptimizerGD::solve(const arma::mat &cov_mat_true, const arma::mat &prec_mat_init) const {
-
-    arma::mat prec_mat_curr = prec_mat_init;
+class SolverBase {
         
-    for (size_t i=0; i<no_opt_steps; i++) {
-        arma::mat cov_mat_curr = arma::inv(prec_mat_curr);
-                    
-        // Log if needed
-        _log_progress_if_needed(options, i, no_opt_steps, cov_mat_curr, cov_mat_true, prec_mat_curr);
-        
-        // Write if needed
-        _write_progress_if_needed(options, i, prec_mat_curr, cov_mat_curr, cov_mat_true);
-        
-        arma::mat derivs = get_deriv_mat(cov_mat_curr, cov_mat_true);
-        prec_mat_curr -= lr * derivs;
-    }
+protected:
     
-    return std::make_pair(arma::inv(prec_mat_curr), prec_mat_curr);
-}
+    std::vector<std::pair<int,int>> _idx_pairs_free;
+    int _dim;
+    
+private:
+    
+    /// Internal clean up
+    void _clean_up();
+    /// Internal copy
+    void _copy(const SolverBase& other);
+    /// Internal move
+    void _move(SolverBase &other);
+
+public:
+    
+    SolverBase(int dim, const std::vector<std::pair<int,int>> &idx_pairs_free);
+    SolverBase(const SolverBase& other);
+    SolverBase& operator=(const SolverBase& other);
+    SolverBase(SolverBase&& other);
+    SolverBase& operator=(SolverBase&& other);
+    virtual ~SolverBase();
+    
+    virtual std::pair<arma::mat,arma::mat> solve(const arma::mat &cov_mat_true, const arma::mat &prec_mat_init) const = 0;
+};
 
 }
+
+#endif

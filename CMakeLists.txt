@@ -21,6 +21,7 @@ set(SOURCE_FILES
     ${PROJECT_INCLUDE_DIR}/options.hpp
     ${PROJECT_INCLUDE_DIR}/l2_optimizer_adam.hpp
     ${PROJECT_INCLUDE_DIR}/l2_optimizer_base.hpp
+    ${PROJECT_INCLUDE_DIR}/solver_base.hpp
     ${PROJECT_INCLUDE_DIR}/l2_optimizer_gd.hpp
     ${PROJECT_INCLUDE_DIR}/root_finding_newton.hpp
     ${PROJECT_INCLUDE_DIR}/helpers.hpp
@@ -28,6 +29,7 @@ set(SOURCE_FILES
     ${PROJECT_SOURCE_DIR}/root_finding_newton.cpp
     ${PROJECT_SOURCE_DIR}/l2_optimizer_adam.cpp
     ${PROJECT_SOURCE_DIR}/l2_optimizer_base.cpp
+    ${PROJECT_SOURCE_DIR}/solver_base.cpp
     ${PROJECT_SOURCE_DIR}/l2_optimizer_gd.cpp
     ${PROJECT_SOURCE_DIR}/helpers.cpp
     ${PROJECT_SOURCE_DIR}/l2_optimizer_optim.cpp

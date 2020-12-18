@@ -48,16 +48,8 @@ bool RootFindingNewton::_check_pair_exists(const std::vector<std::pair<int,int>>
     }
 }
 
-RootFindingNewton::RootFindingNewton(int dim, const std::vector<std::pair<int,int>> &idx_pairs_free) {
-    _idx_pairs_free = idx_pairs_free;
-    _dim = dim;
+RootFindingNewton::RootFindingNewton(int dim, const std::vector<std::pair<int,int>> &idx_pairs_free) : SolverBase(dim, idx_pairs_free) {
     
-    // Check
-    for (auto pr: _idx_pairs_free) {
-        assert(pr.first < _dim);
-        assert(pr.second < _dim);
-    }
-
     // Non-free idxs
     for (auto i=0; i<_dim; i++) {
         for (auto j=i; j<_dim; j++) {
@@ -69,15 +61,16 @@ RootFindingNewton::RootFindingNewton(int dim, const std::vector<std::pair<int,in
     }
 }
 
-RootFindingNewton::RootFindingNewton(const RootFindingNewton& other) {
+RootFindingNewton::RootFindingNewton(const RootFindingNewton& other) : SolverBase(other) {
     _copy(other);
 };
-RootFindingNewton::RootFindingNewton(RootFindingNewton&& other) {
+RootFindingNewton::RootFindingNewton(RootFindingNewton&& other) : SolverBase(std::move(other)) {
     _move(other);
 };
 RootFindingNewton& RootFindingNewton::operator=(const RootFindingNewton& other) {
     if (this != &other) {
         _clean_up();
+        SolverBase::operator=(other);
         _copy(other);
     };
     return *this;
@@ -85,6 +78,7 @@ RootFindingNewton& RootFindingNewton::operator=(const RootFindingNewton& other) 
 RootFindingNewton& RootFindingNewton::operator=(RootFindingNewton&& other) {
     if (this != &other) {
         _clean_up();
+        SolverBase::operator=(std::move(other));
         _move(other);
     };
     return *this;
@@ -232,12 +226,16 @@ bool RootFindingNewton::_check_convergence(const arma::mat &prec_mat_curr, const
     double mean_abs_res = arma::mean(abs(residuals));
     
     if (max_abs_res < conv_max_abs_res) {
-        std::cout << "Converged: max absolute residual: " << max_abs_res << " is less than limit: " << conv_max_abs_res << std::endl;
+        if (options.log_progress) {
+            std::cout << "Converged: max absolute residual: " << max_abs_res << " is less than limit: " << conv_max_abs_res << std::endl;
+        }
         return true;
     }
 
     if (mean_abs_res < conv_mean_abs_res) {
-        std::cout << "Converged: mean absolute residual: " << mean_abs_res << " is less than limit: " << conv_mean_abs_res << std::endl;
+        if (options.log_progress) {
+            std::cout << "Converged: mean absolute residual: " << mean_abs_res << " is less than limit: " << conv_mean_abs_res << std::endl;
+        }
         return true;
     }
 
@@ -277,7 +275,9 @@ std::pair<arma::mat,arma::mat> RootFindingNewton::solve(const arma::mat &cov_mat
         cov_mat_curr += update_mat_sigma;
     }
     
-    std::cout << "Converged: max no opt steps reached: " << conv_max_no_opt_steps << std::endl;
+    if (options.log_progress) {
+        std::cout << "Converged: max no opt steps reached: " << conv_max_no_opt_steps << std::endl;
+    }
     
     return std::make_pair(cov_mat_curr,prec_mat_curr);
 }

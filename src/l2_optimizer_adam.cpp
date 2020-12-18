@@ -1,6 +1,6 @@
 //
 /*
-File: optimizer_adam.hpp
+File: l2_optimizer_adam.hpp
 Created by: Oliver K. Ernst
 Date: 12/4/20
 
@@ -31,7 +31,7 @@ SOFTWARE.
 
 namespace ginv {
         
-arma::mat L2OptimizerAdam::solve(const arma::mat &cov_mat_true, const arma::mat &prec_mat_init) const {
+std::pair<arma::mat,arma::mat> L2OptimizerAdam::solve(const arma::mat &cov_mat_true, const arma::mat &prec_mat_init) const {
     
     arma::mat prec_mat_curr = prec_mat_init;
 
@@ -67,7 +67,7 @@ arma::mat L2OptimizerAdam::solve(const arma::mat &cov_mat_true, const arma::mat 
         prec_mat_curr -= lr * adam_mt_corr / (sqrt(adam_vt_corr) + adam_eps);
     }
 
-    return prec_mat_curr;
+    return std::make_pair(arma::inv(prec_mat_curr), prec_mat_curr);
 }
 
 }

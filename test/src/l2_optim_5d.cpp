@@ -38,7 +38,8 @@ int main() {
     
     arma::mat prec_mat_init = 0.01 * arma::eye(5,5);
     opt.settings.iter_max = 5e5;
-    arma::mat prec_mat_solved = opt.solve(cov_mat_true, prec_mat_init);
+    auto pr = opt.solve(cov_mat_true, prec_mat_init);
+    arma::mat prec_mat_solved = pr.second;
     
     report_results(prec_mat_solved, cov_mat_true, idx_pairs_free, opt);
 

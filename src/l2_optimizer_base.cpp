@@ -1,6 +1,6 @@
 //
 /*
-File: optimizer_base.cpp
+File: l2_optimizer_base.cpp
 Created by: Oliver K. Ernst
 Date: 5/27/20
 
@@ -31,54 +31,6 @@ SOFTWARE.
 #include "../include/ggm_inversion_bits/helpers.hpp"
 
 namespace ginv {
-
-L2OptimizerBase::L2OptimizerBase(int dim, const std::vector<std::pair<int,int>> &idx_pairs_free) {
-    _idx_pairs_free = idx_pairs_free;
-    _dim = dim;
-    
-    // Check
-    for (auto pr: _idx_pairs_free) {
-        assert(pr.first < _dim);
-        assert(pr.second < _dim);
-    }
-}
-
-L2OptimizerBase::L2OptimizerBase(const L2OptimizerBase& other) {
-    _copy(other);
-};
-L2OptimizerBase::L2OptimizerBase(L2OptimizerBase&& other) {
-    _move(other);
-};
-L2OptimizerBase& L2OptimizerBase::operator=(const L2OptimizerBase& other) {
-    if (this != &other) {
-        _clean_up();
-        _copy(other);
-    };
-    return *this;
-};
-L2OptimizerBase& L2OptimizerBase::operator=(L2OptimizerBase&& other) {
-    if (this != &other) {
-        _clean_up();
-        _move(other);
-    };
-    return *this;
-};
-L2OptimizerBase::~L2OptimizerBase()
-{
-    _clean_up();
-};
-void L2OptimizerBase::_clean_up() {
-    // Nothing....
-};
-
-void L2OptimizerBase::_copy(const L2OptimizerBase& other) {
-    _idx_pairs_free = other._idx_pairs_free;
-    _dim = other._dim;
-};
-void L2OptimizerBase::_move(L2OptimizerBase& other) {
-    _idx_pairs_free = other._idx_pairs_free;
-    _dim = other._dim;
-};
 
 void L2OptimizerBase::_log_progress_if_needed(Options options, int opt_step, int no_opt_steps, const arma::mat &cov_mat_curr, const arma::mat &cov_mat_targets, const arma::mat &prec_mat_curr) const {
     if (options.log_progress) {

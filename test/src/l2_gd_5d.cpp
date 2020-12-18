@@ -42,7 +42,8 @@ int main() {
     opt.options.write_progress = true;
     opt.options.write_dir = "../output/l2_gd_5d/data/";
     ensure_dir_exists(opt.options.write_dir);
-    arma::mat prec_mat_solved = opt.solve(cov_mat_true, prec_mat_init);
+    auto pr = opt.solve(cov_mat_true, prec_mat_init);
+    arma::mat prec_mat_solved = pr.second;
 
     report_results(prec_mat_solved, cov_mat_true, idx_pairs_free, opt);
 
