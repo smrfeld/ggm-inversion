@@ -38,7 +38,6 @@ struct Options {
     bool log_progress=false;
     bool log_mats=false;
     int log_interval=1;
-    std::string log_header="";
 
     bool write_progress=false;
     int write_interval=1;

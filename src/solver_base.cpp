@@ -93,7 +93,7 @@ void SolverBase::_move(SolverBase& other) {
 };
 
 std::string SolverBase::_get_log_header(const Options &options, int opt_step, int max_no_opt_steps) const {
-    return _get_log_header(options.log_header, opt_step, max_no_opt_steps);
+    return _get_log_header(log_header, opt_step, max_no_opt_steps);
 }
 
 std::string SolverBase::_get_log_header(std::string log_header, int opt_step, int max_no_opt_steps) const {
@@ -110,7 +110,7 @@ void SolverBase::_log_mat_info(const arma::mat &mat, std::string header) const {
     for (auto i_row=0; i_row<mat.n_rows; i_row++) {
         std::string row = "";
         for (auto i_col=0; i_col<mat.n_cols; i_col++) {
-            row += format_str("%8.4f ", mat(i_row,i_col));
+            row += format_str("%12.4f ", mat(i_row,i_col));
         }
         spdlog::info(header + " " + row);
     }

@@ -62,6 +62,8 @@ private:
 
 public:
     
+    std::string log_header="";
+    
     SolverBase(int dim, const std::vector<std::pair<int,int>> &idx_pairs_free);
     SolverBase(const SolverBase& other);
     SolverBase& operator=(const SolverBase& other);

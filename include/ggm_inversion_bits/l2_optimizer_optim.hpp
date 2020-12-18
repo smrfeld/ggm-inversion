@@ -57,7 +57,6 @@ private:
 public:
     
     bool log_result = true;
-    std::string log_header = "";
     mutable optim::algo_settings_t settings;
     
     void set_alg_adam(double lr);
