@@ -30,6 +30,8 @@ SOFTWARE.
 #include "../include/ggm_inversion_bits/solver_base.hpp"
 #include "../include/ggm_inversion_bits/helpers.hpp"
 
+#include <spdlog/spdlog.h>
+
 namespace ginv {
 
 SolverBase::SolverBase(int dim, const std::vector<std::pair<int,int>> &idx_pairs_free) {
@@ -89,6 +91,30 @@ void SolverBase::_move(SolverBase& other) {
     _idx_pairs_free = other._idx_pairs_free;
     _dim = other._dim;
 };
+
+std::string SolverBase::_get_log_header(const Options &options, int opt_step, int max_no_opt_steps) const {
+    return _get_log_header(options.log_header, opt_step, max_no_opt_steps);
+}
+
+std::string SolverBase::_get_log_header(std::string log_header, int opt_step, int max_no_opt_steps) const {
+    return format_str(log_header + "[Inversion: %08d / %08d] ", opt_step, max_no_opt_steps);
+}
+
+void SolverBase::_log_mat_info(const arma::mat &mat, const Options &options, int opt_step, int max_no_opt_steps) const {
+    std::string header = _get_log_header(options, opt_step, max_no_opt_steps);
+    _log_mat_info(mat, header);
+}
+
+void SolverBase::_log_mat_info(const arma::mat &mat, std::string header) const {
+
+    for (auto i_row=0; i_row<mat.n_rows; i_row++) {
+        std::string row = "";
+        for (auto i_col=0; i_col<mat.n_cols; i_col++) {
+            row += format_str("%8.4f ", mat(i_row,i_col));
+        }
+        spdlog::info(header + " " + row);
+    }
+}
 
 bool SolverBase::_check_pair_exists(const std::vector<std::pair<int,int>> &pairs, std::pair<int,int> pr_search) const {
                 

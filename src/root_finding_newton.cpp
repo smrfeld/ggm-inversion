@@ -30,6 +30,8 @@ SOFTWARE.
 #include "../include/ggm_inversion_bits/root_finding_newton.hpp"
 #include "../include/ggm_inversion_bits/helpers.hpp"
 
+#include <spdlog/spdlog.h>
+
 namespace ginv {
 
 void RootFindingNewton::_log_progress_if_needed(Options options, int opt_step, int no_opt_steps, const arma::mat &cov_mat_curr, const arma::mat &cov_mat_targets, const arma::mat &prec_mat_curr) const {
@@ -41,15 +43,16 @@ void RootFindingNewton::_log_progress_if_needed(Options options, int opt_step, i
             double max_abs_res = arma::max(abs(res));
             double mean_abs_res = arma::mean(abs(res));
             
-            std::cout << "   Inversion: " << opt_step << " / " << no_opt_steps << " ave absolute residual: " << mean_abs_res << " max absolute residual: " << max_abs_res << std::endl;
+            std::string header = _get_log_header(options, opt_step, no_opt_steps);
+            spdlog::info(header + "absolute residual - ave: {:f} max: {:f}", mean_abs_res, max_abs_res);
 
             if (options.log_mats) {
-                std::cout << "   Cov mat curr: " << std::endl;
-                std::cout << cov_mat_curr << std::endl;
-                std::cout << "   Inv of current prec mat: " << std::endl;
-                std::cout << arma::inv(prec_mat_curr) << std::endl;
-                std::cout << "   Prec mat curr: " << std::endl;
-                std::cout << prec_mat_curr << std::endl;
+                spdlog::info(header + "Cov mat curr:");
+                _log_mat_info(cov_mat_curr, header);
+                spdlog::info(header + "Inv of current prec mat:");
+                _log_mat_info(arma::inv(prec_mat_curr), header);
+                spdlog::info(header + "Prec mat curr:");
+                _log_mat_info(prec_mat_curr, header);
             }
         }
     }
@@ -125,7 +128,7 @@ arma::mat RootFindingNewton::get_jacobian(const arma::mat &prec_mat_curr, const 
     return jac;
 }
 
-bool RootFindingNewton::_check_convergence(const arma::mat &prec_mat_curr, const arma::mat &cov_mat_curr) const {
+bool RootFindingNewton::_check_convergence(Options options, int opt_step, int no_opt_steps, const arma::mat &prec_mat_curr, const arma::mat &cov_mat_curr) const {
 
     arma::vec residuals = get_residuals(prec_mat_curr, cov_mat_curr);
     
@@ -135,14 +138,16 @@ bool RootFindingNewton::_check_convergence(const arma::mat &prec_mat_curr, const
     
     if (max_abs_res < conv_max_abs_res) {
         if (options.log_progress) {
-            std::cout << "Converged: max absolute residual: " << max_abs_res << " is less than limit: " << conv_max_abs_res << std::endl;
+            std::string header = _get_log_header(options, opt_step, no_opt_steps);
+            spdlog::info(header + "Converged: max absolute residual: {:f} is less than limit: {:f}", max_abs_res, conv_max_abs_res);
         }
         return true;
     }
 
     if (mean_abs_res < conv_mean_abs_res) {
         if (options.log_progress) {
-            std::cout << "Converged: mean absolute residual: " << mean_abs_res << " is less than limit: " << conv_mean_abs_res << std::endl;
+            std::string header = _get_log_header(options, opt_step, no_opt_steps);
+            spdlog::info(header + "Converged: mean absolute residual: {:f} is less than limit: {:f}", mean_abs_res, conv_mean_abs_res);
         }
         return true;
     }
@@ -158,7 +163,7 @@ std::pair<arma::mat,arma::mat> RootFindingNewton::solve(const arma::mat &cov_mat
     for (size_t i=0; i<conv_max_no_opt_steps; i++) {
         
         // Check convergence
-        if (_check_convergence(prec_mat_curr, cov_mat_curr)) {
+        if (_check_convergence(options, i, conv_max_no_opt_steps, prec_mat_curr, cov_mat_curr)) {
             return std::make_pair(cov_mat_curr,prec_mat_curr);
         }
         
@@ -184,7 +189,8 @@ std::pair<arma::mat,arma::mat> RootFindingNewton::solve(const arma::mat &cov_mat
     }
     
     if (options.log_progress) {
-        std::cout << "Converged: max no opt steps reached: " << conv_max_no_opt_steps << std::endl;
+        std::string header = _get_log_header(options, conv_max_no_opt_steps, conv_max_no_opt_steps);
+        spdlog::info(header + "Converged: max no opt steps reached: {:d}", conv_max_no_opt_steps);
     }
     
     return std::make_pair(cov_mat_curr,prec_mat_curr);

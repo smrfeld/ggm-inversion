@@ -29,6 +29,8 @@ SOFTWARE.
 
 #include "../include/ggm_inversion_bits/l2_optimizer_optim.hpp"
 
+#include <spdlog/spdlog.h>
+
 namespace ginv {
 
 double optim_obj_func(const arma::vec &prec_mat_vec, arma::vec *deriv_vec, void* input_obj_func_val) {
@@ -81,18 +83,19 @@ std::pair<arma::mat,arma::mat> L2OptimizerOptim::solve(const arma::mat &cov_mat_
     
     // Must succeed
     if (log_result) {
-        std::cout << "--- Result ---" << std::endl;
+        
+        spdlog::info(log_header + "--- Result ---");
         if (!success) {
-            std::cerr << "Failed to converge after: " << settings.opt_iter << " iterations" << std::endl;
+            spdlog::info(log_header + "Failed to converge after: {:d} iterations", settings.opt_iter);
         } else {
-            std::cout << "Converged after: " << settings.opt_iter << " iterations" << std::endl;
+            spdlog::info(log_header + "Converged after: {:d} iterations", settings.opt_iter);
         }
-        std::cout << "Obj func value: " << settings.opt_fn_value << std::endl;
-        std::cout << "Error value: " << settings.opt_error_value << std::endl;
-        std::cout << "Prec mat: " << std::endl;
-        std::cout << free_vec_to_mat(prec_mat_vec) << std::endl;
-        std::cout << "Cov mat: " << std::endl;
-        std::cout << arma::inv(free_vec_to_mat(prec_mat_vec)) << std::endl;
+        spdlog::info(log_header + "Obj func value: {:f}", settings.opt_fn_value);
+        spdlog::info(log_header + "Error value: {:f}", settings.opt_error_value);
+        spdlog::info(log_header + "Prec mat:");
+        _log_mat_info(free_vec_to_mat(prec_mat_vec), log_header);
+        spdlog::info(log_header + "Cov mat:");
+        _log_mat_info(arma::inv(free_vec_to_mat(prec_mat_vec)), log_header);
     }
     
     // Clean up!

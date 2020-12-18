@@ -43,7 +43,12 @@ protected:
     
     std::vector<std::pair<int,int>> _idx_pairs_free, _idx_pairs_non_free;
     int _dim;
-    
+
+    std::string _get_log_header(std::string header, int opt_step, int max_no_opt_steps) const;
+    std::string _get_log_header(const Options &options, int opt_step, int max_no_opt_steps) const;
+    void _log_mat_info(const arma::mat &mat, const Options &options, int opt_step, int max_no_opt_steps) const;
+    void _log_mat_info(const arma::mat &mat, std::string header) const;
+
 private:
     
     bool _check_pair_exists(const std::vector<std::pair<int,int>> &pairs, std::pair<int,int> pr_search) const;

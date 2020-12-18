@@ -41,7 +41,7 @@ class RootFindingNewton : public SolverBase {
         
 protected:
             
-    bool _check_convergence(const arma::mat &prec_mat_curr, const arma::mat &cov_mat_curr) const;
+    bool _check_convergence(Options options, int opt_step, int no_opt_steps, const arma::mat &prec_mat_curr, const arma::mat &cov_mat_curr) const;
     
     void _log_progress_if_needed(Options options, int opt_step, int no_opt_steps, const arma::mat &cov_mat_curr, const arma::mat &cov_mat_targets, const arma::mat &prec_mat_curr) const;
     

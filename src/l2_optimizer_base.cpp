@@ -30,6 +30,8 @@ SOFTWARE.
 #include "../include/ggm_inversion_bits/l2_optimizer_base.hpp"
 #include "../include/ggm_inversion_bits/helpers.hpp"
 
+#include <spdlog/spdlog.h>
+
 namespace ginv {
 
 std::pair<double,double> L2OptimizerBase::get_err(const arma::mat &cov_mat_curr, const arma::mat &cov_mat_targets) const {
@@ -52,14 +54,16 @@ void L2OptimizerBase::_log_progress_if_needed(Options options, int opt_step, int
             double ave_err = pr.first;
             double max_err = pr.second;
             
-            std::cout << "   Inversion: " << opt_step << " / " << no_opt_steps << " ave err: " << 100.0*ave_err << "% max err: " << 100.0*max_err << "%" << std::endl;
+            std::string header = _get_log_header(options, opt_step, no_opt_steps);
+            spdlog::info(header + "err - ave: {:f}% max: {:f}%", 100.0*ave_err, 100.0*max_err);
+            
             if (options.log_mats) {
-                std::cout << "   Cov mat curr: " << std::endl;
-                std::cout << cov_mat_curr << std::endl;
-                std::cout << "   Cov mat targets: " << std::endl;
-                std::cout << cov_mat_targets << std::endl;
-                std::cout << "   Prec mat curr: " << std::endl;
-                std::cout << prec_mat_curr << std::endl;
+                spdlog::info(header + "Cov mat curr:");
+                _log_mat_info(cov_mat_curr, header);
+                spdlog::info(header + "Inv of current prec mat:");
+                _log_mat_info(arma::inv(prec_mat_curr), header);
+                spdlog::info(header + "Prec mat curr:");
+                _log_mat_info(prec_mat_curr, header);
             }
         }
     }
