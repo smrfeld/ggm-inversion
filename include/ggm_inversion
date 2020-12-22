@@ -2,6 +2,7 @@
 #define GGM_INVERSION_BITS_H
 
 #include "ggm_inversion_bits/helpers.hpp"
+#include "ggm_inversion_bits/analytic.hpp"
 #include "ggm_inversion_bits/l2_optimizer_adam.hpp"
 #include "ggm_inversion_bits/l2_optimizer_gd.hpp"
 #include "ggm_inversion_bits/l2_optimizer_optim.hpp"

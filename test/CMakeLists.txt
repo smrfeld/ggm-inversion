@@ -16,6 +16,9 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_DEBUG ${CMAKE_BINARY_DIR}/../bin)
 find_library(ARMADILLO_LIB armadillo HINTS /usr/local/lib/)
 find_library(GGM_INVERSION_LIB ggm_inversion HINTS /usr/local/lib/)
 
+add_executable(analytic_3d src/analytic_3d.cpp src/common.hpp)
+target_link_libraries(analytic_3d PUBLIC ${ARMADILLO_LIB} ${GGM_INVERSION_LIB})
+
 add_executable(l2_adam_5d src/l2_adam_5d.cpp src/common.hpp)
 target_link_libraries(l2_adam_5d PUBLIC ${ARMADILLO_LIB} ${GGM_INVERSION_LIB})
 
